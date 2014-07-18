@@ -61,25 +61,15 @@ public class SimpleServiceInstanceBindingService implements ServiceInstanceBindi
 			throw new ServiceInstanceBindingExistsException(binding);
 		}
 
-		if (!isBindingPermitted(serviceInstance, serviceId, planId, appGuid)) {
-			throw new ServiceBrokerException(
-					"Binding is not permitted for this plan, app and service");
-		}
-
 		binding = new ServiceInstanceBinding(bindingId, serviceInstance.getId(),
-				getCredentials(serviceInstance, serviceId), null, appGuid);
+				getCredentials(serviceInstance, serviceId, planId, appGuid), null, appGuid);
 		repository.save(binding);
 
 		return binding;
 	}
 
-	protected boolean isBindingPermitted(ServiceInstance serviceInstance,
-			String serviceId, String planId, String appGuid) {
-		return true;
-	}
-
 	protected Map<String, Object> getCredentials(ServiceInstance instance,
-			String serviceId) {
+			String serviceId, String planId, String appGuid) {
 		Map<String, Object> credentials = new HashMap<String, Object>();
 		credentials.put("uri", findUriFromService(serviceId));
 		credentials.put("domain", applicationDomain);
