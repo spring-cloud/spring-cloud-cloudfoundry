@@ -25,6 +25,7 @@ import org.cloudfoundry.community.servicebroker.model.Catalog;
 import org.cloudfoundry.community.servicebroker.model.ServiceDefinition;
 import org.cloudfoundry.community.servicebroker.service.BeanCatalogService;
 import org.cloudfoundry.community.servicebroker.service.CatalogService;
+import org.springframework.platform.netflix.eureka.advice.LeaseManagerLite;
 
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.appinfo.InstanceInfo.ActionType;
