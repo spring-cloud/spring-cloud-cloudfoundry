@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.platform.cloudfoundry.broker;
+package org.springframework.platform.cloudfoundry.broker.configuration;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -41,9 +41,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
-import org.springframework.platform.netflix.eureka.EurekaRegistryAvailableEvent;
-import org.springframework.platform.netflix.eureka.advice.LeaseManagerLite;
+import org.springframework.platform.cloudfoundry.broker.FreeServiceDefinitionFactory;
+import org.springframework.platform.cloudfoundry.broker.ServiceInstanceBindingRepository;
+import org.springframework.platform.cloudfoundry.broker.ServiceInstanceRepository;
+import org.springframework.platform.cloudfoundry.broker.simple.SimpleServiceInstanceBindingRepository;
+import org.springframework.platform.cloudfoundry.broker.simple.SimpleServiceInstanceBindingService;
+import org.springframework.platform.cloudfoundry.broker.simple.SimpleServiceInstanceRepository;
+import org.springframework.platform.cloudfoundry.broker.simple.SimpleServiceInstanceService;
 import org.springframework.platform.netflix.eureka.advice.PiggybackMethodInterceptor;
+import org.springframework.platform.netflix.eureka.event.EurekaRegistryAvailableEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ReflectionUtils;
 
@@ -69,21 +75,21 @@ import com.netflix.eureka.lease.LeaseManager;
  *
  */
 @Configuration
-@ComponentScan(basePackages = { "demo", "org.cloudfoundry.community.servicebroker" }, excludeFilters = {
+@ComponentScan(basePackages = { "org.cloudfoundry.community.servicebroker" }, excludeFilters = {
 		@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = BrokerApiVersionConfig.class),
 		@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = BeanCatalogService.class) })
-@ConditionalOnClass(ServiceInstanceRepository.class)
+@ConditionalOnClass({ServiceInstanceRepository.class, BrokerApiVersionConfig.class })
 @ConditionalOnWebApplication
 public class ServiceBrokerAutoConfiguration {
-	
+
 	@Configuration
-	@ConditionalOnMissingClass(name="com.netflix.eureka.PeerAwareInstanceRegistry")
+	@ConditionalOnMissingClass(name = "com.netflix.eureka.PeerAwareInstanceRegistry")
 	@ConditionalOnMissingBean(CatalogService.class)
 	protected static class CatalogConfiguration {
-		
+
 		@Autowired
 		private BrokerProperties broker;
-		
+
 		@Bean
 		public BeanCatalogService catalogService() {
 			return new BeanCatalogService(catalog());
@@ -97,10 +103,10 @@ public class ServiceBrokerAutoConfiguration {
 		@Bean
 		@ConfigurationProperties("cloudfoundry.service.definition")
 		public ServiceDefinition serviceDefinition() {
-			return new FreeServiceDefinitionFactory(broker.getPrefix()).create(broker.getName(),
-					broker.getDescription());
+			return new FreeServiceDefinitionFactory(broker.getPrefix()).create(
+					broker.getName(), broker.getDescription());
 		}
-		
+
 		@Component
 		@ConfigurationProperties("cloudfoundry.server.broker")
 		public static class BrokerProperties {
@@ -108,21 +114,27 @@ public class ServiceBrokerAutoConfiguration {
 			@Value("${spring.application.name:application}")
 			private String name;
 			private String description;
+
 			public String getPrefix() {
-				return prefix==null ? name + "-" : prefix;
+				return prefix == null ? name + "-" : prefix;
 			}
+
 			public void setPrefix(String prefix) {
 				this.prefix = prefix;
 			}
+
 			public String getName() {
 				return name;
 			}
+
 			public void setName(String name) {
 				this.name = name;
 			}
+
 			public String getDescription() {
 				return description == null ? "Singleton service app" : description;
 			}
+
 			public void setDescription(String description) {
 				this.description = description;
 			}
@@ -158,7 +170,7 @@ public class ServiceBrokerAutoConfiguration {
 			ProxyFactory factory = new ProxyFactory(
 					PeerAwareInstanceRegistry.getInstance());
 			factory.addAdvice(new PiggybackMethodInterceptor(leaseManager,
-					LeaseManager.class, LeaseManagerLite.class));
+					LeaseManager.class));
 			factory.setProxyTargetClass(true);
 			Field field = ReflectionUtils.findField(PeerAwareInstanceRegistry.class,
 					"instance");

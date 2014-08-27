@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.platform.cloudfoundry.broker;
+package org.springframework.platform.cloudfoundry.broker.configuration;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,7 +25,7 @@ import org.cloudfoundry.community.servicebroker.model.Catalog;
 import org.cloudfoundry.community.servicebroker.model.ServiceDefinition;
 import org.cloudfoundry.community.servicebroker.service.BeanCatalogService;
 import org.cloudfoundry.community.servicebroker.service.CatalogService;
-import org.springframework.platform.netflix.eureka.advice.LeaseManagerLite;
+import org.springframework.platform.cloudfoundry.broker.FreeServiceDefinitionFactory;
 
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.appinfo.InstanceInfo.ActionType;
@@ -35,15 +35,14 @@ import com.netflix.eureka.lease.LeaseManager;
  * @author Dave Syer
  *
  */
-public class CatalogLeaseManager implements LeaseManager<InstanceInfo>, LeaseManagerLite,
-		CatalogService {
+public class CatalogLeaseManager implements LeaseManager<InstanceInfo>, CatalogService {
 
 	private Map<String, ServiceDefinition> definitions = new HashMap<String, ServiceDefinition>();
 
 	private List<ServiceDefinition> values = new ArrayList<ServiceDefinition>();
 
 	public CatalogLeaseManager(InstanceInfo config) {
-		register(config, false);
+		register(config, 0, false);
 	}
 
 	@Override
@@ -54,11 +53,6 @@ public class CatalogLeaseManager implements LeaseManager<InstanceInfo>, LeaseMan
 	@Override
 	public ServiceDefinition getServiceDefinition(String serviceId) {
 		return new BeanCatalogService(getCatalog()).getServiceDefinition(serviceId);
-	}
-
-	@Override
-	public void register(InstanceInfo info, boolean isReplication) {
-		register(info, 0, isReplication);
 	}
 
 	@Override
@@ -102,7 +96,8 @@ public class CatalogLeaseManager implements LeaseManager<InstanceInfo>, LeaseMan
 
 	private ServiceDefinition getServiceDefinition(InstanceInfo info) {
 		String name = info.getAppName().toLowerCase();
-		ServiceDefinition definition = new FreeServiceDefinitionFactory("eureka-").create(name, "Eureka-brokered service");
+		ServiceDefinition definition = new FreeServiceDefinitionFactory("eureka-")
+				.create(name, "Eureka-brokered service");
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("info", (Object) info);
 		map.put("uri", info.getHomePageUrl());

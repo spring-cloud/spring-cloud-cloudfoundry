@@ -13,20 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.platform.cloudfoundry.broker.sample;
+package org.springframework.platform.cloudfoundry.sso;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.platform.cloudfoundry.sso.EnableCloudfoundrySso;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 
-@Configuration
-@EnableAutoConfiguration
-@EnableCloudfoundrySso
-public class Application {
+/**
+ * @author Dave Syer
+ *
+ */
+public interface CloudfoundrySsoConfigurer {
 
-	public static void main(String[] args) {
-		SpringApplication.run(Application.class, args);
-	}
+	void configure(HttpSecurity http);
 
 }

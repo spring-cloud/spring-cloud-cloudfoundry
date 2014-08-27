@@ -13,29 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.platform.cloudfoundry.broker;
+package org.springframework.platform.cloudfoundry.broker.simple;
 
-import org.cloudfoundry.community.servicebroker.model.ServiceInstanceBinding;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.cloudfoundry.community.servicebroker.model.ServiceInstance;
+import org.springframework.platform.cloudfoundry.broker.ServiceInstanceRepository;
 
 /**
  * @author Dave Syer
  *
  */
-public class SimpleServiceInstanceBindingRepository implements ServiceInstanceBindingRepository {
+public class SimpleServiceInstanceRepository implements ServiceInstanceRepository {
 
 	private String serviceDefinitionId;
 
-	public SimpleServiceInstanceBindingRepository(String serviceDefinitionId) {
+	public SimpleServiceInstanceRepository(String serviceDefinitionId) {
+		// TODO: add dashboard URL
 		this.serviceDefinitionId = serviceDefinitionId;
 	}
 
 	@Override
-	public ServiceInstanceBinding findOne(String id) {
-		return new ServiceInstanceBinding(id, serviceDefinitionId, null, null, null);
+	public List<ServiceInstance> findAll() {
+		return new ArrayList<ServiceInstance>();
 	}
 
 	@Override
-	public void save(ServiceInstanceBinding instance) {
+	public ServiceInstance findOne(String serviceInstanceId) {
+		return new ServiceInstance(serviceInstanceId, serviceDefinitionId, null, null, null, null);
+	}
+
+	@Override
+	public void save(ServiceInstance instance) {
 	}
 
 	@Override

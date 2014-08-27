@@ -1,15 +1,27 @@
 debug: true
+server:
+  port: 8787
 spring:
   application:
     name: eureka
 management:
   context-path: /admin
+cloudfoundry:
+  sso:
+    tokenUri: http://localhost:8080/uaa/oauth/token
+    authorizationUri: http://localhost:8080/uaa/oauth/authorize
+    clientId: app
+    clientSecret: appclientsecret
+logging:
+  level:
+    com.netflix.discovery: 'OFF'
+    org.springframework.security: DEBUG
 eureka:
   server:
     waitTimeInMsWhenSyncEmpty: 1000
   client:
     serviceUrl:
-      defaultZone: http://localhost:8080/v2/
-      default.defaultZone: http://localhost:8080/v2/
+      defaultZone: http://localhost:8787/v2/
+      default.defaultZone: http://localhost:8787/v2/
     registerWithEureka: false
     fetchRegistry: false

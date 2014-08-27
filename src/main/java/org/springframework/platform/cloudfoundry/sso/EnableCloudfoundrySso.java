@@ -13,20 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.platform.cloudfoundry.broker.sample;
+package org.springframework.platform.cloudfoundry.sso;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.platform.cloudfoundry.sso.EnableCloudfoundrySso;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-@Configuration
-@EnableAutoConfiguration
-@EnableCloudfoundrySso
-public class Application {
+import org.springframework.context.annotation.Import;
 
-	public static void main(String[] args) {
-		SpringApplication.run(Application.class, args);
-	}
+/**
+ * @author Dave Syer
+ *
+ */
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Import(CloudfoundrySsoConfiguration.class)
+public @interface EnableCloudfoundrySso {
 
 }
