@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-org.springframework.platform.cloudfoundry.broker.configuration.ServiceBrokerAutoConfiguration
+org.springframework.platform.cloudfoundry.broker.configuration.ServiceBrokerAutoConfiguration,\
+org.springframework.platform.cloudfoundry.proxy.CloudfoundryProxyConfiguration

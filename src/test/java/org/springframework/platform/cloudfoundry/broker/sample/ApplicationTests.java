@@ -33,16 +33,18 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
-@IntegrationTest("server.port=0")
+@IntegrationTest({ "server.port=0", "security.basic.enabled=false",
+		"cloudfoundry.sso.clientId=", "cloudfoundry.resource.clientId=" })
 public class ApplicationTests {
-	
+
 	@Value("${local.server.port}")
 	private int port = 0;
 
 	@Test
 	public void catalogLoads() {
 		@SuppressWarnings("rawtypes")
-		ResponseEntity<Map> entity = new TestRestTemplate().getForEntity("http://localhost:" + port + "/v2/catalog", Map.class);
+		ResponseEntity<Map> entity = new TestRestTemplate().getForEntity(
+				"http://localhost:" + port + "/v2/catalog", Map.class);
 		assertEquals(HttpStatus.OK, entity.getStatusCode());
 	}
 

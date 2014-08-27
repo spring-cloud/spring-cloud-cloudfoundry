@@ -71,12 +71,12 @@ public class CloudfoundrySsoProperties implements Validator {
 	@Override
 	public void validate(Object target, Errors errors) {
 		CloudfoundrySsoProperties sso = (CloudfoundrySsoProperties) target;
-		if (StringUtils.hasText(sso.getTokenUri())) {
+		if (StringUtils.hasText(sso.getClientId())) {
 			if (!StringUtils.hasText(sso.getAuthorizationUri())) {
 				errors.rejectValue("authorizeUri", "missing.authorizeUri", "Missing authorizeUri");
 			}
-			if (!StringUtils.hasText(sso.getClientId())) {
-				errors.rejectValue("clientId", "missing.clientId", "Missing clientId");
+			if (!StringUtils.hasText(sso.getTokenUri())) {
+				errors.rejectValue("tokenUri", "missing.tokenUri", "Missing tokenUri");
 			}
 			if (!StringUtils.hasText(sso.getClientSecret())) {
 				errors.rejectValue("clientSecret", "missing.clientSecret", "Missing clientSecret");

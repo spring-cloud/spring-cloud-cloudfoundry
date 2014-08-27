@@ -63,7 +63,7 @@ import org.springframework.util.ClassUtils;
  *
  */
 @Configuration
-@ConditionalOnExpression("'${cloudfoundry.sso.tokenUri:${vcap.services.sso.credentials.tokenUri:}}'!=''")
+@ConditionalOnExpression("'${cloudfoundry.sso.clientId:${vcap.services.sso.credentials.clientId:}}'!=''")
 @ConditionalOnClass({ EnableOAuth2Client.class, SecurityProperties.class })
 @ConditionalOnWebApplication
 @EnableOAuth2Client
