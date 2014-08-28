@@ -33,6 +33,8 @@ public class CloudfoundryResourceProperties implements Validator {
 
 	private String serviceId = "resource";
 
+	private String id;
+
 	@Value("${vcap.services.${cloudfoundry.resource.serviceId:resource}.credentials.clientId:}")
 	private String clientId;
 
@@ -59,5 +61,9 @@ public class CloudfoundryResourceProperties implements Validator {
 				errors.rejectValue("clientSecret", "missing.clientSecret", "Missing clientSecret");
 			}
 		}
+	}
+
+	public String getResourceId() {
+		return id==null ? clientId : id;
 	}
 }

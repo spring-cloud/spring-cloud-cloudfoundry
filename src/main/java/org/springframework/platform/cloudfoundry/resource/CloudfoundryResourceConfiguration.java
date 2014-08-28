@@ -82,7 +82,7 @@ public class CloudfoundryResourceConfiguration {
 		@Override
 		public void configure(ResourceServerSecurityConfigurer resources)
 				throws Exception {
-			resources.resourceId(resource.getClientId());
+			resources.resourceId(resource.getResourceId());
 		}
 		
 		@Override
