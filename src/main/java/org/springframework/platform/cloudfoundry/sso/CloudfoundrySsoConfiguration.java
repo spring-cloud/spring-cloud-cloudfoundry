@@ -42,6 +42,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
+import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestOperations;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.filter.OAuth2ClientAuthenticationProcessingFilter;
@@ -98,10 +99,14 @@ public class CloudfoundrySsoConfiguration {
 	}
 
 	@Bean
-	@Scope(value = "session", proxyMode = ScopedProxyMode.INTERFACES)
 	public OAuth2RestOperations restTemplate() {
-		return new OAuth2RestTemplate(remote(), new DefaultOAuth2ClientContext(
-				accessTokenRequest));
+		return new OAuth2RestTemplate(remote(), oauth2ClientContext());
+	}
+
+	@Bean
+	@Scope(value = "session", proxyMode = ScopedProxyMode.INTERFACES)
+	public OAuth2ClientContext oauth2ClientContext() {
+		return new DefaultOAuth2ClientContext(accessTokenRequest);
 	}
 
 	@Configuration
