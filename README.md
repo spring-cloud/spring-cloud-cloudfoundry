@@ -1,5 +1,5 @@
 Integration between [Cloudfoundry](https://github.com/cloudfoundry)
-and the [Spring Platform](https://github.com/spring-platform).
+and the [Spring Cloud Components](https://github.com/spring-cloud).
 
 Add this project to a Spring Boot REST service and deploy to
 Cloudfoundry (and use the Actuator for maximum flexibility). It will
