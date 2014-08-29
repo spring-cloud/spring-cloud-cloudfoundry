@@ -165,16 +165,16 @@ public class CloudfoundrySsoConfiguration {
 				requests.anyRequest().authenticated();
 			}
 
-			http.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+			http.logout().logoutRequestMatcher(new AntPathRequestMatcher(sso.getLogoutPath()))
 					.addLogoutHandler(logoutHandler());
 			http.exceptionHandling().authenticationEntryPoint(
-					new LoginUrlAuthenticationEntryPoint("/login"));
+					new LoginUrlAuthenticationEntryPoint(sso.getLoginPath()));
 
 		}
 
 		protected OAuth2ClientAuthenticationProcessingFilter cloudfoundrySsoFilter() {
 			OAuth2ClientAuthenticationProcessingFilter filter = new OAuth2ClientAuthenticationProcessingFilter(
-					"/login");
+					sso.getLoginPath());
 			filter.setRestTemplate(restTemplate);
 			filter.setTokenServices(tokenServices());
 			return filter;
@@ -195,7 +195,7 @@ public class CloudfoundrySsoConfiguration {
 						HttpServletResponse response, Authentication authentication) {
 					restTemplate.getOAuth2ClientContext().setAccessToken(null);
 					String redirect = request.getRequestURL().toString()
-							.replace("/logout", sso.getHome().getPath());
+							.replace(sso.getLogoutPath(), sso.getHome().getPath());
 					try {
 						response.sendRedirect(sso.getLogoutUri(redirect));
 					}

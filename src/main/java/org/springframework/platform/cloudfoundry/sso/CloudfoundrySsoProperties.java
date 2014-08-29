@@ -31,19 +31,28 @@ import org.springframework.validation.Validator;
 @Data
 public class CloudfoundrySsoProperties implements Validator {
 
-	@Value("${vcap.services.sso.credentials.tokenUri:}")
+	private String serviceId = "sso";
+	
+	private String logoutPath = "/logout";
+	
+	private String loginPath = "/login";
+
+	@Value("${vcap.services.${cloudfoundry.sso.serviceId:sso}.credentials.tokenUri:}")
 	private String tokenUri;
 
-	@Value("${vcap.services.sso.credentials.tokenInfoUri:}")
+	@Value("${vcap.services.${cloudfoundry.sso.serviceId:sso}.credentials.userInfoUri:}")
+	private String userInfoUri;
+
+	@Value("${vcap.services.${cloudfoundry.sso.serviceId:sso}.credentials.tokenInfoUri:}")
 	private String tokenInfoUri;
 
-	@Value("${vcap.services.sso.credentials.authorizationUri:}")
+	@Value("${vcap.services.${cloudfoundry.sso.serviceId:sso}.credentials.authorizationUri:}")
 	private String authorizationUri;
 
-	@Value("${vcap.services.sso.credentials.clientId:}")
+	@Value("${vcap.services.${cloudfoundry.sso.serviceId:sso}.credentials.clientId:}")
 	private String clientId;
 
-	@Value("${vcap.services.sso.credentials.clientSecret:}")
+	@Value("${vcap.services.${cloudfoundry.sso.serviceId:sso}.credentials.clientSecret:}")
 	private String clientSecret;
 
 	private Home home = new Home();
