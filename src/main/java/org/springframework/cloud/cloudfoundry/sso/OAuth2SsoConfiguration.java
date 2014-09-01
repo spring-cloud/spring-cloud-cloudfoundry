@@ -206,7 +206,7 @@ public class OAuth2SsoConfiguration {
 
 			http.logout()
 					.logoutRequestMatcher(new AntPathRequestMatcher(sso.getLogoutPath()))
-					.addLogoutHandler(logoutHandler());
+					.addLogoutHandler(logoutHandler()).permitAll();
 			http.exceptionHandling().authenticationEntryPoint(
 					new LoginUrlAuthenticationEntryPoint(sso.getLoginPath()));
 
@@ -232,7 +232,7 @@ public class OAuth2SsoConfiguration {
 						response.sendRedirect(sso.getLogoutUri(redirect));
 					}
 					catch (IOException e) {
-						throw new IllegalStateException("Cannot logout", e);
+						throw new IllegalStateException("Cannot logout remote server", e);
 					}
 				}
 			};

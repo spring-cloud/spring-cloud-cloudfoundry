@@ -64,7 +64,7 @@ public class OAuth2SsoProperties implements Validator {
 	}
 
 	public String getLogoutUri(String redirectUrl) {
-		return logoutUri != null ? logoutUri : tokenUri.replace("/oauth/token",
+		return StringUtils.hasText(logoutUri) ? logoutUri : tokenUri.replace("/oauth/token",
 				"/logout.do?redirect=" + redirectUrl);
 	}
 
