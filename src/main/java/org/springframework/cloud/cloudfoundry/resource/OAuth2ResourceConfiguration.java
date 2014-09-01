@@ -24,17 +24,17 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cloud.cloudfoundry.oauth2.ResourceServerProperties;
+import org.springframework.cloud.cloudfoundry.oauth2.ResourceServerTokenServicesConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfiguration;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
-import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
 import org.springframework.util.ClassUtils;
 
 /**
@@ -42,40 +42,28 @@ import org.springframework.util.ClassUtils;
  *
  */
 @Configuration
-@ConditionalOnExpression("'${cloudfoundry.resource.clientId:${vcap.services.resource.credentials.clientId:}}'!=''")
+@ConditionalOnExpression("'${oauth2.resource.clientId:${vcap.services.resource.credentials.clientId:}}'!=''")
 @ConditionalOnClass({ EnableResourceServer.class, SecurityProperties.class })
 @ConditionalOnWebApplication
 @EnableResourceServer
-@EnableConfigurationProperties(CloudfoundryResourceProperties.class)
-public class CloudfoundryResourceConfiguration {
+@Import(ResourceServerTokenServicesConfiguration.class)
+public class OAuth2ResourceConfiguration {
 
 	@Autowired
-	private CloudfoundryResourceProperties resource;
+	private ResourceServerProperties resource;
 	
 	@Bean
 	@ConditionalOnMissingBean(ResourceServerConfigurer.class)
 	public ResourceServerConfigurer resourceServer() {
 		return new ResourceSecurityConfigurer(resource);
 	}
-	
-	@Bean
-	@ConditionalOnMissingBean(ResourceServerTokenServices.class)
-	public ResourceServerTokenServices tokenServices() {
-		RemoteTokenServices services = new RemoteTokenServices();
-		services.setCheckTokenEndpointUrl(resource.getTokenInfoUri());
-		services.setClientId(resource.getClientId());
-		services.setClientSecret(resource.getClientSecret());
-		return services;
-	}
-
-
 
 	protected static class ResourceSecurityConfigurer extends ResourceServerConfigurerAdapter {
 
-		private CloudfoundryResourceProperties resource;
+		private ResourceServerProperties resource;
 
 		@Autowired
-		public ResourceSecurityConfigurer(CloudfoundryResourceProperties resource) {
+		public ResourceSecurityConfigurer(ResourceServerProperties resource) {
 			this.resource = resource;
 		}
 

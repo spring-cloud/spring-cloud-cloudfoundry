@@ -13,16 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.cloud.cloudfoundry.sso;
+package org.springframework.cloud.cloudfoundry.resource;
 
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+import org.springframework.context.annotation.Import;
 
 /**
  * @author Dave Syer
  *
  */
-public interface CloudfoundrySsoConfigurer {
-
-	void configure(HttpSecurity http);
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Import(OAuth2ResourceConfiguration.class)
+public @interface EnableOAuth2Resource {
 
 }

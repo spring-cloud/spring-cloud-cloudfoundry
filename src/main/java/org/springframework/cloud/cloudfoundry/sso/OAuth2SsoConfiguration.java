@@ -16,6 +16,7 @@
 package org.springframework.cloud.cloudfoundry.sso;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -32,11 +33,19 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplicat
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cloud.cloudfoundry.oauth2.ResourceServerTokenServicesConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.core.Ordered;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpRequest;
+import org.springframework.http.MediaType;
+import org.springframework.http.client.ClientHttpRequestExecution;
+import org.springframework.http.client.ClientHttpRequestInterceptor;
+import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
@@ -49,30 +58,33 @@ import org.springframework.security.oauth2.client.filter.OAuth2ClientAuthenticat
 import org.springframework.security.oauth2.client.filter.OAuth2ClientContextFilter;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
 import org.springframework.security.oauth2.client.token.AccessTokenRequest;
+import org.springframework.security.oauth2.client.token.RequestEnhancer;
+import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeAccessTokenProvider;
 import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
-import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
 import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.util.ClassUtils;
+import org.springframework.util.MultiValueMap;
 
 /**
  * @author Dave Syer
  *
  */
 @Configuration
-@ConditionalOnExpression("'${cloudfoundry.sso.clientId:${vcap.services.sso.credentials.clientId:}}'!=''")
+@ConditionalOnExpression("'${oauth2.sso.clientId:${vcap.services.sso.credentials.clientId:}}'!=''")
 @ConditionalOnClass({ EnableOAuth2Client.class, SecurityProperties.class })
 @ConditionalOnWebApplication
 @EnableOAuth2Client
-@EnableConfigurationProperties(CloudfoundrySsoProperties.class)
-public class CloudfoundrySsoConfiguration {
+@EnableConfigurationProperties(OAuth2SsoProperties.class)
+@Import(ResourceServerTokenServicesConfiguration.class)
+public class OAuth2SsoConfiguration {
 
 	@Autowired
-	private CloudfoundrySsoProperties sso;
+	private OAuth2SsoProperties sso;
 
 	@Resource
 	@Qualifier("accessTokenRequest")
@@ -88,19 +100,42 @@ public class CloudfoundrySsoConfiguration {
 	}
 
 	@Bean
-	public OAuth2ProtectedResourceDetails remote() {
+	public OAuth2ProtectedResourceDetails oauth2RemoteResource() {
 		AuthorizationCodeResourceDetails details = new AuthorizationCodeResourceDetails();
 		// set up resource details, OAuth2 URLs etc.
 		details.setClientId(sso.getClientId());
 		details.setClientSecret(sso.getClientSecret());
 		details.setAccessTokenUri(sso.getTokenUri());
 		details.setUserAuthorizationUri(sso.getAuthorizationUri());
+		details.setClientAuthenticationScheme(sso.getAuthenticationScheme());
 		return details;
 	}
 
 	@Bean
-	public OAuth2RestOperations restTemplate() {
-		return new OAuth2RestTemplate(remote(), oauth2ClientContext());
+	public OAuth2RestOperations oauth2RestTemplate() {
+		OAuth2RestTemplate template = new OAuth2RestTemplate(oauth2RemoteResource(),
+				oauth2ClientContext());
+		template.setInterceptors(Arrays
+				.<ClientHttpRequestInterceptor> asList(new ClientHttpRequestInterceptor() {
+					@Override
+					public ClientHttpResponse intercept(HttpRequest request, byte[] body,
+							ClientHttpRequestExecution execution) throws IOException {
+						request.getHeaders().setAccept(
+								Arrays.asList(MediaType.APPLICATION_JSON));
+						return execution.execute(request, body);
+					}
+				}));
+		AuthorizationCodeAccessTokenProvider accessTokenProvider = new AuthorizationCodeAccessTokenProvider();
+		accessTokenProvider.setTokenRequestEnhancer(new RequestEnhancer() {
+			@Override
+			public void enhance(AccessTokenRequest request,
+					OAuth2ProtectedResourceDetails resource,
+					MultiValueMap<String, String> form, HttpHeaders headers) {
+				headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+			}
+		});
+		template.setAccessTokenProvider(accessTokenProvider);
+		return template;
 	}
 
 	@Bean
@@ -117,12 +152,16 @@ public class CloudfoundrySsoConfiguration {
 		private OAuth2ProtectedResourceDetails remote;
 
 		@Autowired
-		private CloudfoundrySsoProperties sso;
+		private OAuth2SsoProperties sso;
 
 		@Autowired
+		private ResourceServerTokenServices tokenServices;
+
+		@Autowired
+		@Qualifier("oauth2RestTemplate")
 		private OAuth2RestOperations restTemplate;
 
-		private List<CloudfoundrySsoConfigurer> configurers = Collections.emptyList();
+		private List<OAuth2SsoConfigurer> configurers = Collections.emptyList();
 
 		@Override
 		public int getOrder() {
@@ -139,7 +178,7 @@ public class CloudfoundrySsoConfiguration {
 		 * @param configurers the configurers to set
 		 */
 		@Autowired(required = false)
-		public void setConfigurers(List<CloudfoundrySsoConfigurer> configurers) {
+		public void setConfigurers(List<OAuth2SsoConfigurer> configurers) {
 			this.configurers = configurers;
 		}
 
@@ -149,7 +188,7 @@ public class CloudfoundrySsoConfiguration {
 			http.addFilterAfter(cloudfoundrySsoFilter(),
 					AbstractPreAuthenticatedProcessingFilter.class);
 
-			for (CloudfoundrySsoConfigurer configurer : configurers) {
+			for (OAuth2SsoConfigurer configurer : configurers) {
 				// Delegates can add authorizeRequests() here
 				configurer.configure(http);
 			}
@@ -165,7 +204,8 @@ public class CloudfoundrySsoConfiguration {
 				requests.anyRequest().authenticated();
 			}
 
-			http.logout().logoutRequestMatcher(new AntPathRequestMatcher(sso.getLogoutPath()))
+			http.logout()
+					.logoutRequestMatcher(new AntPathRequestMatcher(sso.getLogoutPath()))
 					.addLogoutHandler(logoutHandler());
 			http.exceptionHandling().authenticationEntryPoint(
 					new LoginUrlAuthenticationEntryPoint(sso.getLoginPath()));
@@ -176,16 +216,8 @@ public class CloudfoundrySsoConfiguration {
 			OAuth2ClientAuthenticationProcessingFilter filter = new OAuth2ClientAuthenticationProcessingFilter(
 					sso.getLoginPath());
 			filter.setRestTemplate(restTemplate);
-			filter.setTokenServices(tokenServices());
+			filter.setTokenServices(tokenServices);
 			return filter;
-		}
-
-		private ResourceServerTokenServices tokenServices() {
-			RemoteTokenServices services = new RemoteTokenServices();
-			services.setCheckTokenEndpointUrl(sso.getTokenInfoUri());
-			services.setClientId(sso.getClientId());
-			services.setClientSecret(sso.getClientSecret());
-			return services;
 		}
 
 		private LogoutHandler logoutHandler() {

@@ -21,10 +21,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
  * @author Dave Syer
  *
  */
-public class CloudfoundrySsoConfigurerAdapter implements CloudfoundrySsoConfigurer {
+public interface OAuth2SsoConfigurer {
 
-	@Override
-	public void configure(HttpSecurity http) {
-	}
+	void configure(HttpSecurity http);
 
 }

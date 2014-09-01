@@ -15,20 +15,16 @@
  */
 package org.springframework.cloud.cloudfoundry.sso;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 
 /**
  * @author Dave Syer
  *
  */
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-@Documented
-@EnableOAuth2Sso
-public @interface EnableCloudfoundrySso {
+public class OAuth2SsoConfigurerAdapter implements OAuth2SsoConfigurer {
+
+	@Override
+	public void configure(HttpSecurity http) {
+	}
 
 }

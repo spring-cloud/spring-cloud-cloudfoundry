@@ -31,11 +31,11 @@ import com.netflix.zuul.ZuulFilter;
 @Configuration
 @ConditionalOnClass({ ZuulFilter.class, EnableOAuth2Client.class, SecurityProperties.class })
 @ConditionalOnWebApplication
-public class CloudfoundryProxyConfiguration {
+public class OAuth2ProxyAutoConfiguration {
 
 	@Bean
-	public CloudfoundryTokenFilter cloudfoundryTokenFilter() {
-		return new CloudfoundryTokenFilter();
+	public OAuth2TokenFilter cloudfoundryTokenFilter() {
+		return new OAuth2TokenFilter();
 	}
 
 }

@@ -15,15 +15,25 @@
  */
 package org.springframework.cloud.cloudfoundry.broker.sample;
 
+import java.security.Principal;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.cloud.cloudfoundry.sso.EnableCloudfoundrySso;
+import org.springframework.cloud.cloudfoundry.sso.EnableOAuth2Sso;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @Configuration
 @EnableAutoConfiguration
-@EnableCloudfoundrySso
+@EnableOAuth2Sso
+@RestController
 public class Application {
+	
+	@RequestMapping("/")
+	public Principal home(Principal principal) {
+		return principal;
+	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);

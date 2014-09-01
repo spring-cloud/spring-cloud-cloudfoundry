@@ -19,6 +19,7 @@ import lombok.Data;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.security.oauth2.common.AuthenticationScheme;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -27,33 +28,32 @@ import org.springframework.validation.Validator;
  * @author Dave Syer
  *
  */
-@ConfigurationProperties("cloudfoundry.sso")
+@ConfigurationProperties("oauth2.sso")
 @Data
-public class CloudfoundrySsoProperties implements Validator {
+public class OAuth2SsoProperties implements Validator {
 
 	private String serviceId = "sso";
-	
+
 	private String logoutPath = "/logout";
-	
+
+	@Value("${vcap.services.${oauth2.sso.serviceId:sso}.credentials.logoutUri:}")
+	private String logoutUri;
+
 	private String loginPath = "/login";
 
-	@Value("${vcap.services.${cloudfoundry.sso.serviceId:sso}.credentials.tokenUri:}")
+	@Value("${vcap.services.${oauth2.sso.serviceId:sso}.credentials.tokenUri:}")
 	private String tokenUri;
 
-	@Value("${vcap.services.${cloudfoundry.sso.serviceId:sso}.credentials.userInfoUri:}")
-	private String userInfoUri;
-
-	@Value("${vcap.services.${cloudfoundry.sso.serviceId:sso}.credentials.tokenInfoUri:}")
-	private String tokenInfoUri;
-
-	@Value("${vcap.services.${cloudfoundry.sso.serviceId:sso}.credentials.authorizationUri:}")
+	@Value("${vcap.services.${oauth2.sso.serviceId:sso}.credentials.authorizationUri:}")
 	private String authorizationUri;
 
-	@Value("${vcap.services.${cloudfoundry.sso.serviceId:sso}.credentials.clientId:}")
+	@Value("${vcap.services.${oauth2.sso.serviceId:sso}.credentials.clientId:}")
 	private String clientId;
 
-	@Value("${vcap.services.${cloudfoundry.sso.serviceId:sso}.credentials.clientSecret:}")
+	@Value("${vcap.services.${oauth2.sso.serviceId:sso}.credentials.clientSecret:}")
 	private String clientSecret;
+
+	private AuthenticationScheme authenticationScheme = AuthenticationScheme.header;
 
 	private Home home = new Home();
 
@@ -63,27 +63,19 @@ public class CloudfoundrySsoProperties implements Validator {
 		private boolean secure = true;
 	}
 
-	public String getTokenInfoUri() {
-		return StringUtils.hasText(tokenInfoUri) ? tokenInfoUri : tokenUri.replace(
-				"/oauth/token", "/check_token");
-	}
-
-	public String getUserInfoUri() {
-		return tokenUri.replace("/oauth/token", "/user_info");
-	}
-
 	public String getLogoutUri(String redirectUrl) {
-		return tokenUri.replace("/oauth/token", "/logout.do?redirect=" + redirectUrl);
+		return logoutUri != null ? logoutUri : tokenUri.replace("/oauth/token",
+				"/logout.do?redirect=" + redirectUrl);
 	}
 
 	@Override
 	public boolean supports(Class<?> clazz) {
-		return CloudfoundrySsoProperties.class.isAssignableFrom(clazz);
+		return OAuth2SsoProperties.class.isAssignableFrom(clazz);
 	}
 
 	@Override
 	public void validate(Object target, Errors errors) {
-		CloudfoundrySsoProperties sso = (CloudfoundrySsoProperties) target;
+		OAuth2SsoProperties sso = (OAuth2SsoProperties) target;
 		if (StringUtils.hasText(sso.getClientId())) {
 			if (!StringUtils.hasText(sso.getAuthorizationUri())) {
 				errors.rejectValue("authorizeUri", "missing.authorizeUri",

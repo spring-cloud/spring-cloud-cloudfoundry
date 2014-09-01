@@ -30,17 +30,12 @@ import org.cloudfoundry.community.servicebroker.service.ServiceInstanceService;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
 import org.springframework.cloud.cloudfoundry.broker.FreeServiceDefinitionFactory;
 import org.springframework.cloud.cloudfoundry.broker.ServiceInstanceBindingRepository;
 import org.springframework.cloud.cloudfoundry.broker.ServiceInstanceRepository;
@@ -50,6 +45,12 @@ import org.springframework.cloud.cloudfoundry.broker.simple.SimpleServiceInstanc
 import org.springframework.cloud.cloudfoundry.broker.simple.SimpleServiceInstanceService;
 import org.springframework.cloud.netflix.eureka.advice.PiggybackMethodInterceptor;
 import org.springframework.cloud.netflix.eureka.event.EurekaRegistryAvailableEvent;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ReflectionUtils;
 
@@ -83,14 +84,14 @@ import com.netflix.eureka.lease.LeaseManager;
 public class ServiceBrokerAutoConfiguration {
 
 	@Configuration
-	@ConditionalOnMissingClass(name = "com.netflix.eureka.PeerAwareInstanceRegistry")
-	@ConditionalOnMissingBean(CatalogService.class)
+	@ConditionalOnMissingBean(EurekaInstanceConfig.class)
 	protected static class CatalogConfiguration {
 
 		@Autowired
 		private BrokerProperties broker;
 
 		@Bean
+		@ConditionalOnMissingBean(CatalogService.class)
 		public BeanCatalogService catalogService() {
 			return new BeanCatalogService(catalog());
 		}
@@ -143,7 +144,7 @@ public class ServiceBrokerAutoConfiguration {
 	}
 
 	@Configuration
-	@ConditionalOnClass(PeerAwareInstanceRegistry.class)
+	@ConditionalOnBean(EurekaInstanceConfig.class)
 	protected static class EurekaCatalogConfiguration {
 
 		@Bean
@@ -156,6 +157,7 @@ public class ServiceBrokerAutoConfiguration {
 
 	@Configuration
 	@ConditionalOnClass(PeerAwareInstanceRegistry.class)
+	@ConditionalOnBean(EurekaInstanceConfig.class)
 	protected static class Initializer implements
 			ApplicationListener<EurekaRegistryAvailableEvent> {
 
