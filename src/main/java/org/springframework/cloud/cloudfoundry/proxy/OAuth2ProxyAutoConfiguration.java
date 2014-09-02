@@ -34,8 +34,8 @@ import com.netflix.zuul.ZuulFilter;
 public class OAuth2ProxyAutoConfiguration {
 
 	@Bean
-	public OAuth2TokenFilter cloudfoundryTokenFilter() {
-		return new OAuth2TokenFilter();
+	public OAuth2TokenRelayFilter oauth2TokenRelayFilter() {
+		return new OAuth2TokenRelayFilter();
 	}
 
 }

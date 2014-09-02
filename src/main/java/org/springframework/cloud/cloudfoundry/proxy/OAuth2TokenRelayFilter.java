@@ -8,7 +8,7 @@ import org.springframework.security.oauth2.provider.authentication.OAuth2Authent
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 
-public class OAuth2TokenFilter extends ZuulFilter {
+public class OAuth2TokenRelayFilter extends ZuulFilter {
 
 	private static final String ACCESS_TOKEN = "ACCESS_TOKEN";
 
