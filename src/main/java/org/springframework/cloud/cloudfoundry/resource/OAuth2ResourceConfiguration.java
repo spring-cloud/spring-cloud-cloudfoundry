@@ -42,7 +42,7 @@ import org.springframework.util.ClassUtils;
  *
  */
 @Configuration
-@ConditionalOnExpression("'${oauth2.resource.clientId:${vcap.services.resource.credentials.clientId:}}'!=''")
+@ConditionalOnExpression("'${oauth2.client.clientId:${vcap.services.resource.credentials.clientId:}}'!=''")
 @ConditionalOnClass({ EnableResourceServer.class, SecurityProperties.class })
 @ConditionalOnWebApplication
 @EnableResourceServer

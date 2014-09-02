@@ -16,7 +16,6 @@
 package org.springframework.cloud.cloudfoundry.oauth2;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
@@ -25,7 +24,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClas
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.oauth2.client.OAuth2RestOperations;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
 import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
 import org.springframework.social.connect.support.OAuth2ConnectionFactory;
@@ -36,10 +35,14 @@ import org.springframework.social.connect.support.OAuth2ConnectionFactory;
  */
 @Configuration
 @EnableConfigurationProperties(ResourceServerProperties.class)
+@Import(ClientConfiguration.class)
 public class ResourceServerTokenServicesConfiguration {
 
 	@Autowired
 	private ResourceServerProperties resource;
+
+	@Autowired
+	private OAuth2ClientProperties client;
 
 	@Bean
 	@ConditionalOnMissingBean(ResourceServerTokenServices.class)
@@ -47,8 +50,8 @@ public class ResourceServerTokenServicesConfiguration {
 	protected RemoteTokenServices remoteTokenServices() {
 		RemoteTokenServices services = new RemoteTokenServices();
 		services.setCheckTokenEndpointUrl(resource.getTokenInfoUri());
-		services.setClientId(resource.getClientId());
-		services.setClientSecret(resource.getClientSecret());
+		services.setClientId(client.getClientId());
+		services.setClientSecret(client.getClientSecret());
 		return services;
 	}
 
@@ -60,26 +63,24 @@ public class ResourceServerTokenServicesConfiguration {
 		@Autowired
 		private ResourceServerProperties sso;
 
-		@Autowired(required = false)
-		private OAuth2ConnectionFactory<?> connectionFactory;
+		@Autowired
+		private OAuth2ClientProperties client;
 
 		@Autowired(required = false)
-		@Qualifier("oauth2RestTemplate")
-		private OAuth2RestOperations restTemplate;
+		private OAuth2ConnectionFactory<?> connectionFactory;
 
 		@Bean
 		@ConditionalOnBean(OAuth2ConnectionFactory.class)
 		@ConditionalOnMissingBean(ResourceServerTokenServices.class)
 		public SpringSocialTokenServices socialTokenServices() {
-			return new SpringSocialTokenServices(connectionFactory, sso.getClientId());
+			return new SpringSocialTokenServices(connectionFactory, client.getClientId());
 		}
 
 		@Bean
 		@ConditionalOnMissingBean({ OAuth2ConnectionFactory.class,
 				ResourceServerTokenServices.class })
 		public UserInfoTokenServices userInfoTokenServices() {
-			return new UserInfoTokenServices(restTemplate, sso.getUserInfoUri(),
-					sso.getClientId());
+			return new UserInfoTokenServices(sso.getUserInfoUri(), client.getClientId());
 		}
 
 	}
@@ -93,14 +94,12 @@ public class ResourceServerTokenServicesConfiguration {
 		private ResourceServerProperties sso;
 
 		@Autowired
-		@Qualifier("oauth2RestTemplate")
-		private OAuth2RestOperations restTemplate;
+		private OAuth2ClientProperties client;
 
 		@Bean
 		@ConditionalOnMissingBean(ResourceServerTokenServices.class)
 		public UserInfoTokenServices userInfoTokenServices() {
-			return new UserInfoTokenServices(restTemplate, sso.getUserInfoUri(),
-					sso.getClientId());
+			return new UserInfoTokenServices(sso.getUserInfoUri(), client.getClientId());
 		}
 
 	}

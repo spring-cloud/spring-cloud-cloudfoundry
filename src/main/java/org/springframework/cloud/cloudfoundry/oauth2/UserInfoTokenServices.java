@@ -22,12 +22,14 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.oauth2.client.OAuth2RestTemplate;
+import org.springframework.security.oauth2.client.resource.BaseOAuth2ProtectedResourceDetails;
+import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.OAuth2Request;
 import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
-import org.springframework.web.client.RestOperations;
 
 /**
  * @author Dave Syer
@@ -37,15 +39,11 @@ public class UserInfoTokenServices implements ResourceServerTokenServices {
 
 	protected final Log logger = LogFactory.getLog(getClass());
 
-	private RestOperations restTemplate;
-
 	private String userInfoEndpointUrl;
 
 	private String clientId;
 
-	public UserInfoTokenServices(RestOperations restTemplate,
-			String userInfoEndpointUrl, String clientId) {
-		this.restTemplate = restTemplate;
+	public UserInfoTokenServices(String userInfoEndpointUrl, String clientId) {
 		this.userInfoEndpointUrl = userInfoEndpointUrl;
 		this.clientId = clientId;
 	}
@@ -54,7 +52,7 @@ public class UserInfoTokenServices implements ResourceServerTokenServices {
 	public OAuth2Authentication loadAuthentication(String accessToken)
 			throws AuthenticationException, InvalidTokenException {
 
-		Map<String, Object> map = getMap(userInfoEndpointUrl);
+		Map<String, Object> map = getMap(userInfoEndpointUrl, accessToken);
 
 		if (map.containsKey("error")) {
 			logger.debug("userinfo returned error: " + map.get("error"));
@@ -90,11 +88,17 @@ public class UserInfoTokenServices implements ResourceServerTokenServices {
 		throw new UnsupportedOperationException("Not supported: read access token");
 	}
 
-	private Map<String, Object> getMap(String path) {
+	private Map<String, Object> getMap(String path, String accessToken) {
+		logger.info("Getting user info from :" + path);
+		BaseOAuth2ProtectedResourceDetails resource = new BaseOAuth2ProtectedResourceDetails();
+		resource.setClientId(clientId);
+		OAuth2RestTemplate restTemplate = new OAuth2RestTemplate(resource);
+		restTemplate.getOAuth2ClientContext().setAccessToken(new DefaultOAuth2AccessToken(accessToken));
 		@SuppressWarnings("rawtypes")
 		Map map = restTemplate.getForEntity(path, Map.class).getBody();
 		@SuppressWarnings("unchecked")
 		Map<String, Object> result = map;
 		return result;
 	}
+
 }

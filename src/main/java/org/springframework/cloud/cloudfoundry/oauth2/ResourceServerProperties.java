@@ -16,7 +16,9 @@
 package org.springframework.cloud.cloudfoundry.oauth2;
 
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.util.StringUtils;
@@ -29,18 +31,15 @@ import org.springframework.validation.Validator;
  */
 @ConfigurationProperties("oauth2.resource")
 @Data
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ResourceServerProperties implements Validator {
+	
+	private final OAuth2ClientProperties client;
 
 	private String serviceId = "resource";
 
 	@Value("${vcap.services.${oauth2.resource.serviceId:resource}.credentials.id:}")
 	private String id;
-
-	@Value("${vcap.services.${oauth2.resource.serviceId:resource}.credentials.clientId:${vcap.services.${oauth2.sso.serviceId:sso}.credentials.clientId:}}")
-	private String clientId;
-
-	@Value("${vcap.services.${oauth2.resource.serviceId:resource}.credentials.clientSecret:${vcap.services.${oauth2.sso.serviceId:sso}.credentials.clientSecret:}}")
-	private String clientSecret;
 
 	@Value("${vcap.services.${oauth2.resource.serviceId:resource}.credentials.userInfoUri:${vcap.services.${oauth2.sso.serviceId:sso}.credentials.userInfoUri:}}")
 	private String userInfoUri;
@@ -51,7 +50,7 @@ public class ResourceServerProperties implements Validator {
 	private boolean preferTokenInfo = true;
 
 	public String getResourceId() {
-		return !StringUtils.hasText(id) ? clientId : id;
+		return id;
 	}
 
 	@Override
@@ -62,8 +61,8 @@ public class ResourceServerProperties implements Validator {
 	@Override
 	public void validate(Object target, Errors errors) {
 		ResourceServerProperties resource = (ResourceServerProperties) target;
-		if (StringUtils.hasText(resource.getClientId())) {
-			if (!StringUtils.hasText(resource.getClientSecret())) {
+		if (StringUtils.hasText(client.getClientId())) {
+			if (!StringUtils.hasText(client.getClientSecret())) {
 				if (!StringUtils.hasText(resource.getUserInfoUri())) {
 					errors.rejectValue("userInfoUri", "missing.userInfoUri",
 							"Missing userInfoUri (no client secret available)");

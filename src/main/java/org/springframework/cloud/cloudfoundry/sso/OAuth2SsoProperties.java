@@ -16,13 +16,13 @@
 package org.springframework.cloud.cloudfoundry.sso;
 
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.security.oauth2.common.AuthenticationScheme;
+import org.springframework.cloud.cloudfoundry.oauth2.OAuth2ClientProperties;
 import org.springframework.util.StringUtils;
-import org.springframework.validation.Errors;
-import org.springframework.validation.Validator;
 
 /**
  * @author Dave Syer
@@ -30,7 +30,10 @@ import org.springframework.validation.Validator;
  */
 @ConfigurationProperties("oauth2.sso")
 @Data
-public class OAuth2SsoProperties implements Validator {
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+public class OAuth2SsoProperties {
+
+	private final OAuth2ClientProperties client;
 
 	private String serviceId = "sso";
 
@@ -41,20 +44,6 @@ public class OAuth2SsoProperties implements Validator {
 
 	private String loginPath = "/login";
 
-	@Value("${vcap.services.${oauth2.sso.serviceId:sso}.credentials.tokenUri:}")
-	private String tokenUri;
-
-	@Value("${vcap.services.${oauth2.sso.serviceId:sso}.credentials.authorizationUri:}")
-	private String authorizationUri;
-
-	@Value("${vcap.services.${oauth2.sso.serviceId:sso}.credentials.clientId:}")
-	private String clientId;
-
-	@Value("${vcap.services.${oauth2.sso.serviceId:sso}.credentials.clientSecret:}")
-	private String clientSecret;
-
-	private AuthenticationScheme authenticationScheme = AuthenticationScheme.header;
-
 	private Home home = new Home();
 
 	@Data
@@ -64,31 +53,8 @@ public class OAuth2SsoProperties implements Validator {
 	}
 
 	public String getLogoutUri(String redirectUrl) {
-		return StringUtils.hasText(logoutUri) ? logoutUri : tokenUri.replace("/oauth/token",
+		return StringUtils.hasText(logoutUri) ? logoutUri : client.getTokenUri().replace("/oauth/token",
 				"/logout.do?redirect=" + redirectUrl);
-	}
-
-	@Override
-	public boolean supports(Class<?> clazz) {
-		return OAuth2SsoProperties.class.isAssignableFrom(clazz);
-	}
-
-	@Override
-	public void validate(Object target, Errors errors) {
-		OAuth2SsoProperties sso = (OAuth2SsoProperties) target;
-		if (StringUtils.hasText(sso.getClientId())) {
-			if (!StringUtils.hasText(sso.getAuthorizationUri())) {
-				errors.rejectValue("authorizeUri", "missing.authorizeUri",
-						"Missing authorizeUri");
-			}
-			if (!StringUtils.hasText(sso.getTokenUri())) {
-				errors.rejectValue("tokenUri", "missing.tokenUri", "Missing tokenUri");
-			}
-			if (!StringUtils.hasText(sso.getClientSecret())) {
-				errors.rejectValue("clientSecret", "missing.clientSecret",
-						"Missing clientSecret");
-			}
-		}
 	}
 
 }
