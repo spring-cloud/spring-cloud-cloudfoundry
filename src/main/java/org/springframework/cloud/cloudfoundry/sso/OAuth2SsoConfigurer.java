@@ -23,6 +23,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
  */
 public interface OAuth2SsoConfigurer {
 
-	void configure(HttpSecurity http);
+	void configure(HttpSecurity http) throws Exception;
 
 }

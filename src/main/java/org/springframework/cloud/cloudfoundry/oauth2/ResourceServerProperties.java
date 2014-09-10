@@ -68,7 +68,7 @@ public class ResourceServerProperties implements Validator {
 							"Missing userInfoUri (no client secret available)");
 				}
 			} else {
-				if (!StringUtils.hasText(resource.getTokenInfoUri())) {
+				if (isPreferTokenInfo() && !StringUtils.hasText(resource.getTokenInfoUri())) {
 					errors.rejectValue("tokenInfoUri", "missing.tokenInfoUri",
 							"Missing tokenInfoUri");
 				}				
