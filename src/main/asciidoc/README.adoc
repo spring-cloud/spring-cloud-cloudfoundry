@@ -1,5 +1,3 @@
-= Spring Cloud for Cloud Foundry
-
 include::intro.adoc[]
 
 == Service Broker Example

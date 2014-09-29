@@ -1,0 +1,7 @@
+Add this project to a Spring Boot REST service and deploy to
+Cloudfoundry (and use the Actuator for maximum flexibility). It will
+expose service-broker endpoints automatically (look in /mappings for
+/v2/*) and you can register it with the Cloud Controller as described
+here:
+http://docs.cloudfoundry.org/services/managing-service-brokers.html[http://docs.cloudfoundry.org/services/managing-service-brokers.html].
+

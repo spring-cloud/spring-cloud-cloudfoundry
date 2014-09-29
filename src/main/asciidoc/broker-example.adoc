@@ -1,14 +1,5 @@
-Integration between [Cloudfoundry](https://github.com/cloudfoundry)
-and the [Spring Cloud Components](https://github.com/spring-cloud).
 
-Add this project to a Spring Boot REST service and deploy to
-Cloudfoundry (and use the Actuator for maximum flexibility). It will
-expose service-broker endpoints automatically (look in /mappings for
-/v2/*) and you can register it with the Cloud Controller as described
-here:
-[http://docs.cloudfoundry.org/services/managing-service-brokers.html](http://docs.cloudfoundry.org/services/managing-service-brokers.html).
-
-Example script to deploy and register a broker:
+Example script to deploy and regis#ter a broker:
 
 ```
 DOMAIN=mydomain.net
@@ -67,31 +58,7 @@ that through the `vcap.services.[service].credentials.uri` environment
 property.
 
 If your service also has a
-[Eureka core](https://github.com/Netflix/eureka) dependency, and you
+https://github.com/Netflix/eureka[Eureka core] dependency, and you
 can expose it as a Eureka service, then any service which registers
-with Eureka will also become a Cloudfoundry service. Example app with
-Eureka server (include jersey 1.13 to get the JAX-RS dependencies):
+with Eureka will also become a Cloud Foundry service.
 
-```
-@Configuration
-@EnableAutoConfiguration
-public class Application extends WebMvcConfigurerAdapter {
-
-	public static void main(String[] args) {
-		SpringApplication.run(Application.class, args);
-	}
-
-	@Bean
-	public FilterRegistrationBean jersey() {
-		FilterRegistrationBean bean = new FilterRegistrationBean();
-		bean.setFilter(new ServletContainer());
-		bean.addInitParameter("com.sun.jersey.config.property.WebPageContentRegex",
-				"(/|/(flex/|images/|js/|css/|jsp/|admin/|v2/catalog|v2/service_instances).*)");
-		bean.addInitParameter("com.sun.jersey.config.property.packages",
-				"com.sun.jersey;com.netflix");
-		return bean;
-	}
-
-}
-
-```
