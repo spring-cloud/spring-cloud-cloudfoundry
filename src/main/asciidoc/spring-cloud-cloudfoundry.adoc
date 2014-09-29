@@ -1,4 +1,4 @@
-= Spring Cloud Cloud Foundry
+= Spring Cloud for Cloud Foundry
 
 Integration between https://github.com/cloudfoundry[Cloud Foundry]
 and https://github.com/spring-cloud[Spring Cloud].
@@ -9,6 +9,8 @@ expose service-broker endpoints automatically (look in /mappings for
 /v2/*) and you can register it with the Cloud Controller as described
 here:
 http://docs.cloudfoundry.org/services/managing-service-brokers.html[http://docs.cloudfoundry.org/services/managing-service-brokers.html].
+
+== Service Broker Example
 
 Example script to deploy and register a broker:
 
