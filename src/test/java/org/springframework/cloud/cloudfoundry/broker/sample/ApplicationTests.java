@@ -33,8 +33,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
-@IntegrationTest({ "server.port=0", "security.basic.enabled=false",
-		"cloudfoundry.sso.clientId=", "cloudfoundry.resource.clientId=" })
+@IntegrationTest({ "server.port=0"})
 public class ApplicationTests {
 
 	@Value("${local.server.port}")
