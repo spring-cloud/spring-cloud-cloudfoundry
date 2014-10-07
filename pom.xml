@@ -18,6 +18,13 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
+	<scm>
+		<url>https://github.com/spring-cloud/spring-cloud-cloudfoundry</url>
+		<connection>scm:git:git://github.com/spring-cloud/spring-cloud-cloudfoundry.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com/spring-cloud/spring-cloud-cloudfoundry.git</developerConnection>
+		<tag>HEAD</tag>
+	</scm>
+
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
