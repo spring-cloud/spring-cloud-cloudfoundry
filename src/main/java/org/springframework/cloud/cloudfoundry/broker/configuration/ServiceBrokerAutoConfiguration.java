@@ -15,8 +15,6 @@
  */
 package org.springframework.cloud.cloudfoundry.broker.configuration;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,7 +25,6 @@ import org.cloudfoundry.community.servicebroker.service.BeanCatalogService;
 import org.cloudfoundry.community.servicebroker.service.CatalogService;
 import org.cloudfoundry.community.servicebroker.service.ServiceInstanceBindingService;
 import org.cloudfoundry.community.servicebroker.service.ServiceInstanceService;
-import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -44,21 +41,15 @@ import org.springframework.cloud.cloudfoundry.broker.simple.SimpleServiceInstanc
 import org.springframework.cloud.cloudfoundry.broker.simple.SimpleServiceInstanceRepository;
 import org.springframework.cloud.cloudfoundry.broker.simple.SimpleServiceInstanceService;
 import org.springframework.cloud.netflix.eureka.EurekaClientAutoConfiguration;
-import org.springframework.cloud.netflix.eureka.advice.PiggybackMethodInterceptor;
-import org.springframework.cloud.netflix.eureka.event.EurekaRegistryAvailableEvent;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ReflectionUtils;
 
 import com.netflix.appinfo.EurekaInstanceConfig;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.appinfo.providers.EurekaConfigBasedInstanceInfoProvider;
-import com.netflix.eureka.PeerAwareInstanceRegistry;
 import com.netflix.eureka.lease.LeaseManager;
 
 /**
@@ -153,42 +144,6 @@ public class ServiceBrokerAutoConfiguration {
 		public CatalogLeaseManager catalogLeaseManager(EurekaInstanceConfig config) {
 			InstanceInfo info = new EurekaConfigBasedInstanceInfoProvider(config).get();
 			return new CatalogLeaseManager(info);
-		}
-
-	}
-
-	@Configuration
-	@ConditionalOnClass(PeerAwareInstanceRegistry.class)
-	@ConditionalOnBean(EurekaInstanceConfig.class)
-	protected static class Initializer implements
-			ApplicationListener<EurekaRegistryAvailableEvent> {
-
-		@Autowired
-		private ApplicationContext applicationContext;
-
-		@Autowired
-		private CatalogLeaseManager leaseManager;
-
-		@Override
-		public void onApplicationEvent(EurekaRegistryAvailableEvent event) {
-			ProxyFactory factory = new ProxyFactory(
-					PeerAwareInstanceRegistry.getInstance());
-			factory.addAdvice(new PiggybackMethodInterceptor(leaseManager,
-					LeaseManager.class));
-			factory.setProxyTargetClass(true);
-			Field field = ReflectionUtils.findField(PeerAwareInstanceRegistry.class,
-					"instance");
-			try {
-				// Awful ugly hack to work around lack of DI in eureka
-				field.setAccessible(true);
-				Field modifiersField = Field.class.getDeclaredField("modifiers");
-				modifiersField.setAccessible(true);
-				modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-				ReflectionUtils.setField(field, null, factory.getProxy());
-			}
-			catch (Exception e) {
-				throw new IllegalStateException("Cannot modify instance registry", e);
-			}
 		}
 
 	}
