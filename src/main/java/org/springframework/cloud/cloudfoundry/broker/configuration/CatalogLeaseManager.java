@@ -28,10 +28,10 @@ import org.cloudfoundry.community.servicebroker.model.ServiceDefinition;
 import org.cloudfoundry.community.servicebroker.service.BeanCatalogService;
 import org.cloudfoundry.community.servicebroker.service.CatalogService;
 import org.springframework.cloud.cloudfoundry.broker.FreeServiceDefinitionFactory;
-import org.springframework.cloud.netflix.eureka.advice.LeaseManagerLite;
-import org.springframework.cloud.netflix.eureka.event.EurekaInstanceCanceledEvent;
-import org.springframework.cloud.netflix.eureka.event.EurekaInstanceRegisteredEvent;
-import org.springframework.cloud.netflix.eureka.event.EurekaInstanceRenewedEvent;
+import org.springframework.cloud.netflix.eureka.server.advice.LeaseManagerLite;
+import org.springframework.cloud.netflix.eureka.server.event.EurekaInstanceCanceledEvent;
+import org.springframework.cloud.netflix.eureka.server.event.EurekaInstanceRegisteredEvent;
+import org.springframework.cloud.netflix.eureka.server.event.EurekaInstanceRenewedEvent;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.event.SmartApplicationListener;
 
