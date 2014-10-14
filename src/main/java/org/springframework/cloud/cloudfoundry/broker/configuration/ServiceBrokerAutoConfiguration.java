@@ -30,10 +30,10 @@ import org.cloudfoundry.community.servicebroker.service.ServiceInstanceService;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.cloudfoundry.broker.FreeServiceDefinitionFactory;
@@ -43,6 +43,7 @@ import org.springframework.cloud.cloudfoundry.broker.simple.SimpleServiceInstanc
 import org.springframework.cloud.cloudfoundry.broker.simple.SimpleServiceInstanceBindingService;
 import org.springframework.cloud.cloudfoundry.broker.simple.SimpleServiceInstanceRepository;
 import org.springframework.cloud.cloudfoundry.broker.simple.SimpleServiceInstanceService;
+import org.springframework.cloud.netflix.eureka.EurekaClientAutoConfiguration;
 import org.springframework.cloud.netflix.eureka.advice.PiggybackMethodInterceptor;
 import org.springframework.cloud.netflix.eureka.event.EurekaRegistryAvailableEvent;
 import org.springframework.context.ApplicationContext;
@@ -81,6 +82,7 @@ import com.netflix.eureka.lease.LeaseManager;
 		@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = BeanCatalogService.class) })
 @ConditionalOnClass({ServiceInstanceRepository.class, BrokerApiVersionConfig.class })
 @ConditionalOnWebApplication
+@AutoConfigureAfter(EurekaClientAutoConfiguration.class)
 public class ServiceBrokerAutoConfiguration {
 
 	@Configuration
