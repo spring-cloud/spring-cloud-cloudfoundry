@@ -53,8 +53,9 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-mongodb</artifactId>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-security</artifactId>
+			<version>1.0.0.BUILD-SNAPSHOT</version>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
@@ -69,7 +70,19 @@
 		<dependency>
 			<groupId>org.cloudfoundry</groupId>
 			<artifactId>spring-boot-cf-service-broker</artifactId>
-			<version>2.3.1</version>
+			<version>2.3.2</version>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.cloudfoundry</groupId>
+			<artifactId>cloudfoundry-client-lib</artifactId>
+			<version>1.0.4</version>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<artifactId>spring-security-oauth2</artifactId>
+			<groupId>org.springframework.security.oauth</groupId>
+			<version>2.0.3.RELEASE</version>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
@@ -89,29 +102,29 @@
 		</dependency>
 	</dependencies>
 
-    <profiles>
+	<profiles>
 		<profile>
 			<id>docs</id>
-            <build>
-               <plugins>
-		        <plugin>
-		          <groupId>org.asciidoctor</groupId>
-		          <artifactId>asciidoctor-maven-plugin</artifactId>
-                  <inherited>false</inherited>
-                </plugin>
-			    <plugin>
-				  <groupId>org.apache.maven.plugins</groupId>
-				  <artifactId>maven-antrun-plugin</artifactId>
-                  <inherited>false</inherited>
-                </plugin>
- 				<plugin>
-				  <groupId>org.codehaus.mojo</groupId>
-				  <artifactId>build-helper-maven-plugin</artifactId>
-                  <inherited>false</inherited>
-                </plugin>
-              </plugins>
-            </build>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.asciidoctor</groupId>
+						<artifactId>asciidoctor-maven-plugin</artifactId>
+						<inherited>false</inherited>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<inherited>false</inherited>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>build-helper-maven-plugin</artifactId>
+						<inherited>false</inherited>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
-    </profiles>
+	</profiles>
 
 </project>
