@@ -4,6 +4,9 @@ server:
 spring:
   application:
     name: eureka
+security:
+  basic:
+    enabled: false
 management:
   context-path: /admin
 eureka:
