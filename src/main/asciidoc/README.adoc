@@ -1,6 +1,2 @@
 include::intro.adoc[]
 
-== Service Broker Example
-
-include::broker-example.adoc[]
-

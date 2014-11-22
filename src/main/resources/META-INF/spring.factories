@@ -1,2 +1,3 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-org.springframework.cloud.cloudfoundry.broker.configuration.ServiceBrokerAutoConfiguration
+# Application Listeners
+org.springframework.context.ApplicationListener=\
+org.springframework.cloud.cloudfoundry.environment.VcapServiceCredentialsListener

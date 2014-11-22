@@ -1,7 +1,50 @@
-Add this project to a Spring Boot REST service and deploy to
-Cloudfoundry (and use the Actuator for maximum flexibility). It will
-expose service-broker endpoints automatically (look in /mappings for
-/v2/*) and you can register it with the Cloud Controller as described
-here:
-http://docs.cloudfoundry.org/services/managing-service-brokers.html[http://docs.cloudfoundry.org/services/managing-service-brokers.html].
+Here's a Spring Cloud app with OAuth2 SSO:
+
+.app.groovy
+[source,java]
+----
+@Controller
+@EnableOAuth2Sso
+class Application {
+  
+  @RequestMapping('/')
+  String home() {
+    'Hello World'
+  }
+
+}
+----
+
+If you run it without any service bindings:
+
+----
+$ spring jar app.jar app.groovy
+$ cf push -p app.jar
+----
+
+it will be secure with (Spring Boot default) Basic authentication,
+i.e. the password will be in the logs (or set it with
+`security.user.password` as normal). To turn on OAuth2 SSO all you
+need to do is bind the app to a service with the right
+credentials. For example, a
+http://docs.pivotal.io/pivotalcf/devguide/services/user-provided.html[user-provided
+service] can be created like this on PWS:
+
+----
+$ cf create-user-provided-service sso -p '{clientId:"<my-client>",clientSecret:"<my-secret>",userInfoUri:"https://uaa.run.pivotal.io/userinfo",tokenUri: "https://login.run.pivotal.io/oauth/token",authorizationUri:"https://login.run.pivotal.io/oauth/authorize"}
+----
+
+Then bind and restart the app:
+
+----
+$ cf bind app sso
+$ cf restart app
+----
+
+and visit it in a browser. It will redirect to the Cloud Foundry (PWS)
+login server instead of challenging for Basic authentication. The
+`clientId` and `clientSecret` are credentials of a registered client
+in Cloud Foundry.  To get a Cloud Foundry client registration for
+testing please ask at support@run.pivotal.io (if you want it on PWS),
+or your local platform administrator (if it's a private instance).
 
