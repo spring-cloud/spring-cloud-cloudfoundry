@@ -7,7 +7,7 @@ and https://github.com/spring-cloud[Spring Cloud].
 == Service Broker Example
 
 
-Example script to deploy and regis#ter a broker:
+Example script to deploy and register a broker:
 
 ```
 DOMAIN=mydomain.net
