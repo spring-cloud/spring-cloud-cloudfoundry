@@ -15,12 +15,12 @@ binds the app to environment properties in `oauth2.\*`. Spring Cloud
 for Cloud Foundry just sets up default environment properties so that
 it all just works if you bind to a Cloud Foundry service instance
 called "sso". The service credentials are mapped to the SSO
-properties, i.e. `clientId`, `clientSecret`, `tokenUri`,
-`authorizationUri`, `userInfoUri`, `tokenInfoUri1, `jwt.\*` (refer to
-the Spring Cloud Security documentation for details of which
-combinations will work together). The main thing is that in Cloud
-Foundry you only need one service to cover all the necessary
-credentials.
+properties, i.e. (from `oauth2.client.\*`) `clientId`, `clientSecret`,
+`tokenUri`, `authorizationUri`, (and from `oauth2.resource.\*`)
+`userInfoUri`, `tokenInfoUri`, `keyValue`, `keyUri`. Refer to the
+Spring Cloud Security documentation for details of which combinations
+will work together. The main thing is that in Cloud Foundry you only
+need one service to cover all the necessary credentials.
 
 To use a different sercice instance name (i.e. not "sso") just set
 `oauth2.sso.serviceId` to your custom name.
@@ -30,9 +30,9 @@ To use a different sercice instance name (i.e. not "sso") just set
 Spring Cloud Security already has support for decoding JWT tokens if
 you just provide the verification key (as an environment property). In
 Cloud Foundry you can pick that property up from a servcice binding
-(`jwt.keyValue` or `jwt.keyUri`).
+(`keyValue` or `keyUri`).
 
-For example the `jwt.keyUri` in PWS is
+For example the `keyUri` in PWS is
 "https://uaa.run.pivotal.io/token_key":
 
 ----
@@ -52,17 +52,17 @@ user-provided-service for an OAuth2 resource can be created like this
 on PWS:
 
 ----
-$ cf create-user-provided-service resource -p '{jwt.keyUri:"https://uaa.run.pivotal.io/token_key"}
+$ cf create-user-provided-service resource -p '{keyUri:"https://uaa.run.pivotal.io/token_key"}
 ----
 
 To use JWT you need to add the verification key as either
-`jwt.keyValue` or `jwt.keyUri` (these could be added to the "sso"
+`keyValue` or `keyUri` (these could be added to the "sso"
 service or the "resource" service if you have one).
 
 To use a different sercice instance name (i.e. not "resource" or
 "sso") just set `oauth2.resource.serviceId` to your custom name.
 
-=== The Default Environment Keys
+=== Default Environment Keys
 
 The precise mapppings are as follows:
 
@@ -70,6 +70,6 @@ The precise mapppings are as follows:
 
 * `oauth2.client.\*` to `vcap.services.${oauth2.sso.serviceId:sso}.credentials.tokenUri:${vcap.services.${oauth2.resource.serviceId:resource}.credentials.*`
 
-* `oauth2.resource.\*` to `vcap.services.${oauth2.resource.serviceId:resource}.credentials.tokenUri:${vcap.services.${oauth2.sso.serviceId:sso}.credentials.*`
+* `oauth2.resource.(jwt).\*` to `vcap.services.${oauth2.resource.serviceId:resource}.credentials.tokenUri:${vcap.services.${oauth2.sso.serviceId:sso}.credentials.*`
 
 
