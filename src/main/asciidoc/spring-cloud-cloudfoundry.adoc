@@ -15,8 +15,8 @@ binds the app to environment properties in `oauth2.\*`. Spring Cloud
 for Cloud Foundry just sets up default environment properties so that
 it all just works if you bind to a Cloud Foundry service instance
 called "sso". The service credentials are mapped to the SSO
-properties, i.e. (from `oauth2.client.\*`) `clientId`, `clientSecret`,
-`tokenUri`, `authorizationUri`, (and from `oauth2.resource.\*`)
+properties, i.e. (from `oauth2.client.*`) `clientId`, `clientSecret`,
+`tokenUri`, `authorizationUri`, (and from `oauth2.resource.*`)
 `userInfoUri`, `tokenInfoUri`, `keyValue`, `keyUri`. Refer to the
 Spring Cloud Security documentation for details of which combinations
 will work together. The main thing is that in Cloud Foundry you only
