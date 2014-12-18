@@ -45,6 +45,6 @@ and visit it in a browser. It will redirect to the Cloud Foundry (PWS)
 login server instead of challenging for Basic authentication. The
 `clientId` and `clientSecret` are credentials of a registered client
 in Cloud Foundry.  To get a Cloud Foundry client registration for
-testing please ask at support@run.pivotal.io (if you want it on PWS),
-or your local platform administrator (if it's a private instance).
+testing please ask your local platform administrator if it's a private
+instance).
 
