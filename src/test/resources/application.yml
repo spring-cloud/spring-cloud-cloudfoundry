@@ -12,12 +12,13 @@ management:
 eureka:
   server:
     enabled: false
-oauth2:
-  sso:
-    tokenUri: http://localhost:8080/uaa/oauth/token
-    authorizationUri: http://localhost:8080/uaa/oauth/authorize
-    clientId: app
-    clientSecret: appclientsecret
+spring:
+  oauth2:
+    sso:
+      tokenUri: http://localhost:8080/uaa/oauth/token
+      authorizationUri: http://localhost:8080/uaa/oauth/authorize
+      clientId: app
+      clientSecret: appclientsecret
 logging:
   level:
     com.netflix.discovery: 'OFF'
@@ -26,15 +27,16 @@ logging:
 ---
 spring:
   profiles: github
-oauth2:
-  sso:
-    tokenUri: https://github.com/login/oauth/access_token
-    authorizationUri: https://github.com/login/oauth/authorize
-    clientId: bd1c0a783ccdd1c9b9e4
-    clientSecret: 1a9030fbca47a5b2c28e92f19050bb77824b5ad1
-    authenticationScheme: form
-  resource:
-    clientId: ${oauth2.sso.clientId}
-    userInfoUri: https://api.github.com/user
-    preferTokenInfo: false
+spring:
+  oauth2:
+    sso:
+      tokenUri: https://github.com/login/oauth/access_token
+      authorizationUri: https://github.com/login/oauth/authorize
+      clientId: bd1c0a783ccdd1c9b9e4
+      clientSecret: 1a9030fbca47a5b2c28e92f19050bb77824b5ad1
+      authenticationScheme: form
+    resource:
+      clientId: ${oauth2.sso.clientId}
+      userInfoUri: https://api.github.com/user
+      preferTokenInfo: false
   

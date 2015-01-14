@@ -45,42 +45,42 @@ public class VcapServiceCredentialsListener implements
 		Map<String, Object> source = new HashMap<String, Object>();
 		source.put("oauth.sso.logoutUri",
 				"${vcap.services.${oauth2.sso.serviceId:sso}.credentials.logoutUri:}");
-		source.put("oauth2.resource.id",
+		source.put("spring.oauth2.resource.id",
 				"${vcap.services.${oauth2.resource.serviceId:resource}.credentials.id:}");
 		source.put(
-				"oauth2.resource.userInfoUri",
+				"spring.oauth2.resource.userInfoUri",
 				"${vcap.services.${oauth2.resource.serviceId:resource}.credentials.userInfoUri:"
 						+ "${vcap.services.${oauth2.sso.serviceId:sso}.credentials.userInfoUri:}}");
 		source.put(
-				"oauth2.resource.tokenInfoUri",
+				"spring.oauth2.resource.tokenInfoUri",
 				"${vcap.services.${oauth2.resource.serviceId:resource}.credentials.tokenInfoUri:"
 						+ "${vcap.services.${oauth2.sso.serviceId:sso}.credentials.tokenInfoUri:}}");
 		source.put(
-				"oauth2.resource.jwt.keyUri",
+				"spring.oauth2.resource.jwt.keyUri",
 				"${vcap.services.${oauth2.resource.serviceId:resource}.credentials.keyUri:"
 						+ "${vcap.services.${oauth2.sso.serviceId:sso}.credentials.keyUri:}}");
 		source.put(
-				"oauth2.resource.jwt.keyValue",
+				"spring.oauth2.resource.jwt.keyValue",
 				"${vcap.services.${oauth2.resource.serviceId:resource}.credentials.keyValue:"
 						+ "${vcap.services.${oauth2.sso.serviceId:sso}.credentials.keyValue:}}");
 		source.put(
-				"oauth2.client.tokenUri",
+				"spring.oauth2.client.tokenUri",
 				"${vcap.services.${oauth2.sso.serviceId:sso}.credentials.tokenUri:"
 						+ "${vcap.services.${oauth2.resource.serviceId:resource}.credentials.tokenUri:}}");
 		source.put(
-				"oauth2.client.authorizationUri",
+				"spring.oauth2.client.authorizationUri",
 				"${vcap.services.${oauth2.sso.serviceId:sso}.credentials.authorizationUri:"
 						+ "${vcap.services.${oauth2.resource.serviceId:resource}.credentials.authorizationUri:}}");
 		source.put(
-				"oauth2.client.clientId",
+				"spring.oauth2.client.clientId",
 				"${vcap.services.${oauth2.sso.serviceId:sso}.credentials.clientId:"
 						+ "${vcap.services.${oauth2.resource.serviceId:resource}.credentials.clientId:}}");
 		source.put(
-				"oauth2.client.clientSecret",
+				"spring.oauth2.client.clientSecret",
 				"${vcap.services.${oauth2.sso.serviceId:sso}.credentials.clientSecret:"
 						+ "${vcap.services.${oauth2.resource.serviceId:resource}.credentials.clientSecret:}}");
 		source.put(
-				"oauth2.client.scope",
+				"spring.oauth2.client.scope",
 				"${vcap.services.${oauth2.sso.serviceId:sso}.credentials.scope:"
 						+ "${vcap.services.${oauth2.resource.serviceId:resource}.credentials.scope:}}");
 		event.getEnvironment().getPropertySources()
