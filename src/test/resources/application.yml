@@ -36,7 +36,7 @@ spring:
       clientSecret: 1a9030fbca47a5b2c28e92f19050bb77824b5ad1
       authenticationScheme: form
     resource:
-      clientId: ${oauth2.sso.clientId}
+      clientId: ${spring.oauth2.sso.clientId}
       userInfoUri: https://api.github.com/user
       preferTokenInfo: false
   

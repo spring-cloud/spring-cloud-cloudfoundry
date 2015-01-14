@@ -11,25 +11,25 @@ include::quickstart.adoc[]
 === OAuth2 Single Sign On
 
 Spring Cloud Security provides the `@EnableOAuth2Sso` annotation and
-binds the app to environment properties in `oauth2.\*`. Spring Cloud
+binds the app to environment properties in `spring.oauth2.\*`. Spring Cloud
 for Cloud Foundry just sets up default environment properties so that
 it all just works if you bind to a Cloud Foundry service instance
 called "sso". The service credentials are mapped to the SSO
-properties, i.e. (from `oauth2.client.*`) `clientId`, `clientSecret`,
+properties, i.e. (from `spring.oauth2.client.*`) `clientId`, `clientSecret`,
 `tokenUri`, `authorizationUri`, (and from `oauth2.resource.*`)
 `userInfoUri`, `tokenInfoUri`, `keyValue`, `keyUri`. Refer to the
 Spring Cloud Security documentation for details of which combinations
 will work together. The main thing is that in Cloud Foundry you only
 need one service to cover all the necessary credentials.
 
-To use a different sercice instance name (i.e. not "sso") just set
-`oauth2.sso.serviceId` to your custom name.
+To use a different service instance name (i.e. not "sso") just set
+`spring.oauth2.sso.serviceId` to your custom name.
 
 === JWT Tokens
 
 Spring Cloud Security already has support for decoding JWT tokens if
 you just provide the verification key (as an environment property). In
-Cloud Foundry you can pick that property up from a servcice binding
+Cloud Foundry you can pick that property up from a service binding
 (`keyValue` or `keyUri`).
 
 For example the `keyUri` in PWS is
@@ -60,16 +60,16 @@ To use JWT you need to add the verification key as either
 service or the "resource" service if you have one).
 
 To use a different sercice instance name (i.e. not "resource" or
-"sso") just set `oauth2.resource.serviceId` to your custom name.
+"sso") just set `spring.oauth2.resource.serviceId` to your custom name.
 
 === Default Environment Keys
 
 The precise mapppings are as follows:
 
-* `oauth2.sso.\*` to `vcap.services.${oauth2.sso.serviceId:sso}.credentials.*`
+* `spring.oauth2.sso.\*` to `vcap.services.${spring.oauth2.sso.serviceId:sso}.credentials.*`
 
-* `oauth2.client.\*` to `vcap.services.${oauth2.sso.serviceId:sso}.credentials.tokenUri:${vcap.services.${oauth2.resource.serviceId:resource}.credentials.*`
+* `spring.oauth2.client.\*` to `vcap.services.${spring.oauth2.sso.serviceId:sso}.credentials.tokenUri:${vcap.services.${spring.oauth2.resource.serviceId:resource}.credentials.*`
 
-* `oauth2.resource.(jwt).\*` to `vcap.services.${oauth2.resource.serviceId:resource}.credentials.tokenUri:${vcap.services.${oauth2.sso.serviceId:sso}.credentials.*`
+* `spring.oauth2.resource.(jwt).\*` to `vcap.services.${spring.oauth2.resource.serviceId:resource}.credentials.tokenUri:${vcap.services.${spring.oauth2.sso.serviceId:sso}.credentials.*`
 
 
