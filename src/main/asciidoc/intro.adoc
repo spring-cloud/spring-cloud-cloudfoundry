@@ -9,7 +9,7 @@ username to use for the service).
 Add this project as a dependency to any Spring Cloud UI app or REST
 service and deploy to Cloudfoundry.  If you use Spring Cloud Security
 OAuth2 features this will make them bindable to Cloud Foundry services
-instead of enironment properties in `oauth2.*`.  For a UI app you can
+instead of enironment properties in `spring.oauth2.*`.  For a UI app you can
 declare `@EnableOAuth2Sso` and bind to a service called "sso", and for
 a service you can add `@EnableOAuth2Resource` and bind to a service
 called "resource" (see below for how to change the names).
