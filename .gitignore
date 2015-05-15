@@ -1,6 +1,7 @@
 *~
 #*
 *#
+
 .#*
 .classpath
 .project
@@ -11,5 +12,5 @@
 *.iml
 build
 bin
-/target/
+**/target/
 .factorypath
