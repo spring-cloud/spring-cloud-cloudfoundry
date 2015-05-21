@@ -24,37 +24,37 @@ import org.cloudfoundry.client.lib.domain.CloudApplication;
  */
 public class CloudFoundryServer extends Server {
 
-    private final MetaInfo metaInfo;
+	private final MetaInfo metaInfo;
 
-    public CloudFoundryServer(final CloudApplication cloudApplication) {
+	public CloudFoundryServer(final CloudApplication cloudApplication) {
 
-        super(cloudApplication.getUris().iterator().next(), 80);
+		super(cloudApplication.getUris().iterator().next(), 80);
 
-        this.metaInfo = new MetaInfo() {
-            @Override
-            public String getAppName() {
-                return cloudApplication.getName();
-            }
+		this.metaInfo = new MetaInfo() {
+			@Override
+			public String getAppName() {
+				return cloudApplication.getName();
+			}
 
-            @Override
-            public String getServerGroup() {
-                return null;
-            }
+			@Override
+			public String getServerGroup() {
+				return null;
+			}
 
-            @Override
-            public String getServiceIdForDiscovery() {
-                return cloudApplication.getName();
-            }
+			@Override
+			public String getServiceIdForDiscovery() {
+				return cloudApplication.getName();
+			}
 
-            @Override
-            public String getInstanceId() {
-                return cloudApplication.getName();
-            }
-        };
-    }
+			@Override
+			public String getInstanceId() {
+				return cloudApplication.getName();
+			}
+		};
+	}
 
-    @Override
-    public MetaInfo getMetaInfo() {
-        return metaInfo;
-    }
+	@Override
+	public MetaInfo getMetaInfo() {
+		return metaInfo;
+	}
 }

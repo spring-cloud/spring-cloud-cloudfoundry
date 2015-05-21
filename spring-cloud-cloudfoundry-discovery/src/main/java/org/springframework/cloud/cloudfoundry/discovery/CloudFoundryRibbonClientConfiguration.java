@@ -36,47 +36,52 @@ import javax.annotation.PostConstruct;
 @Configuration
 public class CloudFoundryRibbonClientConfiguration {
 
-    protected static final String DEFAULT_NAMESPACE = "ribbon";
-    protected static final String VALUE_NOT_SET = "__not__set__";
+	protected static final String DEFAULT_NAMESPACE = "ribbon";
+	protected static final String VALUE_NOT_SET = "__not__set__";
 
 	@Value("${ribbon.client.name}")
-    private String serviceId;
+	private String serviceId;
 
-    public CloudFoundryRibbonClientConfiguration (){ }
+	public CloudFoundryRibbonClientConfiguration() {
+	}
 
-    public CloudFoundryRibbonClientConfiguration  (String svcId) {
-        this.serviceId = svcId;
-    }
+	public CloudFoundryRibbonClientConfiguration(String svcId) {
+		this.serviceId = svcId;
+	}
 
-    @Bean
-    @ConditionalOnMissingBean
-    public ServerList<?> ribbonServerList(CloudFoundryClient cloudFoundryClient, IClientConfig config) {
-        CloudFoundryServerList cloudFoundryServerList = new CloudFoundryServerList(cloudFoundryClient);
-        cloudFoundryServerList.initWithNiwsConfig(config);
-        return cloudFoundryServerList;
-    }
+	@Bean
+	@ConditionalOnMissingBean
+	public ServerList<?> ribbonServerList(CloudFoundryClient cloudFoundryClient,
+			IClientConfig config) {
+		CloudFoundryServerList cloudFoundryServerList = new CloudFoundryServerList(
+				cloudFoundryClient);
+		cloudFoundryServerList.initWithNiwsConfig(config);
+		return cloudFoundryServerList;
+	}
 
-    @PostConstruct
-    public void postConstruct() {
-        // FIXME: what should this be?
-        setProp(this.serviceId, CommonClientConfigKey.DeploymentContextBasedVipAddresses.key(), this.serviceId);
-        setProp(this.serviceId, CommonClientConfigKey.EnableZoneAffinity.key(), "true");
-    }
+	@PostConstruct
+	public void postConstruct() {
+		// FIXME: what should this be?
+		setProp(this.serviceId,
+				CommonClientConfigKey.DeploymentContextBasedVipAddresses.key(),
+				this.serviceId);
+		setProp(this.serviceId, CommonClientConfigKey.EnableZoneAffinity.key(), "true");
+	}
 
-    protected void setProp(String serviceId, String suffix, String value) {
-        // how to set the namespace properly?
-        String key = getKey(serviceId, suffix);
-        DynamicStringProperty property = getProperty(key);
-        if (property.get().equals(VALUE_NOT_SET)) {
-            ConfigurationManager.getConfigInstance().setProperty(key, value);
-        }
-    }
+	protected void setProp(String serviceId, String suffix, String value) {
+		// how to set the namespace properly?
+		String key = getKey(serviceId, suffix);
+		DynamicStringProperty property = getProperty(key);
+		if (property.get().equals(VALUE_NOT_SET)) {
+			ConfigurationManager.getConfigInstance().setProperty(key, value);
+		}
+	}
 
-    protected DynamicStringProperty getProperty(String key) {
-        return DynamicPropertyFactory.getInstance().getStringProperty(key, VALUE_NOT_SET);
-    }
+	protected DynamicStringProperty getProperty(String key) {
+		return DynamicPropertyFactory.getInstance().getStringProperty(key, VALUE_NOT_SET);
+	}
 
-    protected String getKey(String serviceId, String suffix) {
-        return serviceId + "." + DEFAULT_NAMESPACE + "." + suffix;
-    }
+	protected String getKey(String serviceId, String suffix) {
+		return serviceId + "." + DEFAULT_NAMESPACE + "." + suffix;
+	}
 }

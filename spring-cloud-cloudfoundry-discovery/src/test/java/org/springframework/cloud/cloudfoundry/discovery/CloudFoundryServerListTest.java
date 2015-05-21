@@ -17,13 +17,16 @@
 package org.springframework.cloud.cloudfoundry.discovery;
 
 import com.netflix.client.config.IClientConfig;
+
 import org.cloudfoundry.client.lib.CloudFoundryClient;
+import org.cloudfoundry.client.lib.CloudFoundryException;
 import org.cloudfoundry.client.lib.domain.CloudApplication;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+import org.springframework.http.HttpStatus;
 
 import java.util.Arrays;
 import java.util.List;
@@ -36,40 +39,54 @@ import static org.mockito.BDDMockito.mock;
  */
 public class CloudFoundryServerListTest {
 
-    private CloudFoundryServerList cloudFoundryServerList;
-    private String serviceId = "foo-service";
+	private CloudFoundryServerList cloudFoundryServerList;
+	private String serviceId = "foo-service";
+	private CloudFoundryClient cloudFoundryClient;
 
-    @Before
-    public void setUp() {
+	@Before
+	public void setUp() {
 
-        CloudApplication cloudApplication = mock(CloudApplication.class);
-        given(cloudApplication.getUris()).will(new Answer<List<String>>() {
-            @Override
-            public List<String> answer(InvocationOnMock invocationOnMock) throws Throwable {
-                return Arrays.asList("a-url.com", "b-url.com");
-            }
-        });
+		CloudApplication cloudApplication = mock(CloudApplication.class);
+		given(cloudApplication.getUris()).will(new Answer<List<String>>() {
+			@Override
+			public List<String> answer(InvocationOnMock invocationOnMock)
+					throws Throwable {
+				return Arrays.asList("a-url.com", "b-url.com");
+			}
+		});
 
-        CloudFoundryClient cloudFoundryClient = mock(CloudFoundryClient.class);
-        given(cloudFoundryClient.getApplication(this.serviceId)).willReturn(cloudApplication);
+		cloudFoundryClient = mock(CloudFoundryClient.class);
+		given(cloudFoundryClient.getApplication(this.serviceId)).willReturn(
+				cloudApplication);
 
-        IClientConfig iClientConfig = mock(IClientConfig.class);
-        given(iClientConfig.getClientName()).willReturn(this.serviceId);
+		IClientConfig iClientConfig = mock(IClientConfig.class);
+		given(iClientConfig.getClientName()).willReturn(this.serviceId);
 
-        this.cloudFoundryServerList = new CloudFoundryServerList(cloudFoundryClient);
-        this.cloudFoundryServerList.initWithNiwsConfig(iClientConfig);
-    }
+		this.cloudFoundryServerList = new CloudFoundryServerList(cloudFoundryClient);
+		this.cloudFoundryServerList.initWithNiwsConfig(iClientConfig);
+	}
 
-    @Test
-    public void testListOfServers() {
-        List<CloudFoundryServer> initialListOfServers = this.cloudFoundryServerList.getInitialListOfServers();
-        List<CloudFoundryServer> updatedListOfServers = this.cloudFoundryServerList.getUpdatedListOfServers();
-        Assert.assertEquals(updatedListOfServers, initialListOfServers);
-        Assert.assertTrue(initialListOfServers.size() == 1);
-    }
+	@Test
+	public void testListOfServers() {
+		List<CloudFoundryServer> initialListOfServers = this.cloudFoundryServerList
+				.getInitialListOfServers();
+		List<CloudFoundryServer> updatedListOfServers = this.cloudFoundryServerList
+				.getUpdatedListOfServers();
+		Assert.assertEquals(updatedListOfServers, initialListOfServers);
+		Assert.assertTrue(initialListOfServers.size() == 1);
+	}
 
-    @Test
-    public void testInit() {
-        Assert.assertEquals(this.cloudFoundryServerList.serviceId, this.serviceId);
-    }
+	@Test
+	public void testListOfServersFails() {
+		given(cloudFoundryClient.getApplication(this.serviceId)).willThrow(
+				new CloudFoundryException(HttpStatus.NOT_FOUND));
+		List<CloudFoundryServer> initialListOfServers = this.cloudFoundryServerList
+				.getInitialListOfServers();
+		Assert.assertTrue(initialListOfServers.size() == 0);
+	}
+
+	@Test
+	public void testInit() {
+		Assert.assertEquals(this.cloudFoundryServerList.serviceId, this.serviceId);
+	}
 }

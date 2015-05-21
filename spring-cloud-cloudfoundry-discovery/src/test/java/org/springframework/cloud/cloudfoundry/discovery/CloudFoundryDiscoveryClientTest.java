@@ -19,6 +19,7 @@ package org.springframework.cloud.cloudfoundry.discovery;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cloudfoundry.client.lib.CloudFoundryClient;
+import org.cloudfoundry.client.lib.CloudFoundryException;
 import org.cloudfoundry.client.lib.domain.CloudApplication;
 import org.cloudfoundry.client.lib.domain.InstanceInfo;
 import org.cloudfoundry.client.lib.domain.InstanceState;
@@ -28,6 +29,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,114 +45,135 @@ import static org.mockito.BDDMockito.mock;
  */
 public class CloudFoundryDiscoveryClientTest {
 
-    private final Log log = LogFactory.getLog(getClass());
+	private final Log log = LogFactory.getLog(getClass());
 
-    private CloudFoundryDiscoveryClient cloudFoundryDiscoveryClient;
+	private CloudFoundryDiscoveryClient cloudFoundryDiscoveryClient;
 
-    private CloudApplication cloudApplication;
+	private CloudApplication cloudApplication;
 
-    private String hiServiceServiceId = "hi-service";
+	private String hiServiceServiceId = "hi-service";
 
-    private CloudFoundryClient cloudFoundryClient;
+	private CloudFoundryClient cloudFoundryClient;
 
-    private CloudApplication fakeCloudApplication(String name, String... uri) {
-        CloudApplication cloudApplication = mock(CloudApplication.class);
-        given(cloudApplication.getName()).willReturn(name);
-        given(cloudApplication.getUris()).willReturn(Arrays.asList(uri));
-        return cloudApplication;
-    }
+	private CloudApplication fakeCloudApplication(String name, String... uri) {
+		CloudApplication cloudApplication = mock(CloudApplication.class);
+		given(cloudApplication.getName()).willReturn(name);
+		given(cloudApplication.getUris()).willReturn(Arrays.asList(uri));
+		return cloudApplication;
+	}
 
-    @Before
-    public void setUp() {
-        this.cloudFoundryClient = mock(CloudFoundryClient.class);
-        Environment environment = mock(Environment.class);
+	@Before
+	public void setUp() {
+		this.cloudFoundryClient = mock(CloudFoundryClient.class);
+		Environment environment = mock(Environment.class);
 
-        given(environment.getProperty("VCAP_APPLICATION"))
-                .willReturn("{\"limits\":{\"mem\":1024,\"disk\":1024,\"fds\":16384},\"application_version\":" +
-                        "\"36eff082-96d6-498f-8214-508fda72ba65\",\"application_name\":\"" + hiServiceServiceId +
-                        "\",\"application_uris\"" +
-                        ":[\"" + hiServiceServiceId +
-                        ".cfapps.io\"],\"version\":\"36eff082-96d6-498f-8214-508fda72ba65\",\"name\":" +
-                        "\"hi-service\",\"space_name\":\"joshlong\",\"space_id\":\"e0cd969c-3461-41ae-abde-4e11bb5acbd1\"," +
-                        "\"uris\":[\"hi-service.cfapps.io\"],\"users\":null,\"application_id\":\"af350f7c-88c4-4e35-a04e-698a1dbc7354\"," +
-                        "\"instance_id\":\"e4843ca23bd947b28e6d4cb3f9b92cbb\",\"instance_index\":0,\"host\":\"0.0.0.0\",\"port\":61590," +
-                        "\"started_at\":\"2015-05-07 20:00:10 +0000\",\"started_at_timestamp\":1431028810,\"start\":\"2015-05-07 20:00:10 +0000\"," +
-                        "\"state_timestamp\":1431028810}");
+		given(environment.getProperty("VCAP_APPLICATION"))
+				.willReturn(
+						"{\"limits\":{\"mem\":1024,\"disk\":1024,\"fds\":16384},\"application_version\":"
+								+ "\"36eff082-96d6-498f-8214-508fda72ba65\",\"application_name\":\""
+								+ hiServiceServiceId
+								+ "\",\"application_uris\""
+								+ ":[\""
+								+ hiServiceServiceId
+								+ ".cfapps.io\"],\"version\":\"36eff082-96d6-498f-8214-508fda72ba65\",\"name\":"
+								+ "\"hi-service\",\"space_name\":\"joshlong\",\"space_id\":\"e0cd969c-3461-41ae-abde-4e11bb5acbd1\","
+								+ "\"uris\":[\"hi-service.cfapps.io\"],\"users\":null,\"application_id\":\"af350f7c-88c4-4e35-a04e-698a1dbc7354\","
+								+ "\"instance_id\":\"e4843ca23bd947b28e6d4cb3f9b92cbb\",\"instance_index\":0,\"host\":\"0.0.0.0\",\"port\":61590,"
+								+ "\"started_at\":\"2015-05-07 20:00:10 +0000\",\"started_at_timestamp\":1431028810,\"start\":\"2015-05-07 20:00:10 +0000\","
+								+ "\"state_timestamp\":1431028810}");
 
-        List<CloudApplication> cloudApplications = new ArrayList<>();
-        cloudApplications.add(fakeCloudApplication(this.hiServiceServiceId, "hi-service.cfapps.io", "hi-service-1.cfapps.io"));
-        cloudApplications.add(fakeCloudApplication("config-service", "conf-service.cfapps.io", "conf-service-1.cfapps.io"));
+		List<CloudApplication> cloudApplications = new ArrayList<>();
+		cloudApplications.add(fakeCloudApplication(this.hiServiceServiceId,
+				"hi-service.cfapps.io", "hi-service-1.cfapps.io"));
+		cloudApplications.add(fakeCloudApplication("config-service",
+				"conf-service.cfapps.io", "conf-service-1.cfapps.io"));
 
-        given(this.cloudFoundryClient.getApplications())
-                .willReturn(cloudApplications);
+		given(this.cloudFoundryClient.getApplications()).willReturn(cloudApplications);
 
-        cloudApplication = cloudApplications.get(0);
-        given(this.cloudFoundryClient.getApplication(this.hiServiceServiceId))
-                .willReturn(cloudApplication);
+		cloudApplication = cloudApplications.get(0);
+		given(this.cloudFoundryClient.getApplication(this.hiServiceServiceId))
+				.willReturn(cloudApplication);
 
-        given(this.cloudFoundryClient.getApplication(this.hiServiceServiceId))
-                .willReturn(this.cloudApplication);
+		given(this.cloudFoundryClient.getApplication(this.hiServiceServiceId))
+				.willReturn(this.cloudApplication);
 
-        InstanceInfo instanceInfo = mock(InstanceInfo.class);
-        InstancesInfo instancesInfo = mock(InstancesInfo.class);
-        given(instancesInfo.getInstances())
-                .willReturn(Collections.singletonList(instanceInfo));
-        given(instanceInfo.getState())
-                .willReturn(InstanceState.RUNNING);
+		InstanceInfo instanceInfo = mock(InstanceInfo.class);
+		InstancesInfo instancesInfo = mock(InstancesInfo.class);
+		given(instancesInfo.getInstances()).willReturn(
+				Collections.singletonList(instanceInfo));
+		given(instanceInfo.getState()).willReturn(InstanceState.RUNNING);
 
-        given(this.cloudFoundryClient.getApplicationInstances(this.cloudApplication))
-                .willReturn(instancesInfo);
+		given(this.cloudFoundryClient.getApplicationInstances(this.cloudApplication))
+				.willReturn(instancesInfo);
 
-        this.cloudFoundryDiscoveryClient = new CloudFoundryDiscoveryClient(cloudFoundryClient, environment);
-    }
+		this.cloudFoundryDiscoveryClient = new CloudFoundryDiscoveryClient(
+				cloudFoundryClient, environment);
+	}
 
-    @Test
-    public void testServiceResolution() {
-        List<String> serviceNames = this.cloudFoundryDiscoveryClient.getServices();
+	@Test
+	public void testServiceResolution() {
+		List<String> serviceNames = this.cloudFoundryDiscoveryClient.getServices();
 
-        Assert.assertTrue("there should be one registered service.", serviceNames.contains(
-                this.hiServiceServiceId));
+		Assert.assertTrue("there should be one registered service.",
+				serviceNames.contains(this.hiServiceServiceId));
 
-        for (String serviceName : serviceNames) {
-            this.log.debug("\t discovered serviceName: " + serviceName);
-        }
-    }
+		for (String serviceName : serviceNames) {
+			this.log.debug("\t discovered serviceName: " + serviceName);
+		}
+	}
 
-    @Test
-    public void testInstances() {
-        List<ServiceInstance> instances = this.cloudFoundryDiscoveryClient.getInstances(
-                this.hiServiceServiceId);
-        assertEquals(instances.size(), 1);
-    }
+	@Test
+	public void testInstances() {
+		List<ServiceInstance> instances = this.cloudFoundryDiscoveryClient
+				.getInstances(this.hiServiceServiceId);
+		assertEquals(instances.size(), 1);
+	}
 
-    @Test
-    public void testLocalServiceInstanceRunning() {
+	@Test
+	public void testLocalServiceInstanceRunning() {
 
-        InstanceInfo instanceInfo = mock(InstanceInfo.class);
-        InstancesInfo instancesInfo = mock(InstancesInfo.class);
-        given(instancesInfo.getInstances()).willReturn(Collections.singletonList(instanceInfo));
-        given(instanceInfo.getState()).willReturn(InstanceState.RUNNING);
+		InstanceInfo instanceInfo = mock(InstanceInfo.class);
+		InstancesInfo instancesInfo = mock(InstancesInfo.class);
+		given(instancesInfo.getInstances()).willReturn(
+				Collections.singletonList(instanceInfo));
+		given(instanceInfo.getState()).willReturn(InstanceState.RUNNING);
 
-        given(cloudFoundryClient.getApplicationInstances(this.cloudApplication)).willReturn(instancesInfo);
+		given(cloudFoundryClient.getApplicationInstances(this.cloudApplication))
+				.willReturn(instancesInfo);
 
-        ServiceInstance localServiceInstance = this.cloudFoundryDiscoveryClient.getLocalServiceInstance();
-        assertTrue(localServiceInstance.getHost().contains("hi-service.cfapps.io"));
-        assertTrue(localServiceInstance.getServiceId().equals(this.hiServiceServiceId));
-        assertEquals(localServiceInstance.getPort(), 80);
-    }
+		ServiceInstance localServiceInstance = this.cloudFoundryDiscoveryClient
+				.getLocalServiceInstance();
+		assertTrue(localServiceInstance.getHost().contains("hi-service.cfapps.io"));
+		assertTrue(localServiceInstance.getServiceId().equals(this.hiServiceServiceId));
+		assertEquals(localServiceInstance.getPort(), 80);
+	}
 
-    @Test
-    public void testLocalServiceInstanceNotRunning() {
+	@Test
+	public void testLocalServiceInstanceNotRunning() {
 
-        InstanceInfo instanceInfo = mock(InstanceInfo.class);
-        InstancesInfo instancesInfo = mock(InstancesInfo.class);
-        given(instancesInfo.getInstances()).willReturn(Collections.singletonList(instanceInfo));
-        given(instanceInfo.getState()).willReturn(InstanceState.CRASHED);
+		InstanceInfo instanceInfo = mock(InstanceInfo.class);
+		InstancesInfo instancesInfo = mock(InstancesInfo.class);
+		given(instancesInfo.getInstances()).willReturn(
+				Collections.singletonList(instanceInfo));
+		given(instanceInfo.getState()).willReturn(InstanceState.CRASHED);
 
-        given(cloudFoundryClient.getApplicationInstances(this.cloudApplication)).willReturn(instancesInfo);
+		given(cloudFoundryClient.getApplicationInstances(this.cloudApplication))
+				.willReturn(instancesInfo);
 
-        ServiceInstance localServiceInstance = this.cloudFoundryDiscoveryClient.getLocalServiceInstance();
-        assertNull(localServiceInstance);
-    }
+		ServiceInstance localServiceInstance = this.cloudFoundryDiscoveryClient
+				.getLocalServiceInstance();
+		assertNull(localServiceInstance);
+	}
+
+	@Test
+	public void testLocalServiceInstanceNotFoundg() {
+
+		given(cloudFoundryClient.getApplicationInstances(this.cloudApplication))
+				.willThrow(new CloudFoundryException(HttpStatus.NOT_FOUND));
+
+		ServiceInstance localServiceInstance = this.cloudFoundryDiscoveryClient
+				.getLocalServiceInstance();
+		assertNull(localServiceInstance);
+	}
 
 }

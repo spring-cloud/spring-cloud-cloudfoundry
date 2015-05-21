@@ -18,6 +18,9 @@ package org.springframework.cloud.cloudfoundry.discovery;
 
 import com.netflix.client.config.IClientConfig;
 import com.netflix.loadbalancer.AbstractServerList;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.cloudfoundry.client.lib.CloudFoundryClient;
 import org.cloudfoundry.client.lib.domain.CloudApplication;
 
@@ -29,31 +32,40 @@ import java.util.List;
  */
 public class CloudFoundryServerList extends AbstractServerList<CloudFoundryServer> {
 
-    protected String serviceId;
+	private static final Log log = LogFactory.getLog(CloudFoundryServerList.class);
 
-    private final CloudFoundryClient cloudFoundryClient;
+	protected String serviceId;
 
-    public CloudFoundryServerList(CloudFoundryClient cloudFoundryClient) {
-        this.cloudFoundryClient = cloudFoundryClient;
-    }
+	private final CloudFoundryClient cloudFoundryClient;
 
-    @Override
-    public void initWithNiwsConfig(IClientConfig iClientConfig) {
-        this.serviceId = iClientConfig.getClientName();
-    }
+	public CloudFoundryServerList(CloudFoundryClient cloudFoundryClient) {
+		this.cloudFoundryClient = cloudFoundryClient;
+	}
 
-    @Override
-    public List<CloudFoundryServer> getInitialListOfServers() {
-        return this.cloudFoundryServers();
-    }
+	@Override
+	public void initWithNiwsConfig(IClientConfig iClientConfig) {
+		this.serviceId = iClientConfig.getClientName();
+	}
 
-    @Override
-    public List<CloudFoundryServer> getUpdatedListOfServers() {
-        return this.cloudFoundryServers();
-    }
+	@Override
+	public List<CloudFoundryServer> getInitialListOfServers() {
+		return this.cloudFoundryServers();
+	}
 
-    protected List<CloudFoundryServer> cloudFoundryServers() {
-        CloudApplication cloudApplications = this.cloudFoundryClient.getApplication(this.serviceId);
-        return Collections.singletonList(new CloudFoundryServer(cloudApplications));
-    }
+	@Override
+	public List<CloudFoundryServer> getUpdatedListOfServers() {
+		return this.cloudFoundryServers();
+	}
+
+	protected List<CloudFoundryServer> cloudFoundryServers() {
+		try {
+			CloudApplication cloudApplications = this.cloudFoundryClient
+					.getApplication(this.serviceId);
+			return Collections.singletonList(new CloudFoundryServer(cloudApplications));
+		}
+		catch (Exception e) {
+			log.warn("Cannot determine server list for " + serviceId + ": " + e.getClass() + "(" + e.getMessage() + ")");
+			return Collections.emptyList();
+		}
+	}
 }

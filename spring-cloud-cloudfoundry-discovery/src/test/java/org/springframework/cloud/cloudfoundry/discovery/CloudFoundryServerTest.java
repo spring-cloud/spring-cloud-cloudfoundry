@@ -33,26 +33,26 @@ import static org.mockito.BDDMockito.mock;
  */
 public class CloudFoundryServerTest {
 
-    private CloudFoundryServer cloudFoundryServer;
-    private List<String> urls = Arrays.asList("a-url.com", "b-url.com");
-    private String serverName = "server-name";
+	private CloudFoundryServer cloudFoundryServer;
+	private List<String> urls = Arrays.asList("a-url.com", "b-url.com");
+	private String serverName = "server-name";
 
-    @Before
-    public void setUp() {
-        CloudApplication cloudApplication = mock(CloudApplication.class);
-        given(cloudApplication.getUris()).willReturn(this.urls);
-        given(cloudApplication.getName()).willReturn(this.serverName);
-        given(cloudApplication.getRunningInstances()).willReturn(1);
-        this.cloudFoundryServer = new CloudFoundryServer(cloudApplication);
-    }
+	@Before
+	public void setUp() {
+		CloudApplication cloudApplication = mock(CloudApplication.class);
+		given(cloudApplication.getUris()).willReturn(this.urls);
+		given(cloudApplication.getName()).willReturn(this.serverName);
+		given(cloudApplication.getRunningInstances()).willReturn(1);
+		this.cloudFoundryServer = new CloudFoundryServer(cloudApplication);
+	}
 
-    @Test
-    public void testProperConstruction() {
-        Server.MetaInfo metaInfo = this.cloudFoundryServer.getMetaInfo();
+	@Test
+	public void testProperConstruction() {
+		Server.MetaInfo metaInfo = this.cloudFoundryServer.getMetaInfo();
 
-        Assert.assertEquals(metaInfo.getAppName(), this.serverName);
-        Assert.assertEquals(metaInfo.getServiceIdForDiscovery(), this.serverName);
-        Assert.assertEquals(metaInfo.getInstanceId(), this.serverName);
-        Assert.assertEquals(this.cloudFoundryServer.getHost(), this.urls.get(0));
-    }
+		Assert.assertEquals(metaInfo.getAppName(), this.serverName);
+		Assert.assertEquals(metaInfo.getServiceIdForDiscovery(), this.serverName);
+		Assert.assertEquals(metaInfo.getInstanceId(), this.serverName);
+		Assert.assertEquals(this.cloudFoundryServer.getHost(), this.urls.get(0));
+	}
 }

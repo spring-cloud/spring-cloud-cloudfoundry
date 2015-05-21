@@ -24,33 +24,43 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "spring.cloud.cloudfoundry.discovery")
 public class CloudFoundryDiscoveryProperties {
 
-    private String cloudControllerUrl = "https://api.run.pivotal.io";
+	private String cloudControllerUrl = "https://api.run.pivotal.io";
 
-    private String email;
+	private String email;
 
-    private String password;
+	private String password;
 
-    public String getCloudControllerUrl() {
-        return cloudControllerUrl;
-    }
+	private boolean enabled = true;
 
-    public void setCloudControllerUrl(String cloudControllerUrl) {
-        this.cloudControllerUrl = cloudControllerUrl;
-    }
+	public boolean isEnabled() {
+		return enabled;
+	}
 
-    public String getEmail() {
-        return email;
-    }
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	public String getCloudControllerUrl() {
+		return cloudControllerUrl;
+	}
 
-    public String getPassword() {
-        return password;
-    }
+	public void setCloudControllerUrl(String cloudControllerUrl) {
+		this.cloudControllerUrl = cloudControllerUrl;
+	}
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
 }
