@@ -1,0 +1,11 @@
+= Spring Cloud for Cloud Foundry
+
+include::intro.adoc[]
+
+The first time you use it the discovery client might be slow owing to
+the fact that it has to get an access token from Cloud Foundry.
+
+== Quickstart
+
+include::quickstart.adoc[]
+

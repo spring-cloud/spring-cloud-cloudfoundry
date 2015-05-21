@@ -24,7 +24,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "spring.cloud.cloudfoundry.discovery")
 public class CloudFoundryDiscoveryProperties {
 
-	private String cloudControllerUrl = "https://api.run.pivotal.io";
+	private String url = "https://api.run.pivotal.io";
 
 	private String email;
 
@@ -40,12 +40,12 @@ public class CloudFoundryDiscoveryProperties {
 		this.enabled = enabled;
 	}
 
-	public String getCloudControllerUrl() {
-		return cloudControllerUrl;
+	public String getUrl() {
+		return url;
 	}
 
-	public void setCloudControllerUrl(String cloudControllerUrl) {
-		this.cloudControllerUrl = cloudControllerUrl;
+	public void setUrl(String cloudControllerUrl) {
+		this.url = cloudControllerUrl;
 	}
 
 	public String getEmail() {

@@ -54,7 +54,7 @@ public class CloudFoundryDiscoveryClientConfiguration {
 	public CloudFoundryClient cloudFoundryClient(CloudCredentials cc)
 			throws MalformedURLException {
 		CloudFoundryClient cloudFoundryClient = new CloudFoundryClient(cc, URI.create(
-				this.cloudFoundryDiscoveryProperties.getCloudControllerUrl()).toURL());
+				this.cloudFoundryDiscoveryProperties.getUrl()).toURL());
 		cloudFoundryClient.login();
 		return cloudFoundryClient;
 	}
