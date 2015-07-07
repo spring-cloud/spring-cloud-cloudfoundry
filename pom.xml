@@ -16,7 +16,6 @@
 
      <properties>
        <bintray.package>cloudfoundry</bintray.package>
-       <module>spring-cloud-starter-cloudfoundry</module>
 	   <main.basedir>${basedir}</main.basedir>
      </properties>
 
@@ -35,6 +34,7 @@
         <module>spring-cloud-cloudfoundry-discovery</module>
         <module>spring-cloud-cloudfoundry-web</module>
         <module>spring-cloud-cloudfoundry-sample</module>
+        <module>spring-cloud-starter-cloudfoundry</module>
         <module>docs</module>
     </modules>
     <build>
