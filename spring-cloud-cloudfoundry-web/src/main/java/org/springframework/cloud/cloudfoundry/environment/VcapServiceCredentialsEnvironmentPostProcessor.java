@@ -67,9 +67,9 @@ implements EnvironmentPostProcessor, Ordered {
 			source.put("security.oauth2.resource.userInfoUri",
 					authDomain + "/userinfo");
 			source.put("security.oauth2.resource.keyUri", authDomain + "/token_key");
-			source.put("security.oauth2.resource.accessTokenUri",
+			source.put("security.oauth2.client.accessTokenUri",
 					authDomain + "/oauth/token");
-			source.put("security.oauth2.resource.authorizationUri",
+			source.put("security.oauth2.client.authorizationUri",
 					authDomain + "/oauth/authorization");
 		}
 		else {

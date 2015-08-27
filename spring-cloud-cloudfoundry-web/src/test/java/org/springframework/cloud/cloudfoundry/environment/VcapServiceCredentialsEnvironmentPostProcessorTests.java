@@ -73,6 +73,15 @@ public class VcapServiceCredentialsEnvironmentPostProcessorTests {
 	}
 
 	@Test
+	public void addTokenUriAuthDomain() {
+		EnvironmentTestUtils.addEnvironment(this.environment,
+				"vcap.services.sso.credentials.auth_domain:http://example.com");
+		this.listener.postProcessEnvironment(this.environment, new SpringApplication());
+		assertEquals("http://example.com/oauth/token", this.environment
+				.resolvePlaceholders("${security.oauth2.client.accessTokenUri}"));
+	}
+
+	@Test
 	public void addUserInfoUri() {
 		EnvironmentTestUtils.addEnvironment(this.environment,
 				"vcap.services.sso.credentials.userInfoUri:http://example.com");
@@ -84,7 +93,7 @@ public class VcapServiceCredentialsEnvironmentPostProcessorTests {
 	@Test
 	public void addServiceId() {
 		EnvironmentTestUtils.addEnvironment(this.environment,
-				"vcap.services.my.credentials.tokenUri:http://example.com",
+				"vcap.services.my.credentials.accessTokenUri:http://example.com",
 				"security.oauth2.sso.serviceId:my");
 		this.listener.postProcessEnvironment(this.environment, new SpringApplication());
 		assertEquals("http://example.com", this.environment
