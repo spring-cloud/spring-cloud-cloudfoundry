@@ -69,7 +69,7 @@ implements EnvironmentPostProcessor, Ordered {
 			source.put("security.oauth2.resource.keyUri", authDomain + "/token_key");
 			source.put("security.oauth2.client.accessTokenUri",
 					authDomain + "/oauth/token");
-			source.put("security.oauth2.client.authorizationUri",
+			source.put("security.oauth2.client.userAuthorizationUri",
 					authDomain + "/oauth/authorization");
 		}
 		else {
@@ -78,7 +78,7 @@ implements EnvironmentPostProcessor, Ordered {
 			addProperty(source, resolver, serviceId, "resource", "keyUri");
 			addProperty(source, resolver, serviceId, "resource", "keyValue");
 			addProperty(source, resolver, serviceId, "client", "accessTokenUri", "tokenUri");
-			addProperty(source, resolver, serviceId, "client", "authorizationUri");
+			addProperty(source, resolver, serviceId, "client", "userAuthorizationUri", "authorizationUri");
 		}
 		addProperty(source, resolver, serviceId, "client", "clientId");
 		addProperty(source, resolver, serviceId, "client", "clientSecret");
