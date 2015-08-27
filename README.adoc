@@ -8,10 +8,17 @@ middlware that you "bind" to an app, essentially providing it with an
 environment variable containing credentials (e.g. the location and
 username to use for the service).
 
-Add this project as a dependency to any Spring Cloud UI app or REST
-service and deploy to Cloudfoundry.  If you use Spring Cloud Security
-OAuth2 features this will make them bindable to Cloud Foundry services
-instead of enironment properties in `spring.oauth2.*`.  For a UI app you can
-declare `@EnableOAuth2Sso` and bind to a service called "sso", and for
-a service you can add `@EnableOAuth2Resource` and bind to a service
-called "resource" (see below for how to change the names).
+The `spring-cloud-cloudfoundry-web` project provides basic support for
+some enhanced features of webapps in Cloud Foundry: binding
+automatically to single-sign-on services and optionally enabling
+sticky routing for discovery.
+
+The `spring-cloud-cloudfoundry-discovery` project provides an
+implementation of Spring Cloud Commons `DiscoveryClient` so you can
+`@EnableDiscoveryClient` and provide your credentials as
+`spring.cloud.cloudfoundry.discovery.[email,password]` and then you
+can use the `DiscoveryClient` directly or via a `LoadBalancerClient`
+(also `*.url` if you are not connecting to [Pivotal Web
+Services](https://run.pivotal.io)).
+
+> NOTE: if you are looking for a way to bind to services then this is the wrong library. Check out the [Spring Cloud Connectors](https://github.com/spring-cloud/spring-cloud-connectors) instead.

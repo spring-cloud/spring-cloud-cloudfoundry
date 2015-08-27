@@ -32,8 +32,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.Collections;
-
 /**
  * @author <A href= "josh@joshlong.com">Josh Long</A>
  */
@@ -60,7 +58,7 @@ public class CloudFoundryAutoConfigurationTest {
 				+ "\"state_timestamp\":1431028810}";
 
 		this.context = new SpringApplicationBuilder()
-				.properties(Collections.singletonMap("VCAP_APPLICATION", vcapAppl))
+				.properties("VCAP_APPLICATION:"+vcapAppl, "server.port=0")
 				.sources(SimpleConfiguration.class).run();
 	}
 
