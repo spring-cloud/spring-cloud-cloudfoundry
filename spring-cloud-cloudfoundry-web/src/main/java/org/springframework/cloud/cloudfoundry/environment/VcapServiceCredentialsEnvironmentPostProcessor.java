@@ -70,7 +70,7 @@ implements EnvironmentPostProcessor, Ordered {
 			source.put("security.oauth2.client.accessTokenUri",
 					authDomain + "/oauth/token");
 			source.put("security.oauth2.client.userAuthorizationUri",
-					authDomain + "/oauth/authorization");
+					authDomain + "/oauth/authorize");
 		}
 		else {
 			addProperty(source, resolver, serviceId, "resource", "userInfoUri");
