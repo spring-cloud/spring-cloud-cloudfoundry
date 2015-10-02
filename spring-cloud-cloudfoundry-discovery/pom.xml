@@ -70,11 +70,6 @@
 		</dependency>
 		<dependency>
 			<groupId>com.netflix.feign</groupId>
-			<artifactId>feign-ribbon</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.netflix.feign</groupId>
 			<scope>test</scope>
 			<artifactId>feign-slf4j</artifactId>
 		</dependency>
