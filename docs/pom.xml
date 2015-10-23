@@ -11,7 +11,7 @@
 	<artifactId>spring-cloud-cloudfoundry-docs</artifactId>
 	<packaging>pom</packaging>
 	<name>Spring Cloud for Cloud Foundry Docs</name>
-	<version>1.0.0.BUILD-SNAPSHOT</version>
+	<version>1.0.0.M2</version>
 	<description>Spring Cloud Docs</description>
 	<properties>
 		<docs.main>spring-cloud-cloudfoundry</docs.main>
