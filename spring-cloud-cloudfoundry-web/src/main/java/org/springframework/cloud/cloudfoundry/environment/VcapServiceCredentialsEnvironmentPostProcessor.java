@@ -20,7 +20,7 @@ import java.util.Map;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.bind.RelaxedPropertyResolver;
-import org.springframework.boot.context.config.ConfigFileEnvironmentPostProcessor;
+import org.springframework.boot.context.config.ConfigFileApplicationListener;
 import org.springframework.boot.env.EnvironmentPostProcessor;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
@@ -37,7 +37,7 @@ implements EnvironmentPostProcessor, Ordered {
 	// After VcapEnvironmentPostProcessor and ConfigFileEnvironmentPostProcessor so
 	// values here can
 	// use those ones
-	private int order = ConfigFileEnvironmentPostProcessor.DEFAULT_ORDER + 1;
+	private int order = ConfigFileApplicationListener.DEFAULT_ORDER + 1;
 
 	@Override
 	public int getOrder() {
