@@ -1,5 +1,11 @@
+= Spring Cloud for Cloudfoundry
+
+image:https://travis-ci.org/spring-cloud/spring-cloud-cloudfoundry.svg?branch=master["Build Status", link="https://travis-ci.org/spring-cloud/spring-cloud-cloudfoundry"]
+
 include::intro.adoc[]
 
 > NOTE: if you are looking for a way to bind to services then this is the wrong library. Check out the [Spring Cloud Connectors](https://github.com/spring-cloud/spring-cloud-connectors) instead.
 
+== Contributing
 
+include::https://raw.githubusercontent.com/spring-cloud/spring-cloud-build/master/docs/src/main/asciidoc/contributing.adoc[]
