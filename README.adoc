@@ -27,6 +27,27 @@ Services](https://run.pivotal.io)).
 
 > NOTE: if you are looking for a way to bind to services then this is the wrong library. Check out the [Spring Cloud Connectors](https://github.com/spring-cloud/spring-cloud-connectors) instead.
 
+= Building documentation
+
+`./mvnw install -P docs -DskipTests=true --settings .settings.xml`
+
+If there is an ruby error like
+
+--------------------------------------------------------------
+LoadError: no such file to load -- asciidoctor
+--------------------------------------------------------------
+
+then the user must install the _asciidoctor_ gem and set the environment
+variable `GEM_HOME`to the ruby gem folder. For example:
+
+-------------------------------------------------------------
+  # Get gem info
+  gem environment
+
+  export GEM_HOME=<PATH FOR GEM ENVIRONMENT>
+
+-------------------------------------------------------------
+
 == Contributing
 
 link:https://raw.githubusercontent.com/spring-cloud/spring-cloud-build/master/docs/src/main/asciidoc/contributing.adoc[]
