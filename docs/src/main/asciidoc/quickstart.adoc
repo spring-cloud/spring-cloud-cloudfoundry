@@ -26,5 +26,5 @@ $ spring jar app.jar app.groovy
 $ cf push -p app.jar
 ----
 
-it will show it's app name in the home page.
+It will show its app name in the home page.
 
