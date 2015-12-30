@@ -24,16 +24,28 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "spring.cloud.cloudfoundry.discovery")
 public class CloudFoundryDiscoveryProperties {
 
+	/**
+	 * URL of Cloud Foundry API (Cloud Controller).
+	 */
 	private String url = "https://api.run.pivotal.io";
 
+	/**
+	 * Email address of user to authenticate.
+	 */
 	private String email;
 
+	/**
+	 * Password for user to authenticate and obtain token.
+	 */
 	private String password;
 
+	/**
+	 * Flag to indicate that discovery is enabled.
+	 */
 	private boolean enabled = true;
 
 	public boolean isEnabled() {
-		return enabled;
+		return this.enabled;
 	}
 
 	public void setEnabled(boolean enabled) {
@@ -41,7 +53,7 @@ public class CloudFoundryDiscoveryProperties {
 	}
 
 	public String getUrl() {
-		return url;
+		return this.url;
 	}
 
 	public void setUrl(String cloudControllerUrl) {
@@ -49,7 +61,7 @@ public class CloudFoundryDiscoveryProperties {
 	}
 
 	public String getEmail() {
-		return email;
+		return this.email;
 	}
 
 	public void setEmail(String email) {
@@ -57,7 +69,7 @@ public class CloudFoundryDiscoveryProperties {
 	}
 
 	public String getPassword() {
-		return password;
+		return this.password;
 	}
 
 	public void setPassword(String password) {
