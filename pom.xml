@@ -17,9 +17,6 @@
      <properties>
        <bintray.package>cloudfoundry</bintray.package>
 	   <main.basedir>${basedir}</main.basedir>
-	   <feign.version>8.10.0</feign.version>
-	   <spring-cloud-netflix.version>1.1.0.BUILD-SNAPSHOT</spring-cloud-netflix.version>
-	   <spring-cloud-commons.version>1.1.0.BUILD-SNAPSHOT</spring-cloud-commons.version>
      </properties>
 
     <scm>
@@ -34,12 +31,14 @@
     </scm>
 
     <modules>
+        <module>spring-cloud-cloudfoundry-dependencies</module>
         <module>spring-cloud-cloudfoundry-discovery</module>
         <module>spring-cloud-cloudfoundry-web</module>
         <module>spring-cloud-cloudfoundry-sample</module>
         <module>spring-cloud-starter-cloudfoundry</module>
         <module>docs</module>
     </modules>
+
     <build>
         <plugins>
             <plugin>
@@ -57,36 +56,11 @@
         <dependencies>
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-netflix</artifactId>
-                <version>${spring-cloud-netflix.version}</version>
+                <artifactId>spring-cloud-cloudfoundry-dependencies</artifactId>
+                <version>${project.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-			<dependency>
-				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-commons</artifactId>
-				<version>${spring-cloud-commons.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-cloudfoundry-discovery</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-cloudfoundry-web</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-starter-cloudfoundry</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.cloudfoundry</groupId>
-				<artifactId>cloudfoundry-client-lib</artifactId>
-				<version>1.1.1</version>
-			</dependency>
  		    <dependency>
 			  <groupId>commons-logging</groupId>
 			  <artifactId>commons-logging</artifactId>
@@ -94,5 +68,55 @@
 		    </dependency>
        </dependencies>
     </dependencyManagement>
+
+	<profiles>
+		<profile>
+			<id>spring</id>
+			<repositories>
+				<repository>
+					<id>spring-snapshots</id>
+					<name>Spring Snapshots</name>
+					<url>http://repo.spring.io/libs-snapshot-local</url>
+					<snapshots>
+						<enabled>true</enabled>
+					</snapshots>
+				</repository>
+				<repository>
+					<id>spring-milestones</id>
+					<name>Spring Milestones</name>
+					<url>http://repo.spring.io/libs-milestone-local</url>
+					<snapshots>
+						<enabled>false</enabled>
+					</snapshots>
+				</repository>
+				<repository>
+					<id>spring-releases</id>
+					<name>Spring Releases</name>
+					<url>http://repo.spring.io/release</url>
+					<snapshots>
+						<enabled>false</enabled>
+					</snapshots>
+				</repository>
+			</repositories>
+			<pluginRepositories>
+				<pluginRepository>
+					<id>spring-snapshots</id>
+					<name>Spring Snapshots</name>
+					<url>http://repo.spring.io/libs-snapshot-local</url>
+					<snapshots>
+						<enabled>true</enabled>
+					</snapshots>
+				</pluginRepository>
+				<pluginRepository>
+					<id>spring-milestones</id>
+					<name>Spring Milestones</name>
+					<url>http://repo.spring.io/libs-milestone-local</url>
+					<snapshots>
+						<enabled>false</enabled>
+					</snapshots>
+				</pluginRepository>
+			</pluginRepositories>
+		</profile>
+	</profiles>
 
 </project>
