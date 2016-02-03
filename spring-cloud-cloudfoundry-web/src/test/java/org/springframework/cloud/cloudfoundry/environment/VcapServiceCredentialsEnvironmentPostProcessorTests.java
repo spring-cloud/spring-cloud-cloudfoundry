@@ -100,4 +100,13 @@ public class VcapServiceCredentialsEnvironmentPostProcessorTests {
 				.resolvePlaceholders("${security.oauth2.client.accessTokenUri}"));
 	}
 
+	@Test
+	public void addJwtKeyUri() {
+		EnvironmentTestUtils.addEnvironment(this.environment,
+				"vcap.services.sso.credentials.keyUri:http://example.com");
+		this.listener.postProcessEnvironment(this.environment, new SpringApplication());
+		assertEquals("http://example.com", this.environment
+				.resolvePlaceholders("${security.oauth2.resource.jwt.keyUri}"));
+	}
+
 }
