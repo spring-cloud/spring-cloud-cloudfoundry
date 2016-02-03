@@ -66,7 +66,7 @@ implements EnvironmentPostProcessor, Ordered {
 		if (authDomain != null) {
 			source.put("security.oauth2.resource.userInfoUri",
 					authDomain + "/userinfo");
-			source.put("security.oauth2.resource.keyUri", authDomain + "/token_key");
+			source.put("security.oauth2.resource.jwt.keyUri", authDomain + "/token_key");
 			source.put("security.oauth2.client.accessTokenUri",
 					authDomain + "/oauth/token");
 			source.put("security.oauth2.client.userAuthorizationUri",
@@ -75,7 +75,7 @@ implements EnvironmentPostProcessor, Ordered {
 		else {
 			addProperty(source, resolver, serviceId, "resource", "userInfoUri");
 			addProperty(source, resolver, serviceId, "resource", "tokenInfoUri");
-			addProperty(source, resolver, serviceId, "resource", "keyUri");
+			addProperty(source, resolver, serviceId, "resource.jwt", "keyUri");
 			addProperty(source, resolver, serviceId, "resource", "keyValue");
 			addProperty(source, resolver, serviceId, "client", "accessTokenUri", "tokenUri");
 			addProperty(source, resolver, serviceId, "client", "userAuthorizationUri", "authorizationUri");
