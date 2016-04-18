@@ -16,7 +16,6 @@
 package org.springframework.cloud.cloudfoundry.session;
 
 import java.io.IOException;
-import java.util.UUID;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -24,11 +23,11 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
-import org.springframework.cloud.netflix.eureka.EurekaInstanceConfigBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.Ordered;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -36,31 +35,28 @@ import org.springframework.web.filter.OncePerRequestFilter;
  * @author Dave Syer
  */
 @Configuration
+@PropertySource("spring-cloud-cloudfoundry.properties")
 public class StickyFilterConfiguration {
 
-    private String cookie = UUID.randomUUID().toString();
+	@Value("${spring.cloud.cloudfoundry.web.cookie}")
+	private String cookie;
 
-    @Autowired
-    public void init(EurekaInstanceConfigBean eurekaInstance) {
-        eurekaInstance.getMetadataMap().put("cookie", cookie);
-    }
-
-    @Bean
-    public FilterRegistrationBean stickyCloudFoundryFilter() {
-        FilterRegistrationBean filter = new FilterRegistrationBean();
-        filter.setOrder(Ordered.LOWEST_PRECEDENCE);
-        filter.setFilter(new OncePerRequestFilter() {
-            @Override
-            protected void doFilterInternal(HttpServletRequest request,
-                                            HttpServletResponse response, FilterChain filterChain)
-                    throws ServletException, IOException {
-                if (!response.containsHeader("Set-Cookie")) {
-                    response.addCookie(new Cookie("JSESSIONID", cookie));
-                }
-                filterChain.doFilter(request, response);
-            }
-        });
-        return filter;
-    }
+	@Bean
+	public FilterRegistrationBean stickyCloudFoundryFilter() {
+		FilterRegistrationBean filter = new FilterRegistrationBean();
+		filter.setOrder(Ordered.LOWEST_PRECEDENCE);
+		filter.setFilter(new OncePerRequestFilter() {
+			@Override
+			protected void doFilterInternal(HttpServletRequest request,
+					HttpServletResponse response, FilterChain filterChain)
+					throws ServletException, IOException {
+				if (!response.containsHeader("Set-Cookie")) {
+					response.addCookie(new Cookie("JSESSIONID", cookie));
+				}
+				filterChain.doFilter(request, response);
+			}
+		});
+		return filter;
+	}
 
 }

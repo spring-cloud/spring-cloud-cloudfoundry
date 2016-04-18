@@ -40,21 +40,29 @@ import org.springframework.core.env.Environment;
 public class CloudFoundryDiscoveryClientConfiguration {
 
 	@Autowired
-	private CloudFoundryDiscoveryProperties cloudFoundryDiscoveryProperties;
+	private CloudFoundryDiscoveryProperties discovery;
 
 	@Bean
 	@ConditionalOnMissingBean(CloudCredentials.class)
 	public CloudCredentials cloudCredentials() {
-		return new CloudCredentials(this.cloudFoundryDiscoveryProperties.getEmail(),
-				this.cloudFoundryDiscoveryProperties.getPassword());
+		return new CloudCredentials(this.discovery.getEmail(),
+				this.discovery.getPassword());
 	}
 
 	@Bean
 	@ConditionalOnMissingBean(CloudFoundryClient.class)
 	public CloudFoundryClient cloudFoundryClient(CloudCredentials cc)
 			throws MalformedURLException {
-		CloudFoundryClient cloudFoundryClient = new CloudFoundryClient(cc, URI.create(
-				this.cloudFoundryDiscoveryProperties.getUrl()).toURL());
+		CloudFoundryClient cloudFoundryClient;
+		if (discovery.getOrg() != null && discovery.getSpace() != null) {
+			cloudFoundryClient = new CloudFoundryClient(cc,
+					URI.create(this.discovery.getUrl()).toURL(), discovery.getOrg(),
+					discovery.getSpace());
+		}
+		else {
+			cloudFoundryClient = new CloudFoundryClient(cc,
+					URI.create(this.discovery.getUrl()).toURL());
+		}
 		cloudFoundryClient.login();
 		return cloudFoundryClient;
 	}

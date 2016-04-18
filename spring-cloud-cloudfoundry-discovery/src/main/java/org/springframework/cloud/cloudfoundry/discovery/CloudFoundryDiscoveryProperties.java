@@ -40,6 +40,16 @@ public class CloudFoundryDiscoveryProperties {
 	private String password;
 
 	/**
+	 * Organization name to authenticate with (default to user's default).
+	 */
+	private String org;
+
+	/**
+	 * Space name to authenticate with (default to user's default).
+	 */
+	private String space;
+
+	/**
 	 * Flag to indicate that discovery is enabled.
 	 */
 	private boolean enabled = true;
@@ -74,5 +84,21 @@ public class CloudFoundryDiscoveryProperties {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getOrg() {
+		return org;
+	}
+
+	public void setOrg(String org) {
+		this.org = org;
+	}
+
+	public String getSpace() {
+		return space;
+	}
+
+	public void setSpace(String space) {
+		this.space = space;
 	}
 }

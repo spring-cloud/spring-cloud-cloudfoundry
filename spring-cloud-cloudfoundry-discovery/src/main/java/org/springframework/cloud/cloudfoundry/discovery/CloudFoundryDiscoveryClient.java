@@ -58,8 +58,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * CloudFoundryClient cloudFoundryClient(
  * 		&#064;Value(&quot;${MY_CUSTOM_CF_API:https://api.run.pivotal.io}&quot;) String api,
  * 		CloudCredentials cc) throws MalformedURLException {
- * 	CloudFoundryClient cloudFoundryClient = new CloudFoundryClient(cc, URI.create(api)
- * 			.toURL());
+ * 	CloudFoundryClient cloudFoundryClient = new CloudFoundryClient(cc,
+ * 			URI.create(api).toURL());
  * 	cloudFoundryClient.login();
  * 	return cloudFoundryClient;
  * }
@@ -123,23 +123,22 @@ public class CloudFoundryDiscoveryClient implements DiscoveryClient {
 		try {
 			CloudApplication application = this.cloudFoundryClient
 					.getApplication(this.vcapApplicationName);
-			serviceInstances = this
-					.createServiceInstancesFromCloudApplications(Collections
-							.singletonList(application));
+			serviceInstances = this.createServiceInstancesFromCloudApplications(
+					Collections.singletonList(application));
 		}
 		catch (Exception e) {
 			log.warn("Could not determine local service instance: " + e.getClass() + " ("
 					+ e.getMessage() + ")");
 		}
-		return serviceInstances != null && serviceInstances.size() > 0 ? serviceInstances
-				.iterator().next() : null;
+		return serviceInstances != null && serviceInstances.size() > 0
+				? serviceInstances.iterator().next() : null;
 	}
 
 	@Override
 	public List<ServiceInstance> getInstances(String s) {
 		CloudApplication applications = this.cloudFoundryClient.getApplication(s);
-		return this.createServiceInstancesFromCloudApplications(Collections
-				.singletonList(applications));
+		return this.createServiceInstancesFromCloudApplications(
+				Collections.singletonList(applications));
 	}
 
 	private boolean isRunning(CloudApplication ca) {
@@ -192,7 +191,9 @@ public class CloudFoundryDiscoveryClient implements DiscoveryClient {
 		}
 
 		public CloudFoundryServiceInstance(CloudApplication ca) {
-			super(ca.getName(), ca.getUris().iterator().next(), 80, false);
+			super(ca.getName(),
+					ca.getUris().isEmpty() ? "localhost" : ca.getUris().iterator().next(),
+					80, false);
 
 			this.cloudApplication = ca;
 		}
