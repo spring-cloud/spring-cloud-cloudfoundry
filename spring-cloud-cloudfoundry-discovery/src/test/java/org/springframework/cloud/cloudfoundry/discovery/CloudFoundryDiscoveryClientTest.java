@@ -16,6 +16,17 @@
 
 package org.springframework.cloud.cloudfoundry.discovery;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cloudfoundry.client.lib.CloudFoundryClient;
@@ -30,15 +41,6 @@ import org.junit.Test;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import static org.junit.Assert.*;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.mock;
 
 /**
  * @author <A href="mailto:josh@Joshlong.com">Josh Long</A>
@@ -71,10 +73,10 @@ public class CloudFoundryDiscoveryClientTest {
 				.willReturn(
 						"{\"limits\":{\"mem\":1024,\"disk\":1024,\"fds\":16384},\"application_version\":"
 								+ "\"36eff082-96d6-498f-8214-508fda72ba65\",\"application_name\":\""
-								+ hiServiceServiceId
+								+ this.hiServiceServiceId
 								+ "\",\"application_uris\""
 								+ ":[\""
-								+ hiServiceServiceId
+								+ this.hiServiceServiceId
 								+ ".cfapps.io\"],\"version\":\"36eff082-96d6-498f-8214-508fda72ba65\",\"name\":"
 								+ "\"hi-service\",\"space_name\":\"joshlong\",\"space_id\":\"e0cd969c-3461-41ae-abde-4e11bb5acbd1\","
 								+ "\"uris\":[\"hi-service.cfapps.io\"],\"users\":null,\"application_id\":\"af350f7c-88c4-4e35-a04e-698a1dbc7354\","
@@ -90,9 +92,9 @@ public class CloudFoundryDiscoveryClientTest {
 
 		given(this.cloudFoundryClient.getApplications()).willReturn(cloudApplications);
 
-		cloudApplication = cloudApplications.get(0);
+		this.cloudApplication = cloudApplications.get(0);
 		given(this.cloudFoundryClient.getApplication(this.hiServiceServiceId))
-				.willReturn(cloudApplication);
+				.willReturn(this.cloudApplication);
 
 		given(this.cloudFoundryClient.getApplication(this.hiServiceServiceId))
 				.willReturn(this.cloudApplication);
@@ -107,7 +109,7 @@ public class CloudFoundryDiscoveryClientTest {
 				.willReturn(instancesInfo);
 
 		this.cloudFoundryDiscoveryClient = new CloudFoundryDiscoveryClient(
-				cloudFoundryClient, environment);
+				this.cloudFoundryClient, environment);
 	}
 
 	@Test
@@ -132,13 +134,15 @@ public class CloudFoundryDiscoveryClientTest {
 	@Test
 	public void testLocalServiceInstanceRunning() {
 
+		given(this.cloudFoundryClient.getApplication("application"))
+				.willReturn(this.cloudApplication);
 		InstanceInfo instanceInfo = mock(InstanceInfo.class);
 		InstancesInfo instancesInfo = mock(InstancesInfo.class);
 		given(instancesInfo.getInstances()).willReturn(
 				Collections.singletonList(instanceInfo));
 		given(instanceInfo.getState()).willReturn(InstanceState.RUNNING);
 
-		given(cloudFoundryClient.getApplicationInstances(this.cloudApplication))
+		given(this.cloudFoundryClient.getApplicationInstances(this.cloudApplication))
 				.willReturn(instancesInfo);
 
 		ServiceInstance localServiceInstance = this.cloudFoundryDiscoveryClient
@@ -157,7 +161,7 @@ public class CloudFoundryDiscoveryClientTest {
 				Collections.singletonList(instanceInfo));
 		given(instanceInfo.getState()).willReturn(InstanceState.CRASHED);
 
-		given(cloudFoundryClient.getApplicationInstances(this.cloudApplication))
+		given(this.cloudFoundryClient.getApplicationInstances(this.cloudApplication))
 				.willReturn(instancesInfo);
 
 		ServiceInstance localServiceInstance = this.cloudFoundryDiscoveryClient
@@ -168,7 +172,7 @@ public class CloudFoundryDiscoveryClientTest {
 	@Test
 	public void testLocalServiceInstanceNotFoundg() {
 
-		given(cloudFoundryClient.getApplicationInstances(this.cloudApplication))
+		given(this.cloudFoundryClient.getApplicationInstances(this.cloudApplication))
 				.willThrow(new CloudFoundryException(HttpStatus.NOT_FOUND));
 
 		ServiceInstance localServiceInstance = this.cloudFoundryDiscoveryClient

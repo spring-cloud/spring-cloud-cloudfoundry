@@ -16,7 +16,6 @@
 
 package org.springframework.cloud.cloudfoundry.discovery;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,14 +32,11 @@ import org.cloudfoundry.client.lib.domain.CloudApplication;
 import org.cloudfoundry.client.lib.domain.InstanceInfo;
 import org.cloudfoundry.client.lib.domain.InstanceState;
 import org.cloudfoundry.client.lib.domain.InstancesInfo;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.DefaultServiceInstance;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.core.env.Environment;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * A Cloud Foundry v2 API-aware implementation of the {@link DiscoveryClient discovery
@@ -52,7 +48,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * You need to provide an instance of the {@link CloudFoundryClient}. A workable
  * configuration looks like this:
  * <p/>
- * 
+ *
  * <pre class="code">
  * &#064;Bean
  * CloudFoundryClient cloudFoundryClient(
@@ -84,32 +80,14 @@ public class CloudFoundryDiscoveryClient implements DiscoveryClient {
 
 	private static final Log log = LogFactory.getLog(CloudFoundryDiscoveryClient.class);
 
-	private final ObjectMapper objectMapper = Jackson2ObjectMapperBuilder.json().build();
-
 	private final CloudFoundryClient cloudFoundryClient;
 
-	private final String vcapApplicationName;
+	@Value("${vcap.application.name:${spring.application.name:application}}")
+	private String vcapApplicationName = "application";
 
 	public CloudFoundryDiscoveryClient(CloudFoundryClient cloudFoundryClient,
 			Environment environment) {
-
 		this.cloudFoundryClient = cloudFoundryClient;
-
-		String vcapApplication = environment.getProperty("VCAP_APPLICATION");
-
-		try {
-			JsonNode jsonNode = objectMapper.readTree(vcapApplication);
-			JsonNode appNameNode = jsonNode.get("application_name");
-
-			this.vcapApplicationName = appNameNode.toString().replaceAll("\"", "");
-
-			log.debug("Current ServiceInstance information...");
-			log.debug("\tvcapApplicationName: " + this.vcapApplicationName);
-
-		}
-		catch (IOException e) {
-			throw new RuntimeException(e);
-		}
 	}
 
 	@Override
@@ -187,7 +165,7 @@ public class CloudFoundryDiscoveryClient implements DiscoveryClient {
 		private final CloudApplication cloudApplication;
 
 		public CloudApplication getCloudApplication() {
-			return cloudApplication;
+			return this.cloudApplication;
 		}
 
 		public CloudFoundryServiceInstance(CloudApplication ca) {
