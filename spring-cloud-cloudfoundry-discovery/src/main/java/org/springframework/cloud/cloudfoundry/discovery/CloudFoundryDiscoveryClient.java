@@ -69,7 +69,7 @@ import org.springframework.core.env.Environment;
  * variants to specify which space and organization to use.
  * <p/>
  *
- * @author <A href="mailto:josh@joshlong.com">Josh Long</A>
+ * @author Josh Long
  * @author Spencer Gibb
  * @author Dave Syer
  */

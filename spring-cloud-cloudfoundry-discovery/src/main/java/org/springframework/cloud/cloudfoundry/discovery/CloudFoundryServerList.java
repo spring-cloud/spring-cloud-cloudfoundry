@@ -16,19 +16,19 @@
 
 package org.springframework.cloud.cloudfoundry.discovery;
 
-import com.netflix.client.config.IClientConfig;
-import com.netflix.loadbalancer.AbstractServerList;
+import java.util.Collections;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.cloudfoundry.client.lib.CloudFoundryClient;
 import org.cloudfoundry.client.lib.domain.CloudApplication;
 
-import java.util.Collections;
-import java.util.List;
+import com.netflix.client.config.IClientConfig;
+import com.netflix.loadbalancer.AbstractServerList;
 
 /**
- * @author <A href="mailto:josh@joshlong.com">Josh Long</A>
+ * @author Josh Long
  */
 public class CloudFoundryServerList extends AbstractServerList<CloudFoundryServer> {
 
@@ -64,7 +64,7 @@ public class CloudFoundryServerList extends AbstractServerList<CloudFoundryServe
 			return Collections.singletonList(new CloudFoundryServer(cloudApplications));
 		}
 		catch (Exception e) {
-			log.warn("Cannot determine server list for " + serviceId + ": " + e.getClass() + "(" + e.getMessage() + ")");
+			log.warn("Cannot determine server list for " + this.serviceId + ": " + e.getClass() + "(" + e.getMessage() + ")");
 			return Collections.emptyList();
 		}
 	}

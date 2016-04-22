@@ -16,11 +16,12 @@
 
 package org.springframework.cloud.cloudfoundry.discovery;
 
-import com.netflix.loadbalancer.Server;
 import org.cloudfoundry.client.lib.domain.CloudApplication;
 
+import com.netflix.loadbalancer.Server;
+
 /**
- * @author <a href="mailto:josh@joshlong.com">Josh Long</A>
+ * @author Josh Long
  */
 public class CloudFoundryServer extends Server {
 
@@ -55,6 +56,6 @@ public class CloudFoundryServer extends Server {
 
 	@Override
 	public MetaInfo getMetaInfo() {
-		return metaInfo;
+		return this.metaInfo;
 	}
 }

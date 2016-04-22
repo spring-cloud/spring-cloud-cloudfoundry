@@ -19,7 +19,7 @@ package org.springframework.cloud.cloudfoundry.discovery;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * @author <A href="mailto:josh@joshlong.com">Josh Long</A>
+ * @author Josh Long
  */
 @ConfigurationProperties(prefix = "spring.cloud.cloudfoundry.discovery")
 public class CloudFoundryDiscoveryProperties {
@@ -30,9 +30,9 @@ public class CloudFoundryDiscoveryProperties {
 	private String url = "https://api.run.pivotal.io";
 
 	/**
-	 * Email address of user to authenticate.
+	 * Username to authenticate (usually an email address).
 	 */
-	private String email;
+	private String username;
 
 	/**
 	 * Password for user to authenticate and obtain token.
@@ -70,12 +70,12 @@ public class CloudFoundryDiscoveryProperties {
 		this.url = cloudControllerUrl;
 	}
 
-	public String getEmail() {
-		return this.email;
+	public String getUsername() {
+		return this.username;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setUsername(String email) {
+		this.username = email;
 	}
 
 	public String getPassword() {
@@ -87,7 +87,7 @@ public class CloudFoundryDiscoveryProperties {
 	}
 
 	public String getOrg() {
-		return org;
+		return this.org;
 	}
 
 	public void setOrg(String org) {
@@ -95,7 +95,7 @@ public class CloudFoundryDiscoveryProperties {
 	}
 
 	public String getSpace() {
-		return space;
+		return this.space;
 	}
 
 	public void setSpace(String space) {

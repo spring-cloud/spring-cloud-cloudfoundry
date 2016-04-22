@@ -31,7 +31,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
 /**
- * @author <A href="mailto:josh@joshlong.com">Josh Long</A>
+ * @author Josh Long
  */
 @Configuration
 @EnableConfigurationProperties
@@ -45,7 +45,7 @@ public class CloudFoundryDiscoveryClientConfiguration {
 	@Bean
 	@ConditionalOnMissingBean(CloudCredentials.class)
 	public CloudCredentials cloudCredentials() {
-		return new CloudCredentials(this.discovery.getEmail(),
+		return new CloudCredentials(this.discovery.getUsername(),
 				this.discovery.getPassword());
 	}
 
@@ -54,10 +54,10 @@ public class CloudFoundryDiscoveryClientConfiguration {
 	public CloudFoundryClient cloudFoundryClient(CloudCredentials cc)
 			throws MalformedURLException {
 		CloudFoundryClient cloudFoundryClient;
-		if (discovery.getOrg() != null && discovery.getSpace() != null) {
+		if (this.discovery.getOrg() != null && this.discovery.getSpace() != null) {
 			cloudFoundryClient = new CloudFoundryClient(cc,
-					URI.create(this.discovery.getUrl()).toURL(), discovery.getOrg(),
-					discovery.getSpace());
+					URI.create(this.discovery.getUrl()).toURL(), this.discovery.getOrg(),
+					this.discovery.getSpace());
 		}
 		else {
 			cloudFoundryClient = new CloudFoundryClient(cc,
