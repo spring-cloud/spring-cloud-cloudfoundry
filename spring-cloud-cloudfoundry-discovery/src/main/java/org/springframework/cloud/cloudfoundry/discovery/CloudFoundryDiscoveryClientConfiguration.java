@@ -34,9 +34,9 @@ import org.springframework.core.env.Environment;
  * @author Josh Long
  */
 @Configuration
-@EnableConfigurationProperties
 @ConditionalOnClass(CloudFoundryClient.class)
 @ConditionalOnProperty(value = "spring.cloud.cloudfoundry.discovery.enabled", matchIfMissing = true)
+@EnableConfigurationProperties(CloudFoundryDiscoveryProperties.class)
 public class CloudFoundryDiscoveryClientConfiguration {
 
 	@Autowired
@@ -74,8 +74,4 @@ public class CloudFoundryDiscoveryClientConfiguration {
 		return new CloudFoundryDiscoveryClient(cloudFoundryClient, environment);
 	}
 
-	@Bean
-	public CloudFoundryDiscoveryProperties cloudFoundryDiscoveryProperties() {
-		return new CloudFoundryDiscoveryProperties();
-	}
 }
