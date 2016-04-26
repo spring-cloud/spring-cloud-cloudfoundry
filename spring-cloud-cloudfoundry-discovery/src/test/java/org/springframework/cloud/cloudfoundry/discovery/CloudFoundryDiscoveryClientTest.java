@@ -132,6 +132,15 @@ public class CloudFoundryDiscoveryClientTest {
 	}
 
 	@Test
+	public void testInstancesNotAvailable() {
+		given(this.cloudFoundryClient.getApplications()).willThrow(new RuntimeException("Planned"));
+
+		List<ServiceInstance> instances = this.cloudFoundryDiscoveryClient
+				.getInstances(this.hiServiceServiceId);
+		assertEquals(instances.size(), 0);
+	}
+
+	@Test
 	public void testLocalServiceInstanceRunning() {
 
 		given(this.cloudFoundryClient.getApplication("application"))
@@ -170,7 +179,7 @@ public class CloudFoundryDiscoveryClientTest {
 	}
 
 	@Test
-	public void testLocalServiceInstanceNotFoundg() {
+	public void testLocalServiceInstanceNotFound() {
 
 		given(this.cloudFoundryClient.getApplicationInstances(this.cloudApplication))
 				.willThrow(new CloudFoundryException(HttpStatus.NOT_FOUND));

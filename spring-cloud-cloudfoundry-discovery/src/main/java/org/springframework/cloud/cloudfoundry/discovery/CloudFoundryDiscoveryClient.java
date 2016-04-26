@@ -114,9 +114,16 @@ public class CloudFoundryDiscoveryClient implements DiscoveryClient {
 
 	@Override
 	public List<ServiceInstance> getInstances(String s) {
-		CloudApplication applications = this.cloudFoundryClient.getApplication(s);
-		return this.createServiceInstancesFromCloudApplications(
-				Collections.singletonList(applications));
+		try {
+			CloudApplication applications = this.cloudFoundryClient.getApplication(s);
+			return this.createServiceInstancesFromCloudApplications(
+					Collections.singletonList(applications));
+		}
+		catch (Exception e) {
+			log.warn("Could not get service instances: " + e.getClass() + " ("
+					+ e.getMessage() + ")");
+			return Collections.emptyList();
+		}
 	}
 
 	private boolean isRunning(CloudApplication ca) {
@@ -136,7 +143,15 @@ public class CloudFoundryDiscoveryClient implements DiscoveryClient {
 	@Override
 	public List<String> getServices() {
 		List<String> services = new ArrayList<>();
-		List<CloudApplication> applications = this.cloudFoundryClient.getApplications();
+		List<CloudApplication> applications;
+		try {
+			applications = this.cloudFoundryClient.getApplications();
+		}
+		catch (Exception e) {
+			log.warn("Could not get applications: " + e.getClass() + " ("
+					+ e.getMessage() + ")");
+			applications = Collections.emptyList();
+		}
 		Set<String> serviceIds = new HashSet<>();
 		for (CloudApplication ca : applications) {
 			if (isRunning(ca)) {
