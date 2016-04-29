@@ -5,11 +5,11 @@ include::intro.adoc[]
 The first time you use it the discovery client might be slow owing to
 the fact that it has to get an access token from Cloud Foundry.
 
-== Quickstart
+== Discovery
 
 include::quickstart.adoc[]
 
-=== Single Sign On
+== Single Sign On
 
 NOTE: All of the OAuth2 SSO and resource server features moved to Spring Boot
 in version 1.3. You can find documentation in the 
