@@ -16,6 +16,7 @@
 
 package org.springframework.cloud.cloudfoundry.discovery;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
@@ -47,6 +48,7 @@ public class CloudFoundryDiscoveryProperties {
 	/**
 	 * Space name to authenticate with (default to user's default).
 	 */
+	@Value("${vcap.application.space_name:}")
 	private String space;
 
 	/**

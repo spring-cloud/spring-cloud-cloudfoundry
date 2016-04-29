@@ -9,6 +9,11 @@ the fact that it has to get an access token from Cloud Foundry.
 
 include::quickstart.adoc[]
 
+The `DiscoveryClient` can lists all the apps in a space, according to
+the credentials it is authenticated with, where the space defaults to
+the one the client is running in (if any). If neither org nor space
+are configured, they default per the user's profile in Cloud Foundry.
+
 == Single Sign On
 
 NOTE: All of the OAuth2 SSO and resource server features moved to Spring Boot

@@ -29,6 +29,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.util.StringUtils;
 
 /**
  * @author Josh Long
@@ -54,7 +55,7 @@ public class CloudFoundryDiscoveryClientConfiguration {
 	public CloudFoundryClient cloudFoundryClient(CloudCredentials cc)
 			throws MalformedURLException {
 		CloudFoundryClient cloudFoundryClient;
-		if (this.discovery.getOrg() != null && this.discovery.getSpace() != null) {
+		if (StringUtils.hasText(this.discovery.getOrg()) && StringUtils.hasText(this.discovery.getSpace())) {
 			cloudFoundryClient = new CloudFoundryClient(cc,
 					URI.create(this.discovery.getUrl()).toURL(), this.discovery.getOrg(),
 					this.discovery.getSpace());
