@@ -445,8 +445,8 @@ implementation of Spring Cloud Commons <code>DiscoveryClient</code> so you can
 <code>@EnableDiscoveryClient</code> and provide your credentials as
 <code>spring.cloud.cloudfoundry.discovery.[email,password]</code> and then you
 can use the <code>DiscoveryClient</code> directly or via a <code>LoadBalancerClient</code>
-(also <code>*.url</code> if you are not connecting to [Pivotal Web
-Services](<a href="https://run.pivotal.io)" class="bare">https://run.pivotal.io)</a>).</p>
+(also <code>*.url</code> if you are not connecting to
+<a href="https://run.pivotal.io">Pivotal Web Services</a>).</p>
 </div>
 <div class="paragraph">
 <p>The first time you use it the discovery client might be slow owing to
@@ -491,6 +491,12 @@ $ cf push -p app.jar</pre>
 <div class="paragraph">
 <p>It will show its app name in the home page.</p>
 </div>
+<div class="paragraph">
+<p>The <code>DiscoveryClient</code> can lists all the apps in a space, according to
+the credentials it is authenticated with, where the space defaults to
+the one the client is running in (if any). If neither org nor space
+are configured, they default per the user&#8217;s profile in Cloud Foundry.</p>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -524,7 +530,7 @@ parameterized using <code>spring.oauth2.sso.serviceId</code>.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-04-29 12:32:14 UTC
+Last updated 2016-04-29 12:50:07 UTC
 </div>
 </div>
 </body>
