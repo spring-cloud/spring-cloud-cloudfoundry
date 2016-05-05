@@ -128,16 +128,15 @@ public class CloudFoundryDiscoveryClientTest {
 	public void testInstances() {
 		List<ServiceInstance> instances = this.cloudFoundryDiscoveryClient
 				.getInstances(this.hiServiceServiceId);
-		assertEquals(instances.size(), 1);
+		assertEquals("Wrong instances: " + instances, 1, instances.size());
 	}
 
 	@Test
 	public void testInstancesNotAvailable() {
-		given(this.cloudFoundryClient.getApplications()).willThrow(new RuntimeException("Planned"));
-
+		given(this.cloudFoundryClient.getApplication(this.hiServiceServiceId)).willThrow(new RuntimeException("Planned"));
 		List<ServiceInstance> instances = this.cloudFoundryDiscoveryClient
 				.getInstances(this.hiServiceServiceId);
-		assertEquals(instances.size(), 0);
+		assertEquals("Wrong instances: " + instances, 0, instances.size());
 	}
 
 	@Test
