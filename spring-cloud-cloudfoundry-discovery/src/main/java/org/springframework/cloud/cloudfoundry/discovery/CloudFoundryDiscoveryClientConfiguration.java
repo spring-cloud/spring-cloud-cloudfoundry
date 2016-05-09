@@ -75,4 +75,9 @@ public class CloudFoundryDiscoveryClientConfiguration {
 		return new CloudFoundryDiscoveryClient(cloudFoundryClient, environment);
 	}
 
+	@Bean
+	public CloudFoundryHeartbeatSender cloudFoundryHeartbeatSender(CloudFoundryDiscoveryClient client) {
+		return new CloudFoundryHeartbeatSender(client);
+	}
+
 }

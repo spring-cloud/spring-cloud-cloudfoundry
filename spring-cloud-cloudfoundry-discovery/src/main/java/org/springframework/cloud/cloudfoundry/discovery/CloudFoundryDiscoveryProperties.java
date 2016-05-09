@@ -56,6 +56,12 @@ public class CloudFoundryDiscoveryProperties {
 	 */
 	private boolean enabled = true;
 
+	/**
+	 * Frequency in milliseconds of poll for heart beat. The client will poll on this
+	 * frequency and broadcast a list of service ids.
+	 */
+	private long heartbeatFrequency = 5000;
+
 	public boolean isEnabled() {
 		return this.enabled;
 	}
@@ -102,5 +108,13 @@ public class CloudFoundryDiscoveryProperties {
 
 	public void setSpace(String space) {
 		this.space = space;
+	}
+
+	public long getHeartbeatFrequency() {
+		return this.heartbeatFrequency;
+	}
+
+	public void setHeartbeatFrequency(long heartbeatFrequency) {
+		this.heartbeatFrequency = heartbeatFrequency;
 	}
 }
