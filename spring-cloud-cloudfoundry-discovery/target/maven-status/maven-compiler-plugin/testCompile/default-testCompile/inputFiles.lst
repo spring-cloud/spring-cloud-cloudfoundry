@@ -1,0 +1,5 @@
+/opt/jenkins/data/workspace/spring-cloud-cloudfoundry-master-ci/spring-cloud-cloudfoundry-discovery/src/test/java/org/springframework/cloud/cloudfoundry/discovery/CloudFoundryServerTest.java
+/opt/jenkins/data/workspace/spring-cloud-cloudfoundry-master-ci/spring-cloud-cloudfoundry-discovery/src/test/java/org/springframework/cloud/cloudfoundry/discovery/AdhocTestSuite.java
+/opt/jenkins/data/workspace/spring-cloud-cloudfoundry-master-ci/spring-cloud-cloudfoundry-discovery/src/test/java/org/springframework/cloud/cloudfoundry/discovery/CloudFoundryDiscoveryClientTest.java
+/opt/jenkins/data/workspace/spring-cloud-cloudfoundry-master-ci/spring-cloud-cloudfoundry-discovery/src/test/java/org/springframework/cloud/cloudfoundry/discovery/CloudFoundryServerListTest.java
+/opt/jenkins/data/workspace/spring-cloud-cloudfoundry-master-ci/spring-cloud-cloudfoundry-discovery/src/test/java/org/springframework/cloud/cloudfoundry/discovery/CloudFoundryAutoConfigurationTest.java

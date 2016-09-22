@@ -1,0 +1,7 @@
+org/springframework/cloud/cloudfoundry/discovery/CloudFoundryAutoConfigurationTest$SimpleConfiguration.class
+org/springframework/cloud/cloudfoundry/discovery/CloudFoundryDiscoveryClientTest.class
+org/springframework/cloud/cloudfoundry/discovery/CloudFoundryServerTest.class
+org/springframework/cloud/cloudfoundry/discovery/CloudFoundryServerListTest$1.class
+org/springframework/cloud/cloudfoundry/discovery/CloudFoundryAutoConfigurationTest.class
+org/springframework/cloud/cloudfoundry/discovery/AdhocTestSuite.class
+org/springframework/cloud/cloudfoundry/discovery/CloudFoundryServerListTest.class

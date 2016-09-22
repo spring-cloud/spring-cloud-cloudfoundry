@@ -1,0 +1,55 @@
+{
+  "groups": [{
+    "name": "spring.cloud.cloudfoundry.discovery",
+    "type": "org.springframework.cloud.cloudfoundry.discovery.CloudFoundryDiscoveryProperties",
+    "sourceType": "org.springframework.cloud.cloudfoundry.discovery.CloudFoundryDiscoveryProperties"
+  }],
+  "properties": [
+    {
+      "name": "spring.cloud.cloudfoundry.discovery.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Flag to indicate that discovery is enabled.",
+      "sourceType": "org.springframework.cloud.cloudfoundry.discovery.CloudFoundryDiscoveryProperties",
+      "defaultValue": true
+    },
+    {
+      "name": "spring.cloud.cloudfoundry.discovery.heartbeat-frequency",
+      "type": "java.lang.Long",
+      "description": "Frequency in milliseconds of poll for heart beat. The client will poll on this\n frequency and broadcast a list of service ids.",
+      "sourceType": "org.springframework.cloud.cloudfoundry.discovery.CloudFoundryDiscoveryProperties",
+      "defaultValue": 5000
+    },
+    {
+      "name": "spring.cloud.cloudfoundry.discovery.org",
+      "type": "java.lang.String",
+      "description": "Organization name to authenticate with (default to user's default).",
+      "sourceType": "org.springframework.cloud.cloudfoundry.discovery.CloudFoundryDiscoveryProperties"
+    },
+    {
+      "name": "spring.cloud.cloudfoundry.discovery.password",
+      "type": "java.lang.String",
+      "description": "Password for user to authenticate and obtain token.",
+      "sourceType": "org.springframework.cloud.cloudfoundry.discovery.CloudFoundryDiscoveryProperties"
+    },
+    {
+      "name": "spring.cloud.cloudfoundry.discovery.space",
+      "type": "java.lang.String",
+      "description": "Space name to authenticate with (default to user's default).",
+      "sourceType": "org.springframework.cloud.cloudfoundry.discovery.CloudFoundryDiscoveryProperties"
+    },
+    {
+      "name": "spring.cloud.cloudfoundry.discovery.url",
+      "type": "java.lang.String",
+      "description": "URL of Cloud Foundry API (Cloud Controller).",
+      "sourceType": "org.springframework.cloud.cloudfoundry.discovery.CloudFoundryDiscoveryProperties",
+      "defaultValue": "https://api.run.pivotal.io"
+    },
+    {
+      "name": "spring.cloud.cloudfoundry.discovery.username",
+      "type": "java.lang.String",
+      "description": "Username to authenticate (usually an email address).",
+      "sourceType": "org.springframework.cloud.cloudfoundry.discovery.CloudFoundryDiscoveryProperties"
+    }
+  ],
+  "hints": []
+}

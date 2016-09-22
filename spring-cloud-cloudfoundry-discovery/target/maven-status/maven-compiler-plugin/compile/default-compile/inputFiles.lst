@@ -1,0 +1,9 @@
+/opt/jenkins/data/workspace/spring-cloud-cloudfoundry-master-ci/spring-cloud-cloudfoundry-discovery/src/main/java/org/springframework/cloud/cloudfoundry/discovery/CloudFoundryDiscoveryProperties.java
+/opt/jenkins/data/workspace/spring-cloud-cloudfoundry-master-ci/spring-cloud-cloudfoundry-discovery/src/main/java/org/springframework/cloud/cloudfoundry/discovery/CloudFoundryDiscoveryClient.java
+/opt/jenkins/data/workspace/spring-cloud-cloudfoundry-master-ci/spring-cloud-cloudfoundry-discovery/src/main/java/org/springframework/cloud/cloudfoundry/discovery/CloudFoundryDiscoveryClientConfiguration.java
+/opt/jenkins/data/workspace/spring-cloud-cloudfoundry-master-ci/spring-cloud-cloudfoundry-discovery/src/main/java/org/springframework/cloud/cloudfoundry/discovery/CloudFoundryServer.java
+/opt/jenkins/data/workspace/spring-cloud-cloudfoundry-master-ci/spring-cloud-cloudfoundry-discovery/src/main/java/org/springframework/cloud/cloudfoundry/discovery/CloudFoundryHeartbeatSender.java
+/opt/jenkins/data/workspace/spring-cloud-cloudfoundry-master-ci/spring-cloud-cloudfoundry-discovery/src/main/java/org/springframework/cloud/cloudfoundry/discovery/CloudFoundryRibbonClientConfiguration.java
+/opt/jenkins/data/workspace/spring-cloud-cloudfoundry-master-ci/spring-cloud-cloudfoundry-discovery/src/main/java/org/springframework/cloud/cloudfoundry/discovery/RibbonCloudFoundryAutoConfiguration.java
+/opt/jenkins/data/workspace/spring-cloud-cloudfoundry-master-ci/spring-cloud-cloudfoundry-discovery/src/main/java/org/springframework/cloud/cloudfoundry/discovery/EnableCloudFoundryClient.java
+/opt/jenkins/data/workspace/spring-cloud-cloudfoundry-master-ci/spring-cloud-cloudfoundry-discovery/src/main/java/org/springframework/cloud/cloudfoundry/discovery/CloudFoundryServerList.java
