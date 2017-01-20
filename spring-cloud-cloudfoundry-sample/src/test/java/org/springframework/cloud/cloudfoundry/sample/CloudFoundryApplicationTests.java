@@ -18,19 +18,15 @@ package org.springframework.cloud.cloudfoundry.sample;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.IntegrationTest;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 /**
  * @author Dave Syer
  *
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = CloudFoundryApplication.class)
-@IntegrationTest
-@WebAppConfiguration
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = CloudFoundryApplication.class)
 @Ignore("Need to configure spring.cloud.cloudfoundry.discovery.email/password")
 public class CloudFoundryApplicationTests {
 
