@@ -15,17 +15,19 @@
  */
 package org.springframework.cloud.cloudfoundry.environment;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
+import java.util.Collections;
 import java.util.Map;
 
 import org.junit.Test;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.bind.RelaxedPropertyResolver;
-import org.springframework.boot.test.util.EnvironmentTestUtils;
+import org.springframework.boot.context.properties.bind.Binder;
+import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.StandardEnvironment;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.springframework.cloud.cloudfoundry.environment.VcapServiceCredentialsEnvironmentPostProcessor.STRING_OBJECT_MAP;
 
 /**
  * @author Dave Syer
@@ -40,73 +42,66 @@ public class VcapServiceCredentialsEnvironmentPostProcessorTests {
 	@Test
 	public void noop() {
 		this.listener.postProcessEnvironment(this.environment, new SpringApplication());
-		Map<String, Object> properties = new RelaxedPropertyResolver(this.environment)
-				.getSubProperties("security.oauth2");
-		assertTrue(properties == null || properties.isEmpty());
+		Map<String, Object> properties = Binder.get(environment)
+				.bind("security.oauth2", STRING_OBJECT_MAP).orElseGet(Collections::emptyMap);
+		assertTrue(properties.isEmpty());
 	}
 
 	@Test
 	public void addClientId() {
-		EnvironmentTestUtils.addEnvironment(this.environment,
-				"vcap.services.sso.credentials.clientId:foo");
+		TestPropertyValues.of("vcap.services.sso.credentials.clientId:foo").applyTo(this.environment);
 		this.listener.postProcessEnvironment(this.environment, new SpringApplication());
 		assertEquals("foo", this.environment
-				.resolvePlaceholders("${security.oauth2.client.clientId}"));
+				.resolvePlaceholders("${security.oauth2.client.client-id}"));
 	}
 
 	@Test
 	public void addClientIdUnderscores() {
-		EnvironmentTestUtils.addEnvironment(this.environment,
-				"vcap.services.sso.credentials.client_id:foo");
+		TestPropertyValues.of("vcap.services.sso.credentials.client-id:foo").applyTo(this.environment);
 		this.listener.postProcessEnvironment(this.environment, new SpringApplication());
 		assertEquals("foo", this.environment
-				.resolvePlaceholders("${security.oauth2.client.clientId}"));
+				.resolvePlaceholders("${security.oauth2.client.client-id}"));
 	}
 
 	@Test
 	public void addTokenUri() {
-		EnvironmentTestUtils.addEnvironment(this.environment,
-				"vcap.services.sso.credentials.accessTokenUri:http://example.com");
+		TestPropertyValues.of( "vcap.services.sso.credentials.accessTokenUri:http://example.com").applyTo(this.environment);
 		this.listener.postProcessEnvironment(this.environment, new SpringApplication());
 		assertEquals("http://example.com", this.environment
-				.resolvePlaceholders("${security.oauth2.client.accessTokenUri}"));
+				.resolvePlaceholders("${security.oauth2.client.access-token-uri}"));
 	}
 
 	@Test
 	public void addTokenUriAuthDomain() {
-		EnvironmentTestUtils.addEnvironment(this.environment,
-				"vcap.services.sso.credentials.auth_domain:http://example.com");
+		TestPropertyValues.of("vcap.services.sso.credentials.auth-domain:http://example.com").applyTo(this.environment);
 		this.listener.postProcessEnvironment(this.environment, new SpringApplication());
 		assertEquals("http://example.com/oauth/token", this.environment
-				.resolvePlaceholders("${security.oauth2.client.accessTokenUri}"));
+				.resolvePlaceholders("${security.oauth2.client.access-token-uri}"));
 	}
 
 	@Test
 	public void addUserInfoUri() {
-		EnvironmentTestUtils.addEnvironment(this.environment,
-				"vcap.services.sso.credentials.userInfoUri:http://example.com");
+		TestPropertyValues.of( "vcap.services.sso.credentials.userInfoUri:http://example.com").applyTo(this.environment);
 		this.listener.postProcessEnvironment(this.environment, new SpringApplication());
 		assertEquals("http://example.com", this.environment
-				.resolvePlaceholders("${security.oauth2.resource.userInfoUri}"));
+				.resolvePlaceholders("${security.oauth2.resource.user-info-uri}"));
 	}
 
 	@Test
 	public void addServiceId() {
-		EnvironmentTestUtils.addEnvironment(this.environment,
-				"vcap.services.my.credentials.accessTokenUri:http://example.com",
-				"security.oauth2.sso.serviceId:my");
+		TestPropertyValues.of("vcap.services.my.credentials.accessTokenUri:http://example.com",
+				"security.oauth2.sso.serviceId:my").applyTo(this.environment);
 		this.listener.postProcessEnvironment(this.environment, new SpringApplication());
 		assertEquals("http://example.com", this.environment
-				.resolvePlaceholders("${security.oauth2.client.accessTokenUri}"));
+				.resolvePlaceholders("${security.oauth2.client.access-token-uri}"));
 	}
 
 	@Test
 	public void addJwtKeyUri() {
-		EnvironmentTestUtils.addEnvironment(this.environment,
-				"vcap.services.sso.credentials.keyUri:http://example.com");
+		TestPropertyValues.of("vcap.services.sso.credentials.keyUri:http://example.com").applyTo(this.environment);
 		this.listener.postProcessEnvironment(this.environment, new SpringApplication());
 		assertEquals("http://example.com", this.environment
-				.resolvePlaceholders("${security.oauth2.resource.jwt.keyUri}"));
+				.resolvePlaceholders("${security.oauth2.resource.jwt.key-uri}"));
 	}
 
 }
