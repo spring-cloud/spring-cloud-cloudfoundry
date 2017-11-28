@@ -95,7 +95,6 @@ public class CloudFoundryDiscoveryClient implements DiscoveryClient {
 		return DESCRIPTION;
 	}
 
-	@Override
 	public ServiceInstance getLocalServiceInstance() {
 		List<ServiceInstance> serviceInstances = null;
 		try {
