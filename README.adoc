@@ -2,7 +2,7 @@
 
 = Spring Cloud for Cloudfoundry
 
-image:https://travis-ci.org/spring-cloud/spring-cloud-cloudfoundry.svg?branch=master["Build Status", link="https://travis-ci.org/spring-cloud/spring-cloud-cloudfoundry"]
+image:https://circleci.com/gh/spring-cloud/spring-cloud-cloudfoundry.svg?style=svg["CircleCI", link="https://circleci.com/gh/spring-cloud/spring-cloud-cloudfoundry"]
 
 Spring Cloud for Cloudfoundry makes it easy to run
 https://github.com/spring-cloud[Spring Cloud] apps in
