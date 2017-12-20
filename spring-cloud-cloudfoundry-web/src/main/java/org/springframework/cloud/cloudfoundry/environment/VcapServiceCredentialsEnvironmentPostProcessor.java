@@ -35,7 +35,7 @@ import org.springframework.util.StringUtils;
  *
  */
 public class VcapServiceCredentialsEnvironmentPostProcessor
-implements EnvironmentPostProcessor, Ordered {
+		implements EnvironmentPostProcessor, Ordered {
 
 	static final Bindable<Map<String, Object>> STRING_OBJECT_MAP = Bindable
 			.mapOf(String.class, Object.class);
@@ -53,8 +53,8 @@ implements EnvironmentPostProcessor, Ordered {
 	@Override
 	public void postProcessEnvironment(ConfigurableEnvironment environment,
 			SpringApplication application) {
-		Map<String, Object> properties = Binder.get(environment)
-				.bind("vcap.services", STRING_OBJECT_MAP).orElseGet(Collections::emptyMap);
+		Binder.get(environment).bind("vcap.services", STRING_OBJECT_MAP)
+				.orElseGet(Collections::emptyMap);
 		if (!hasChildProperties(environment, "vcap.services")) {
 			return;
 		}
@@ -67,7 +67,8 @@ implements EnvironmentPostProcessor, Ordered {
 		else {
 			serviceId = environment.getProperty("security.oauth2.sso.service-id", "sso");
 		}
-		String authDomain = environment.getProperty("vcap.services." +serviceId + ".credentials.auth-domain");
+		String authDomain = environment
+				.getProperty("vcap.services." + serviceId + ".credentials.auth-domain");
 		if (authDomain != null) {
 			source.put("security.oauth2.resource.user-info-uri",
 					authDomain + "/userinfo");
@@ -82,8 +83,10 @@ implements EnvironmentPostProcessor, Ordered {
 			addProperty(source, environment, serviceId, "resource", "token-info-uri");
 			addProperty(source, environment, serviceId, "resource.jwt", "key-uri");
 			addProperty(source, environment, serviceId, "resource", "key-value");
-			addProperty(source, environment, serviceId, "client", "access-token-uri", "token-uri");
-			addProperty(source, environment, serviceId, "client", "user-authorization-uri", "authorization-uri");
+			addProperty(source, environment, serviceId, "client", "access-token-uri",
+					"token-uri");
+			addProperty(source, environment, serviceId, "client",
+					"user-authorization-uri", "authorization-uri");
 		}
 		addProperty(source, environment, serviceId, "client", "client-id");
 		addProperty(source, environment, serviceId, "client", "client-secret");
@@ -94,7 +97,7 @@ implements EnvironmentPostProcessor, Ordered {
 			source.put("security.oauth2.resource.id", resourceId);
 		}
 		environment.getPropertySources()
-		.addLast(new MapPropertySource("cloudDefaultSecurityBindings", source));
+				.addLast(new MapPropertySource("cloudDefaultSecurityBindings", source));
 	}
 
 	private boolean hasChildProperties(ConfigurableEnvironment environment, String name) {
@@ -103,27 +106,25 @@ implements EnvironmentPostProcessor, Ordered {
 		return !properties.isEmpty();
 	}
 
-	private void addProperty(Map<String, Object> source,
-							 PropertyResolver resolver, String serviceId, String stem, String key, String... altKeys) {
+	private void addProperty(Map<String, Object> source, PropertyResolver resolver,
+			String serviceId, String stem, String key, String... altKeys) {
 		String value = resolve(resolver, serviceId, key);
 		if (StringUtils.hasText(value)) {
-			source.put("security.oauth2."+stem+"." + key, value);
+			source.put("security.oauth2." + stem + "." + key, value);
 			return;
 		}
 		for (String altKey : altKeys) {
 			value = resolve(resolver, serviceId, altKey);
 			if (StringUtils.hasText(value)) {
-				source.put("security.oauth2."+stem+"." + key, value);
+				source.put("security.oauth2." + stem + "." + key, value);
 				return;
 			}
 		}
 	}
 
-	private String resolve(PropertyResolver resolver, String serviceId,
-			String key) {
+	private String resolve(PropertyResolver resolver, String serviceId, String key) {
 		return resolver.getProperty(
-				String.format("vcap.services.%s.credentials.%s", serviceId, key),
-				"");
+				String.format("vcap.services.%s.credentials.%s", serviceId, key), "");
 	}
 
 }

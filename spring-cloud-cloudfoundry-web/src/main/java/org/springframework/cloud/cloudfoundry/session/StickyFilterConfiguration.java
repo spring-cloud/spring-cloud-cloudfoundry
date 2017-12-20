@@ -17,6 +17,7 @@ package org.springframework.cloud.cloudfoundry.session;
 
 import java.io.IOException;
 
+import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -42,8 +43,8 @@ public class StickyFilterConfiguration {
 	private String cookie;
 
 	@Bean
-	public FilterRegistrationBean stickyCloudFoundryFilter() {
-		FilterRegistrationBean filter = new FilterRegistrationBean();
+	public FilterRegistrationBean<?> stickyCloudFoundryFilter() {
+		FilterRegistrationBean<Filter> filter = new FilterRegistrationBean<Filter>();
 		filter.setOrder(Ordered.LOWEST_PRECEDENCE);
 		filter.setFilter(new OncePerRequestFilter() {
 			@Override
