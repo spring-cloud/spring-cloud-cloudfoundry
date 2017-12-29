@@ -16,58 +16,22 @@
 
 package org.springframework.cloud.cloudfoundry.discovery;
 
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.cloudfoundry.client.lib.CloudCredentials;
-import org.cloudfoundry.client.lib.CloudFoundryClient;
-import org.cloudfoundry.client.lib.domain.CloudApplication;
-import org.cloudfoundry.client.lib.domain.InstanceInfo;
-import org.cloudfoundry.client.lib.domain.InstanceState;
-import org.cloudfoundry.client.lib.domain.InstancesInfo;
+import org.cloudfoundry.operations.CloudFoundryOperations;
+import org.cloudfoundry.operations.applications.ApplicationDetail;
+import org.cloudfoundry.operations.applications.ApplicationSummary;
+import org.cloudfoundry.operations.applications.InstanceDetail;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.DefaultServiceInstance;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
-import org.springframework.core.env.Environment;
+import org.springframework.cloud.cloudfoundry.CloudFoundryService;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
- * A Cloud Foundry v2 API-aware implementation of the {@link DiscoveryClient discovery
- * client} SPI. Cloud Foundry already retains a registry of running applications which we
- * expose here as services. Newer versions of Cloud Foundry support instance-specific
- * networking, but as the Cloud Foundry client API doesn't yet support that, this
- * {@link DiscoveryClient implementation doesn't either}.
- * <p/>
- * You need to provide an instance of the {@link CloudFoundryClient}. A workable
- * configuration looks like this:
- * <p/>
- *
- * <pre class="code">
- * &#064;Bean
- * CloudFoundryClient cloudFoundryClient(
- * 		&#064;Value(&quot;${MY_CUSTOM_CF_API:https://api.run.pivotal.io}&quot;) String api,
- * 		CloudCredentials cc) throws MalformedURLException {
- * 	CloudFoundryClient cloudFoundryClient = new CloudFoundryClient(cc,
- * 			URI.create(api).toURL());
- * 	cloudFoundryClient.login();
- * 	return cloudFoundryClient;
- * }
- * </pre>
- * <p/>
- * You can configure all sorts of other things including which Cloud Foundry cloud
- * controller URI to use, how and whether to use an HTTP proxy, and more using alternative
- * constructors. As configured above, the client will talk to all services and
- * applications deployed in <EM>all</EM> spaces and organizations. Use one of the
- * {@link CloudFoundryClient#CloudFoundryClient(CloudCredentials, URL, String, String)}
- * variants to specify which space and organization to use.
- * <p/>
+ * Cloud Foundry maintains a registry of running applications which we expose here as CloudFoundryService instances.
  *
  * @author Josh Long
  * @author Spencer Gibb
@@ -75,119 +39,60 @@ import org.springframework.core.env.Environment;
  */
 public class CloudFoundryDiscoveryClient implements DiscoveryClient {
 
-	private static final String DESCRIPTION = "Cloud Foundry "
-			+ DiscoveryClient.class.getName() + " implementation";
+	private final CloudFoundryService cloudFoundryService;
+	private final CloudFoundryOperations cloudFoundryOperations;
 
-	private static final Log log = LogFactory.getLog(CloudFoundryDiscoveryClient.class);
-
-	private final CloudFoundryClient cloudFoundryClient;
+	private final String description = "Cloud Foundry " + DiscoveryClient.class.getName() + " implementation";
 
 	@Value("${vcap.application.name:${spring.application.name:application}}")
 	private String vcapApplicationName = "application";
 
-	public CloudFoundryDiscoveryClient(CloudFoundryClient cloudFoundryClient,
-			Environment environment) {
-		this.cloudFoundryClient = cloudFoundryClient;
+
+	CloudFoundryDiscoveryClient(CloudFoundryOperations cloudFoundryOperations,
+	                            CloudFoundryService svc) {
+		this.cloudFoundryService = svc;
+		this.cloudFoundryOperations = cloudFoundryOperations;
 	}
 
 	@Override
 	public String description() {
-		return DESCRIPTION;
-	}
-
-	public ServiceInstance getLocalServiceInstance() {
-		List<ServiceInstance> serviceInstances = null;
-		try {
-			CloudApplication application = this.cloudFoundryClient
-					.getApplication(this.vcapApplicationName);
-			serviceInstances = this.createServiceInstancesFromCloudApplications(
-					Collections.singletonList(application));
-		}
-		catch (Exception e) {
-			log.warn("Could not determine local service instance: " + e.getClass() + " ("
-					+ e.getMessage() + ")");
-		}
-		return serviceInstances != null && serviceInstances.size() > 0
-				? serviceInstances.iterator().next() : null;
+		return this.description;
 	}
 
 	@Override
-	public List<ServiceInstance> getInstances(String s) {
-		try {
-			CloudApplication applications = this.cloudFoundryClient.getApplication(s);
-			return this.createServiceInstancesFromCloudApplications(
-					Collections.singletonList(applications));
-		}
-		catch (Exception e) {
-			log.warn("Could not get service instances: " + e.getClass() + " ("
-					+ e.getMessage() + ")");
-			return Collections.emptyList();
-		}
-	}
+	public List<ServiceInstance> getInstances(String serviceId) {
+		return cloudFoundryService
+				.getApplicationInstances(serviceId)
+				.map(tuple -> {
+					ApplicationDetail applicationDetail = tuple.getT1();
+					InstanceDetail instanceDetail = tuple.getT2();
 
-	private boolean isRunning(CloudApplication ca) {
-		InstancesInfo ii = this.cloudFoundryClient.getApplicationInstances(ca);
-		List<InstanceInfo> instances;
-		if (ii != null && (instances = ii.getInstances()) != null) {
-			for (InstanceInfo resolved : instances) {
-				InstanceState state = resolved.getState();
-				if (state != null && state.equals(InstanceState.RUNNING)) {
-					return true;
-				}
-			}
-		}
-		return false;
+					String applicationId = applicationDetail.getId();
+					String applicationIndex = instanceDetail.getIndex();
+					String name = applicationDetail.getName();
+					String url = applicationDetail.getUrls().size() > 0 ? applicationDetail.getUrls().get(0) : null;
+					boolean secure = (url + "").toLowerCase().startsWith("https");
+
+					HashMap<String, String> metadata = new HashMap<>();
+					metadata.put("applicationId", applicationId);
+					metadata.put("instanceId", applicationIndex);
+
+					return (ServiceInstance) new DefaultServiceInstance(name, url, 80, secure, metadata);
+				})
+				.collectList()
+				.blockOptional()
+				.orElse(new ArrayList<>());
 	}
 
 	@Override
 	public List<String> getServices() {
-		List<String> services = new ArrayList<>();
-		List<CloudApplication> applications;
-		try {
-			applications = this.cloudFoundryClient.getApplications();
-		}
-		catch (Exception e) {
-			log.warn("Could not get applications: " + e.getClass() + " ("
-					+ e.getMessage() + ")");
-			applications = Collections.emptyList();
-		}
-		Set<String> serviceIds = new HashSet<>();
-		for (CloudApplication ca : applications) {
-			if (isRunning(ca)) {
-				serviceIds.add(ca.getName());
-			}
-		}
-		services.addAll(serviceIds);
-		return services;
-	}
-
-	protected List<ServiceInstance> createServiceInstancesFromCloudApplications(
-			Collection<CloudApplication> cloudApplications) {
-		Set<ServiceInstance> serviceInstances = new HashSet<>();
-		for (CloudApplication ca : cloudApplications) {
-			if (isRunning(ca)) {
-				serviceInstances.add(new CloudFoundryServiceInstance(ca));
-			}
-		}
-		List<ServiceInstance> instances = new ArrayList<>();
-		instances.addAll(serviceInstances);
-		return instances;
-	}
-
-	public static class CloudFoundryServiceInstance extends DefaultServiceInstance {
-
-		private final CloudApplication cloudApplication;
-
-		public CloudApplication getCloudApplication() {
-			return this.cloudApplication;
-		}
-
-		public CloudFoundryServiceInstance(CloudApplication ca) {
-			super(ca.getName(),
-					ca.getUris().isEmpty() ? "localhost" : ca.getUris().iterator().next(),
-					80, false);
-
-			this.cloudApplication = ca;
-		}
+		return this
+				.cloudFoundryOperations
+				.applications()
+				.list()
+				.map(ApplicationSummary::getName)
+				.collectList()
+				.blockOptional()
+				.orElse(new ArrayList<>());
 	}
 }

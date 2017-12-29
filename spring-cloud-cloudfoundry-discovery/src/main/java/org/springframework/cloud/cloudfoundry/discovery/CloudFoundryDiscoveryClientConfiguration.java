@@ -16,26 +16,22 @@
 
 package org.springframework.cloud.cloudfoundry.discovery;
 
-import java.net.MalformedURLException;
-import java.net.URI;
-
-import org.cloudfoundry.client.lib.CloudCredentials;
-import org.cloudfoundry.client.lib.CloudFoundryClient;
+import org.cloudfoundry.operations.CloudFoundryOperations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cloud.cloudfoundry.CloudFoundryService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
-import org.springframework.util.StringUtils;
 
 /**
  * @author Josh Long
  */
 @Configuration
-@ConditionalOnClass(CloudFoundryClient.class)
+@ConditionalOnClass(CloudFoundryOperations.class)
 @ConditionalOnProperty(value = "spring.cloud.cloudfoundry.discovery.enabled", matchIfMissing = true)
 @EnableConfigurationProperties(CloudFoundryDiscoveryProperties.class)
 public class CloudFoundryDiscoveryClientConfiguration {
@@ -44,40 +40,14 @@ public class CloudFoundryDiscoveryClientConfiguration {
 	private CloudFoundryDiscoveryProperties discovery;
 
 	@Bean
-	@ConditionalOnMissingBean(CloudCredentials.class)
-	public CloudCredentials cloudCredentials() {
-		return new CloudCredentials(this.discovery.getUsername(),
-				this.discovery.getPassword());
-	}
-
-	@Bean
-	@ConditionalOnMissingBean(CloudFoundryClient.class)
-	public CloudFoundryClient cloudFoundryClient(CloudCredentials cc)
-			throws MalformedURLException {
-		CloudFoundryClient cloudFoundryClient;
-		if (StringUtils.hasText(this.discovery.getOrg()) && StringUtils.hasText(this.discovery.getSpace())) {
-			cloudFoundryClient = new CloudFoundryClient(cc,
-					URI.create(this.discovery.getUrl()).toURL(), this.discovery.getOrg(),
-					this.discovery.getSpace());
-		}
-		else {
-			cloudFoundryClient = new CloudFoundryClient(cc,
-					URI.create(this.discovery.getUrl()).toURL());
-		}
-		cloudFoundryClient.login();
-		return cloudFoundryClient;
-	}
-
-	@Bean
 	@ConditionalOnMissingBean(CloudFoundryDiscoveryClient.class)
 	public CloudFoundryDiscoveryClient cloudFoundryDiscoveryClient(
-			CloudFoundryClient cloudFoundryClient, Environment environment) {
-		return new CloudFoundryDiscoveryClient(cloudFoundryClient, environment);
+			CloudFoundryOperations cf, CloudFoundryService svc) {
+		return new CloudFoundryDiscoveryClient(cf, svc);
 	}
 
 	@Bean
 	public CloudFoundryHeartbeatSender cloudFoundryHeartbeatSender(CloudFoundryDiscoveryClient client) {
 		return new CloudFoundryHeartbeatSender(client);
 	}
-
 }

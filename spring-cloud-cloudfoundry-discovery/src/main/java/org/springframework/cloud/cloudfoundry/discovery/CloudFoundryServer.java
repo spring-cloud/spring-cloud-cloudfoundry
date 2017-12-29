@@ -16,8 +16,6 @@
 
 package org.springframework.cloud.cloudfoundry.discovery;
 
-import org.cloudfoundry.client.lib.domain.CloudApplication;
-
 import com.netflix.loadbalancer.Server;
 
 /**
@@ -27,14 +25,12 @@ public class CloudFoundryServer extends Server {
 
 	private final MetaInfo metaInfo;
 
-	public CloudFoundryServer(final CloudApplication cloudApplication) {
-
-		super(cloudApplication.getUris().iterator().next(), 80);
-
+	public CloudFoundryServer(String appName, String uri, int port) {
+		super(uri, port);
 		this.metaInfo = new MetaInfo() {
 			@Override
 			public String getAppName() {
-				return cloudApplication.getName();
+				return appName;
 			}
 
 			@Override
@@ -44,12 +40,12 @@ public class CloudFoundryServer extends Server {
 
 			@Override
 			public String getServiceIdForDiscovery() {
-				return cloudApplication.getName();
+				return appName;
 			}
 
 			@Override
 			public String getInstanceId() {
-				return cloudApplication.getName();
+				return appName;
 			}
 		};
 	}
