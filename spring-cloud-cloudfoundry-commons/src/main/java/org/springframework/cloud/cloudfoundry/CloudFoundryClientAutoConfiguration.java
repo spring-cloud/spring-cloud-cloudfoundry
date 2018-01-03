@@ -44,13 +44,14 @@ public class CloudFoundryClientAutoConfiguration {
 	@Bean
 	@Lazy
 	@ConditionalOnMissingBean
-	CloudFoundryService cloudFoundryService(CloudFoundryOperations cloudFoundryOperations) {
+	public CloudFoundryService cloudFoundryService(CloudFoundryOperations cloudFoundryOperations) {
 		return new CloudFoundryService(cloudFoundryOperations);
 	}
 
 	@Bean
 	@Lazy
-	ReactorCloudFoundryClient cloudFoundryClient(ConnectionContext connectionContext, TokenProvider tokenProvider) {
+	@ConditionalOnMissingBean
+	public ReactorCloudFoundryClient cloudFoundryClient(ConnectionContext connectionContext, TokenProvider tokenProvider) {
 		return ReactorCloudFoundryClient.builder()
 				.connectionContext(connectionContext)
 				.tokenProvider(tokenProvider)
@@ -59,7 +60,8 @@ public class CloudFoundryClientAutoConfiguration {
 
 	@Bean
 	@Lazy
-	DefaultCloudFoundryOperations cloudFoundryOperations(CloudFoundryClient cloudFoundryClient,
+	@ConditionalOnMissingBean
+	public DefaultCloudFoundryOperations cloudFoundryOperations(CloudFoundryClient cloudFoundryClient,
 	                                                     DopplerClient dopplerClient,
 	                                                     RoutingClient routingClient,
 	                                                     UaaClient uaaClient) {
@@ -78,7 +80,8 @@ public class CloudFoundryClientAutoConfiguration {
 
 	@Bean
 	@Lazy
-	DefaultConnectionContext connectionContext() {
+	@ConditionalOnMissingBean
+	public DefaultConnectionContext connectionContext() {
 
 		String apiHost = this.cloudFoundryProperties.getUrl();
 		Boolean skipSslValidation = this.cloudFoundryProperties.isSkipSslValidation();
@@ -91,7 +94,8 @@ public class CloudFoundryClientAutoConfiguration {
 
 	@Bean
 	@Lazy
-	DopplerClient dopplerClient(ConnectionContext connectionContext, TokenProvider tokenProvider) {
+	@ConditionalOnMissingBean
+	public DopplerClient dopplerClient(ConnectionContext connectionContext, TokenProvider tokenProvider) {
 		return ReactorDopplerClient.builder()
 				.connectionContext(connectionContext)
 				.tokenProvider(tokenProvider)
@@ -100,7 +104,8 @@ public class CloudFoundryClientAutoConfiguration {
 
 	@Bean
 	@Lazy
-	RoutingClient routingClient(ConnectionContext connectionContext, TokenProvider tokenProvider) {
+	@ConditionalOnMissingBean
+	public RoutingClient routingClient(ConnectionContext connectionContext, TokenProvider tokenProvider) {
 		return ReactorRoutingClient.builder()
 				.connectionContext(connectionContext)
 				.tokenProvider(tokenProvider)
@@ -109,7 +114,8 @@ public class CloudFoundryClientAutoConfiguration {
 
 	@Bean
 	@Lazy
-	PasswordGrantTokenProvider tokenProvider() {
+	@ConditionalOnMissingBean
+	public PasswordGrantTokenProvider tokenProvider() {
 		String username = this.cloudFoundryProperties.getUsername();
 		String password = this.cloudFoundryProperties.getPassword();
 		return PasswordGrantTokenProvider.builder()
@@ -120,7 +126,8 @@ public class CloudFoundryClientAutoConfiguration {
 
 	@Bean
 	@Lazy
-	ReactorUaaClient uaaClient(ConnectionContext connectionContext, TokenProvider tokenProvider) {
+	@ConditionalOnMissingBean
+	public ReactorUaaClient uaaClient(ConnectionContext connectionContext, TokenProvider tokenProvider) {
 		return ReactorUaaClient.builder()
 				.connectionContext(connectionContext)
 				.tokenProvider(tokenProvider)
