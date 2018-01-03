@@ -3,7 +3,6 @@ package org.springframework.cloud.cloudfoundry;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.lang.NonNull;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
@@ -26,7 +25,6 @@ public class CloudFoundryProperties implements InitializingBean {
 	/**
 	 * Username to authenticate (usually an email address).
 	 */
-	@NonNull
 	private String username;
 
 	/**
