@@ -1,0 +1,49 @@
+{
+  "hints": [],
+  "groups": [
+    {
+      "sourceType": "org.springframework.cloud.cloudfoundry.CloudFoundryProperties",
+      "name": "spring.cloud.cloudfoundry",
+      "type": "org.springframework.cloud.cloudfoundry.CloudFoundryProperties"
+    }
+  ],
+  "properties": [
+    {
+      "sourceType": "org.springframework.cloud.cloudfoundry.CloudFoundryProperties",
+      "name": "spring.cloud.cloudfoundry.org",
+      "description": "Organization name to authenticate with (default to user's default).",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "org.springframework.cloud.cloudfoundry.CloudFoundryProperties",
+      "name": "spring.cloud.cloudfoundry.password",
+      "description": "Password for user to authenticate and obtain token.",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "org.springframework.cloud.cloudfoundry.CloudFoundryProperties",
+      "defaultValue": false,
+      "name": "spring.cloud.cloudfoundry.skip-ssl-validation",
+      "type": "java.lang.Boolean"
+    },
+    {
+      "sourceType": "org.springframework.cloud.cloudfoundry.CloudFoundryProperties",
+      "name": "spring.cloud.cloudfoundry.space",
+      "description": "Space name to authenticate with (default to user's default).",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "org.springframework.cloud.cloudfoundry.CloudFoundryProperties",
+      "defaultValue": "api.run.pivotal.io",
+      "name": "spring.cloud.cloudfoundry.url",
+      "description": "URL of Cloud Foundry API (Cloud Controller).",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "org.springframework.cloud.cloudfoundry.CloudFoundryProperties",
+      "name": "spring.cloud.cloudfoundry.username",
+      "description": "Username to authenticate (usually an email address).",
+      "type": "java.lang.String"
+    }
+  ]
+}
