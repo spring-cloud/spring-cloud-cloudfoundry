@@ -52,7 +52,7 @@ public class CloudFoundryRibbonClientConfiguration {
 	@Bean
 	@ConditionalOnMissingBean
 	public ServerList<?> ribbonServerList(CloudFoundryService svc,
-	                                      IClientConfig config) {
+										  IClientConfig config) {
 		CloudFoundryServerList cloudFoundryServerList = new CloudFoundryServerList(svc);
 		cloudFoundryServerList.initWithNiwsConfig(config);
 		return cloudFoundryServerList;

@@ -49,7 +49,7 @@ public class CloudFoundryDiscoveryClient implements DiscoveryClient {
 
 
 	CloudFoundryDiscoveryClient(CloudFoundryOperations cloudFoundryOperations,
-	                            CloudFoundryService svc) {
+								CloudFoundryService svc) {
 		this.cloudFoundryService = svc;
 		this.cloudFoundryOperations = cloudFoundryOperations;
 	}

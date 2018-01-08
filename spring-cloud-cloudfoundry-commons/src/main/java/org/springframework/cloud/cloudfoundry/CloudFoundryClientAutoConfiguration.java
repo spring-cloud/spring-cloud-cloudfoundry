@@ -62,9 +62,9 @@ public class CloudFoundryClientAutoConfiguration {
 	@Lazy
 	@ConditionalOnMissingBean
 	public DefaultCloudFoundryOperations cloudFoundryOperations(CloudFoundryClient cloudFoundryClient,
-	                                                     DopplerClient dopplerClient,
-	                                                     RoutingClient routingClient,
-	                                                     UaaClient uaaClient) {
+																DopplerClient dopplerClient,
+																RoutingClient routingClient,
+																UaaClient uaaClient) {
 		String organization = this.cloudFoundryProperties.getOrg();
 		String space = this.cloudFoundryProperties.getSpace();
 		return DefaultCloudFoundryOperations
