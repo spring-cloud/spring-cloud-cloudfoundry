@@ -16,20 +16,19 @@
 
 package org.springframework.cloud.cloudfoundry.discovery;
 
-import javax.annotation.PostConstruct;
-
-import org.cloudfoundry.client.lib.CloudFoundryClient;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
 import com.netflix.client.config.CommonClientConfigKey;
 import com.netflix.client.config.IClientConfig;
 import com.netflix.config.ConfigurationManager;
 import com.netflix.config.DynamicPropertyFactory;
 import com.netflix.config.DynamicStringProperty;
 import com.netflix.loadbalancer.ServerList;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.cloud.cloudfoundry.CloudFoundryService;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import javax.annotation.PostConstruct;
 
 /**
  * @author Josh Long
@@ -52,10 +51,9 @@ public class CloudFoundryRibbonClientConfiguration {
 
 	@Bean
 	@ConditionalOnMissingBean
-	public ServerList<?> ribbonServerList(CloudFoundryClient cloudFoundryClient,
-			IClientConfig config) {
-		CloudFoundryServerList cloudFoundryServerList = new CloudFoundryServerList(
-				cloudFoundryClient);
+	public ServerList<?> ribbonServerList(CloudFoundryService svc,
+	                                      IClientConfig config) {
+		CloudFoundryServerList cloudFoundryServerList = new CloudFoundryServerList(svc);
 		cloudFoundryServerList.initWithNiwsConfig(config);
 		return cloudFoundryServerList;
 	}

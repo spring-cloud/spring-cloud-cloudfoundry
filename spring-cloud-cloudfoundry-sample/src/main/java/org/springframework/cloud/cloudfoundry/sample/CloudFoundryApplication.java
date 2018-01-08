@@ -16,14 +16,11 @@
 
 package org.springframework.cloud.cloudfoundry.sample;
 
-import java.util.List;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.cloudfoundry.discovery.CloudFoundryDiscoveryClient;
 import org.springframework.cloud.cloudfoundry.discovery.EnableCloudFoundryClient;
 import org.springframework.context.annotation.Bean;
@@ -47,31 +44,13 @@ public class CloudFoundryApplication {
 		SpringApplication.run(CloudFoundryApplication.class, args);
 	}
 
-	private Log log = LogFactory.getLog(getClass());
-
 	@Bean
-	CommandLineRunner consume(final CloudFoundryDiscoveryClient discoveryClient) {
-
-		return new CommandLineRunner() {
-			@Override
-			public void run(String... args) throws Exception {
-
-				// this demonstrates using the Spring Cloud Commons DiscoveryClient
-				// abstraction
-				log.info("=====================================");
-				for (String svc : discoveryClient.getServices()) {
+	CommandLineRunner demo(CloudFoundryDiscoveryClient discoveryClient) {
+		Log log = LogFactory.getLog(getClass());
+		return args ->
+				discoveryClient.getServices().forEach(svc -> {
 					log.info("service = " + svc);
-					List<ServiceInstance> instances = discoveryClient.getInstances(svc);
-					for (ServiceInstance si : instances) {
-						log.info("\t" + si);
-					}
-				}
-
-				log.info("=====================================");
-				log.info("local: ");
-				log.info("\t" + discoveryClient.getLocalServiceInstance());
-
-			}
-		};
+					discoveryClient.getInstances(svc).forEach(si -> log.info("\t" + si));
+				});
 	}
 }

@@ -26,32 +26,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class CloudFoundryDiscoveryProperties {
 
 	/**
-	 * URL of Cloud Foundry API (Cloud Controller).
-	 */
-	private String url = "https://api.run.pivotal.io";
-
-	/**
-	 * Username to authenticate (usually an email address).
-	 */
-	private String username;
-
-	/**
-	 * Password for user to authenticate and obtain token.
-	 */
-	private String password;
-
-	/**
-	 * Organization name to authenticate with (default to user's default).
-	 */
-	private String org;
-
-	/**
-	 * Space name to authenticate with (default to user's default).
-	 */
-	@Value("${vcap.application.space_name:}")
-	private String space;
-
-	/**
 	 * Flag to indicate that discovery is enabled.
 	 */
 	private boolean enabled = true;
@@ -63,51 +37,11 @@ public class CloudFoundryDiscoveryProperties {
 	private long heartbeatFrequency = 5000;
 
 	public boolean isEnabled() {
-		return this.enabled;
+		return enabled;
 	}
 
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
-	}
-
-	public String getUrl() {
-		return this.url;
-	}
-
-	public void setUrl(String cloudControllerUrl) {
-		this.url = cloudControllerUrl;
-	}
-
-	public String getUsername() {
-		return this.username;
-	}
-
-	public void setUsername(String email) {
-		this.username = email;
-	}
-
-	public String getPassword() {
-		return this.password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getOrg() {
-		return this.org;
-	}
-
-	public void setOrg(String org) {
-		this.org = org;
-	}
-
-	public String getSpace() {
-		return this.space;
-	}
-
-	public void setSpace(String space) {
-		this.space = space;
 	}
 
 	public long getHeartbeatFrequency() {

@@ -12,6 +12,9 @@ middlware that you "bind" to an app, essentially providing it with an
 environment variable containing credentials (e.g. the location and
 username to use for the service).
 
+The `spring-cloud-cloudfoundry-commons` module configures the
+Reactor-based Cloud Foundry Java client, v 3.0, and can be used standalone.
+
 The `spring-cloud-cloudfoundry-web` project provides basic support for
 some enhanced features of webapps in Cloud Foundry: binding
 automatically to single-sign-on services and optionally enabling
@@ -20,16 +23,14 @@ sticky routing for discovery.
 The `spring-cloud-cloudfoundry-discovery` project provides an
 implementation of Spring Cloud Commons `DiscoveryClient` so you can
 `@EnableDiscoveryClient` and provide your credentials as
-`spring.cloud.cloudfoundry.discovery.[email,password]` and then you
-can use the `DiscoveryClient` directly or via a `LoadBalancerClient`
-(also `*.url` if you are not connecting to
-https://run.pivotal.io[Pivotal Web Services]).
+`spring.cloud.cloudfoundry.discovery.[username,password]` (also `*.url` if you are not connecting to https://run.pivotal.io[Pivotal Web Services]) and then you
+can use the `DiscoveryClient` directly or via a `LoadBalancerClient`.
 
 > NOTE: if you are looking for a way to bind to services then this is the wrong library. Check out the [Spring Cloud Connectors](https://github.com/spring-cloud/spring-cloud-connectors) instead.
 
 == Building
 
-:jdkversion: 1.7
+:jdkversion: 1.8
 
 === Basic Compile and Test
 
@@ -70,7 +71,7 @@ https://github.com/spring-cloud-samples/scripts[scripts demo
 repository] for specific instructions about the common cases of mongo,
 rabbit and redis.
 
-NOTE: If all else fails, build with the command from `.travis.yml` (usually
+NOTE: If all else fails, build with the command from `.circle.yml` (usually
 `./mvnw install`).
 
 === Documentation

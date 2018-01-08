@@ -16,30 +16,24 @@
 
 package org.springframework.cloud.cloudfoundry.discovery;
 
-import java.util.Collections;
-import java.util.List;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.cloudfoundry.client.lib.CloudFoundryClient;
-import org.cloudfoundry.client.lib.domain.CloudApplication;
-
 import com.netflix.client.config.IClientConfig;
 import com.netflix.loadbalancer.AbstractServerList;
+import org.springframework.cloud.cloudfoundry.CloudFoundryService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Josh Long
  */
 public class CloudFoundryServerList extends AbstractServerList<CloudFoundryServer> {
 
-	private static final Log log = LogFactory.getLog(CloudFoundryServerList.class);
+	private String serviceId;
 
-	protected String serviceId;
+	private final CloudFoundryService cloudFoundryService;
 
-	private final CloudFoundryClient cloudFoundryClient;
-
-	public CloudFoundryServerList(CloudFoundryClient cloudFoundryClient) {
-		this.cloudFoundryClient = cloudFoundryClient;
+	CloudFoundryServerList(CloudFoundryService svc) {
+		this.cloudFoundryService = svc;
 	}
 
 	@Override
@@ -57,15 +51,12 @@ public class CloudFoundryServerList extends AbstractServerList<CloudFoundryServe
 		return this.cloudFoundryServers();
 	}
 
-	protected List<CloudFoundryServer> cloudFoundryServers() {
-		try {
-			CloudApplication cloudApplications = this.cloudFoundryClient
-					.getApplication(this.serviceId);
-			return Collections.singletonList(new CloudFoundryServer(cloudApplications));
-		}
-		catch (Exception e) {
-			log.warn("Cannot determine server list for " + this.serviceId + ": " + e.getClass() + "(" + e.getMessage() + ")");
-			return Collections.emptyList();
-		}
+	private List<CloudFoundryServer> cloudFoundryServers() {
+		return cloudFoundryService
+				.getApplicationInstances(this.serviceId)
+				.map(tpl -> new CloudFoundryServer(tpl.getT1().getName(), tpl.getT1().getUrls().get(0), 80))
+				.collectList()
+				.blockOptional()
+				.orElse(new ArrayList<>());
 	}
 }
