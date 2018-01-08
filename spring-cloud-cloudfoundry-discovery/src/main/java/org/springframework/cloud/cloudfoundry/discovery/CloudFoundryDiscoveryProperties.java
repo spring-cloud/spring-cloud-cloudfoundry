@@ -16,7 +16,6 @@
 
 package org.springframework.cloud.cloudfoundry.discovery;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
