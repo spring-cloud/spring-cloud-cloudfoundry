@@ -32,7 +32,7 @@ import org.springframework.context.annotation.Bean;
  * root called {@code hi-service.groovy} which you can deploy using the {@code spring} CLI
  * and the {@code cf} CLI that works appropriately for this demonstration.
  *
- * @author <a href="mailto:josh@joshlong.com">Josh Long</a>
+ * @author Josh Long
  * @author Spencer Gibb
  * @author Dave Syer
  */

@@ -16,28 +16,29 @@
 
 package org.springframework.cloud.cloudfoundry.discovery;
 
-import com.netflix.client.config.IClientConfig;
+import java.lang.reflect.Field;
+import java.util.List;
+
 import org.cloudfoundry.operations.applications.ApplicationDetail;
 import org.cloudfoundry.operations.applications.InstanceDetail;
 import org.junit.Assert;
-import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.cloud.cloudfoundry.CloudFoundryService;
 import org.springframework.util.ReflectionUtils;
-import reactor.core.publisher.Flux;
-import reactor.util.function.Tuple2;
-import reactor.util.function.Tuples;
 
-import java.lang.reflect.Field;
-import java.util.List;
+import com.netflix.client.config.IClientConfig;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import reactor.core.publisher.Flux;
+import reactor.util.function.Tuple2;
+import reactor.util.function.Tuples;
+
 /**
- * @author <A href="mailto:josh@Joshlong.com">Josh Long</A>
+ * @author Josh Long
  */
 public class CloudFoundryServerListTest {
 

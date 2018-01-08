@@ -40,7 +40,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
 /**
- * @author <A href="mailto:josh@Joshlong.com">Josh Long</A>
+ * @author Josh Long
  */
 public class CloudFoundryDiscoveryClientTest {
 

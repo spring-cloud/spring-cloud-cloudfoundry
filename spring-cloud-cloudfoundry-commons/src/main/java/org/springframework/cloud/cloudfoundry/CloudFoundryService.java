@@ -12,7 +12,7 @@ import reactor.util.function.Tuple2;
  * Supports the discovery of a combination of an application instance's URI, port,
  * application ID, and application index.
  *
- * @author <a href="mailto:josh@joshlong.com">Josh Long</a>
+ * @author Josh Long
  */
 public class CloudFoundryService {
 

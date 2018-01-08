@@ -12,7 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * @author <a href="mailto:josh@joshlong.com">Josh Long</a>
+ * @author Josh Long
  */
 @ConfigurationProperties(prefix = "spring.cloud.cloudfoundry")
 public class CloudFoundryProperties implements InitializingBean {

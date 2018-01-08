@@ -25,7 +25,7 @@ import org.springframework.context.annotation.Lazy;
 /**
  * Provides auto-configuration for the Reactor-based Cloud Foundry client v3.x.
  *
- * @author <a href="mailto:josh@joshlong.com">Josh Long</a>
+ * @author Josh Long
  * @author Ben Hale
  */
 @Configuration
