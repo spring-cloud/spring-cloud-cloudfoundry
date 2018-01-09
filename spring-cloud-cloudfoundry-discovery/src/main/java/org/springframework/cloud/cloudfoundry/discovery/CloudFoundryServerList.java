@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 the original author or authors.
+ * Copyright 2013-2018 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,16 @@
 
 package org.springframework.cloud.cloudfoundry.discovery;
 
-import com.netflix.client.config.IClientConfig;
-import com.netflix.loadbalancer.AbstractServerList;
-import org.springframework.cloud.cloudfoundry.CloudFoundryService;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.cloud.cloudfoundry.CloudFoundryService;
+import org.springframework.cloud.netflix.ribbon.RibbonUtils;
+import org.springframework.cloud.netflix.ribbon.RibbonUtils.RibbonProperties;
+import org.springframework.util.Assert;
+
+import com.netflix.client.config.IClientConfig;
+import com.netflix.loadbalancer.AbstractServerList;
 
 /**
  * @author Josh Long
@@ -31,14 +35,18 @@ public class CloudFoundryServerList extends AbstractServerList<CloudFoundryServe
 	private String serviceId;
 
 	private final CloudFoundryService cloudFoundryService;
+	private final CloudFoundryDiscoveryProperties properties;
+	private IClientConfig clientConfig;
 
-	CloudFoundryServerList(CloudFoundryService svc) {
+	CloudFoundryServerList(CloudFoundryService svc, CloudFoundryDiscoveryProperties properties) {
 		this.cloudFoundryService = svc;
+		this.properties = properties;
 	}
 
 	@Override
-	public void initWithNiwsConfig(IClientConfig iClientConfig) {
-		this.serviceId = iClientConfig.getClientName();
+	public void initWithNiwsConfig(IClientConfig clientConfig) {
+		this.clientConfig = clientConfig;
+		this.serviceId = this.clientConfig.getClientName();
 	}
 
 	@Override
@@ -52,11 +60,32 @@ public class CloudFoundryServerList extends AbstractServerList<CloudFoundryServe
 	}
 
 	private List<CloudFoundryServer> cloudFoundryServers() {
+		Assert.notNull(this.clientConfig, "clientConfig may not be null");
+
+		RibbonProperties ribbon = RibbonUtils.from(clientConfig);
+
+		Boolean secure = ribbon.getSecure();
+		Integer securePort = ribbon.getSecurePort();
+		Integer nonSecurePort = ribbon.getPort();
+
+		final int port;
+		if (secure != null && secure && securePort != null) {
+		    port = securePort;
+		} else if (nonSecurePort != null) {
+			port = nonSecurePort;
+		} else {
+			port = this.properties.getDefaultServerPort();
+		}
+
 		return cloudFoundryService
 				.getApplicationInstances(this.serviceId)
-				.map(tpl -> new CloudFoundryServer(tpl.getT1().getName(), tpl.getT1().getUrls().get(0), 80))
+				.map(tpl -> new CloudFoundryServer(tpl.getT1().getName(), tpl.getT1().getUrls().get(0), port))
 				.collectList()
 				.blockOptional()
 				.orElse(new ArrayList<>());
+	}
+
+	/** for testing */ String getServiceId() {
+		return serviceId;
 	}
 }

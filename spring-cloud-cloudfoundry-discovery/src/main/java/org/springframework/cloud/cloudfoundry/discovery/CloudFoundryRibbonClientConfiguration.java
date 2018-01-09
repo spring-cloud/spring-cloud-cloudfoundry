@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 the original author or authors.
+ * Copyright 2013-2018 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,17 @@
 
 package org.springframework.cloud.cloudfoundry.discovery;
 
-import com.netflix.client.config.CommonClientConfigKey;
-import com.netflix.client.config.IClientConfig;
-import com.netflix.config.ConfigurationManager;
-import com.netflix.config.DynamicPropertyFactory;
-import com.netflix.config.DynamicStringProperty;
-import com.netflix.loadbalancer.ServerList;
-import org.springframework.beans.factory.annotation.Value;
+import javax.annotation.PostConstruct;
+
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cloud.cloudfoundry.CloudFoundryService;
+import org.springframework.cloud.netflix.ribbon.RibbonClientName;
+import org.springframework.cloud.netflix.ribbon.RibbonUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.annotation.PostConstruct;
+import com.netflix.client.config.IClientConfig;
+import com.netflix.loadbalancer.ServerList;
 
 /**
  * @author Josh Long
@@ -36,10 +34,7 @@ import javax.annotation.PostConstruct;
 @Configuration
 public class CloudFoundryRibbonClientConfiguration {
 
-	protected static final String DEFAULT_NAMESPACE = "ribbon";
-	protected static final String VALUE_NOT_SET = "__not__set__";
-
-	@Value("${ribbon.client.name}")
+	@RibbonClientName
 	private String serviceId;
 
 	public CloudFoundryRibbonClientConfiguration() {
@@ -51,36 +46,16 @@ public class CloudFoundryRibbonClientConfiguration {
 
 	@Bean
 	@ConditionalOnMissingBean
-	public ServerList<?> ribbonServerList(CloudFoundryService svc,
-										  IClientConfig config) {
-		CloudFoundryServerList cloudFoundryServerList = new CloudFoundryServerList(svc);
+	public ServerList<?> ribbonServerList(CloudFoundryService svc, IClientConfig config,
+										  CloudFoundryDiscoveryProperties properties) {
+		CloudFoundryServerList cloudFoundryServerList = new CloudFoundryServerList(svc, properties);
 		cloudFoundryServerList.initWithNiwsConfig(config);
 		return cloudFoundryServerList;
 	}
 
 	@PostConstruct
 	public void postConstruct() {
-		// FIXME: what should this be?
-		setProp(this.serviceId,
-				CommonClientConfigKey.DeploymentContextBasedVipAddresses.key(),
-				this.serviceId);
-		setProp(this.serviceId, CommonClientConfigKey.EnableZoneAffinity.key(), "true");
+		RibbonUtils.initializeRibbonDefaults(this.serviceId);
 	}
 
-	protected void setProp(String serviceId, String suffix, String value) {
-		// how to set the namespace properly?
-		String key = getKey(serviceId, suffix);
-		DynamicStringProperty property = getProperty(key);
-		if (property.get().equals(VALUE_NOT_SET)) {
-			ConfigurationManager.getConfigInstance().setProperty(key, value);
-		}
-	}
-
-	protected DynamicStringProperty getProperty(String key) {
-		return DynamicPropertyFactory.getInstance().getStringProperty(key, VALUE_NOT_SET);
-	}
-
-	protected String getKey(String serviceId, String suffix) {
-		return serviceId + "." + DEFAULT_NAMESPACE + "." + suffix;
-	}
 }

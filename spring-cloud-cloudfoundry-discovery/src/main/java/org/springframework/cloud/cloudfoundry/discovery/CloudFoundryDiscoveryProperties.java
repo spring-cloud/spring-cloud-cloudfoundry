@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 the original author or authors.
+ * Copyright 2013-2018 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,11 @@ public class CloudFoundryDiscoveryProperties {
 	 */
 	private long heartbeatFrequency = 5000;
 
+	/**
+	 * Port to use when no port is defined by ribbon.
+	 */
+	private int defaultServerPort = 80;
+
 	public boolean isEnabled() {
 		return enabled;
 	}
@@ -49,5 +54,22 @@ public class CloudFoundryDiscoveryProperties {
 
 	public void setHeartbeatFrequency(long heartbeatFrequency) {
 		this.heartbeatFrequency = heartbeatFrequency;
+	}
+
+	public int getDefaultServerPort() {
+		return defaultServerPort;
+	}
+
+	public void setDefaultServerPort(int defaultServerPort) {
+		this.defaultServerPort = defaultServerPort;
+	}
+
+	@Override
+	public String toString() {
+		return "CloudFoundryDiscoveryProperties{" +
+				"enabled=" + enabled +
+				", heartbeatFrequency=" + heartbeatFrequency +
+				", defaultServerPort=" + defaultServerPort +
+				'}';
 	}
 }
