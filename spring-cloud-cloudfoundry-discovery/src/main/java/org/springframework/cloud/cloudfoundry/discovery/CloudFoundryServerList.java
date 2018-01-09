@@ -20,8 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.cloud.cloudfoundry.CloudFoundryService;
-import org.springframework.cloud.netflix.ribbon.RibbonUtils;
-import org.springframework.cloud.netflix.ribbon.RibbonUtils.RibbonProperties;
+import org.springframework.cloud.netflix.ribbon.RibbonProperties;
 import org.springframework.util.Assert;
 
 import com.netflix.client.config.IClientConfig;
@@ -62,7 +61,7 @@ public class CloudFoundryServerList extends AbstractServerList<CloudFoundryServe
 	private List<CloudFoundryServer> cloudFoundryServers() {
 		Assert.notNull(this.clientConfig, "clientConfig may not be null");
 
-		RibbonProperties ribbon = RibbonUtils.from(clientConfig);
+		RibbonProperties ribbon = RibbonProperties.from(clientConfig);
 
 		Boolean secure = ribbon.getSecure();
 		Integer securePort = ribbon.getSecurePort();
