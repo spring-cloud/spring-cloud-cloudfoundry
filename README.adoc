@@ -30,7 +30,7 @@ can use the `DiscoveryClient` directly or via a `LoadBalancerClient`.
 
 == Building
 
-:jdkversion: 1.7
+:jdkversion: 1.8
 
 === Basic Compile and Test
 
@@ -71,7 +71,7 @@ https://github.com/spring-cloud-samples/scripts[scripts demo
 repository] for specific instructions about the common cases of mongo,
 rabbit and redis.
 
-NOTE: If all else fails, build with the command from `.travis.yml` (usually
+NOTE: If all else fails, build with the command from `.circle.yml` (usually
 `./mvnw install`).
 
 === Documentation
