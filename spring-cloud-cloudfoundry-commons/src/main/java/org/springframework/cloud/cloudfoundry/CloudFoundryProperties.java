@@ -28,7 +28,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
+ * Configuration properties for a connection to a Cloud Foundry platform.
+ *
  * @author Josh Long
+ * @author Scott Frederick
  */
 @ConfigurationProperties(prefix = "spring.cloud.cloudfoundry")
 public class CloudFoundryProperties implements InitializingBean {
@@ -36,7 +39,8 @@ public class CloudFoundryProperties implements InitializingBean {
 	/**
 	 * URL of Cloud Foundry API (Cloud Controller).
 	 */
-	private String url = "api.run.pivotal.io";
+	@Value("${vcap.application.cf_api:api.run.pivotal.io}")
+	private String url;
 
 	/**
 	 * Username to authenticate (usually an email address).
@@ -49,12 +53,12 @@ public class CloudFoundryProperties implements InitializingBean {
 	private String password;
 
 	/**
-	 * Organization name to authenticate with (default to user's default).
+	 * Organization name to initially target.
 	 */
 	private String org;
 
 	/**
-	 * Space name to authenticate with (default to user's default).
+	 * Space name to initially target.
 	 */
 	@Value("${vcap.application.space_name:}")
 	private String space;
@@ -127,19 +131,21 @@ public class CloudFoundryProperties implements InitializingBean {
 	}
 
 	@Override
-	public void afterPropertiesSet() throws Exception {
+	public void afterPropertiesSet() {
 		this.url = safeUrl(this.url);
 		this.password = this.password.trim();
 		this.username = this.username.trim();
-		this.org = this.org.trim();
-		this.space = this.space.trim();
+		if (this.org != null) {
+			this.org = this.org.trim();
+		}
+		if (this.space != null) {
+			this.space = this.space.trim();
+		}
 
 		Map<String, String> vals = new HashMap<>();
-		vals.put("org", getOrg());
 		vals.put("url", getUrl());
 		vals.put("username", getUsername());
 		vals.put("password", getPassword());
-		vals.put("space", getSpace());
 		vals.forEach((key, value) -> Assert.hasText(value, String.format("'%s' must be provided", key)));
 	}
 }

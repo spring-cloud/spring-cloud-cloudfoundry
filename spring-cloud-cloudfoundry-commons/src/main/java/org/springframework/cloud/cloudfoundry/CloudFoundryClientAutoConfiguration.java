@@ -43,9 +43,10 @@ import org.springframework.context.annotation.Lazy;
  *
  * @author Josh Long
  * @author Ben Hale
+ * @author Scott Frederick
  */
 @Configuration
-@ConditionalOnProperty(prefix = "spring.cloud.cloudfoundry", name = {"username", "password", "org", "space"})
+@ConditionalOnProperty(prefix = "spring.cloud.cloudfoundry", name = {"username", "password"})
 @ConditionalOnClass(name = {"reactor.core.publisher.Flux", "org.cloudfoundry.operations.DefaultCloudFoundryOperations",
 		"org.cloudfoundry.reactor.client.ReactorCloudFoundryClient", "org.reactivestreams.Publisher"})
 @EnableConfigurationProperties(CloudFoundryProperties.class)
@@ -67,16 +68,6 @@ public class CloudFoundryClientAutoConfiguration {
 	@Bean
 	@Lazy
 	@ConditionalOnMissingBean
-	public ReactorCloudFoundryClient cloudFoundryClient(ConnectionContext connectionContext, TokenProvider tokenProvider) {
-		return ReactorCloudFoundryClient.builder()
-				.connectionContext(connectionContext)
-				.tokenProvider(tokenProvider)
-				.build();
-	}
-
-	@Bean
-	@Lazy
-	@ConditionalOnMissingBean
 	public DefaultCloudFoundryOperations cloudFoundryOperations(CloudFoundryClient cloudFoundryClient,
 																DopplerClient dopplerClient,
 																RoutingClient routingClient,
@@ -93,18 +84,13 @@ public class CloudFoundryClientAutoConfiguration {
 				.space(space)
 				.build();
 	}
-
 	@Bean
 	@Lazy
 	@ConditionalOnMissingBean
-	public DefaultConnectionContext connectionContext() {
-
-		String apiHost = this.cloudFoundryProperties.getUrl();
-		Boolean skipSslValidation = this.cloudFoundryProperties.isSkipSslValidation();
-
-		return DefaultConnectionContext.builder()
-				.apiHost(apiHost)
-				.skipSslValidation(skipSslValidation)
+	public ReactorCloudFoundryClient cloudFoundryClient(ConnectionContext connectionContext, TokenProvider tokenProvider) {
+		return ReactorCloudFoundryClient.builder()
+				.connectionContext(connectionContext)
+				.tokenProvider(tokenProvider)
 				.build();
 	}
 
@@ -131,22 +117,35 @@ public class CloudFoundryClientAutoConfiguration {
 	@Bean
 	@Lazy
 	@ConditionalOnMissingBean
-	public PasswordGrantTokenProvider tokenProvider() {
-		String username = this.cloudFoundryProperties.getUsername();
-		String password = this.cloudFoundryProperties.getPassword();
-		return PasswordGrantTokenProvider.builder()
-				.password(password)
-				.username(username)
+	public ReactorUaaClient uaaClient(ConnectionContext connectionContext, TokenProvider tokenProvider) {
+		return ReactorUaaClient.builder()
+				.connectionContext(connectionContext)
+				.tokenProvider(tokenProvider)
 				.build();
 	}
 
 	@Bean
 	@Lazy
 	@ConditionalOnMissingBean
-	public ReactorUaaClient uaaClient(ConnectionContext connectionContext, TokenProvider tokenProvider) {
-		return ReactorUaaClient.builder()
-				.connectionContext(connectionContext)
-				.tokenProvider(tokenProvider)
+	public DefaultConnectionContext connectionContext() {
+		String apiHost = this.cloudFoundryProperties.getUrl();
+		Boolean skipSslValidation = this.cloudFoundryProperties.isSkipSslValidation();
+
+		return DefaultConnectionContext.builder()
+				.apiHost(apiHost)
+				.skipSslValidation(skipSslValidation)
+				.build();
+	}
+
+	@Bean
+	@Lazy
+	@ConditionalOnMissingBean
+	public PasswordGrantTokenProvider tokenProvider() {
+		String username = this.cloudFoundryProperties.getUsername();
+		String password = this.cloudFoundryProperties.getPassword();
+		return PasswordGrantTokenProvider.builder()
+				.password(password)
+				.username(username)
 				.build();
 	}
 }

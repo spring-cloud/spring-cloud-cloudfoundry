@@ -23,12 +23,12 @@
 	</properties>
 
 	<scm>
-		<url>https://github.com/spring-cloud/spring-cloud-consul</url>
+		<url>https://github.com/spring-cloud/spring-cloud-cloudfoundry</url>
 		<connection>
-			scm:git:git://github.com/spring-cloud/spring-cloud-consul.git
+			scm:git:git://github.com/spring-cloud/spring-cloud-cloudfoundry.git
 		</connection>
 		<developerConnection>
-			scm:git:ssh://git@github.com/spring-cloud/spring-cloud-consul.git
+			scm:git:ssh://git@github.com/spring-cloud/spring-cloud-cloudfoundry.git
 		</developerConnection>
 		<tag>HEAD</tag>
 	</scm>

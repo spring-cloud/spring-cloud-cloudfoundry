@@ -17,7 +17,6 @@
 package org.springframework.cloud.cloudfoundry.discovery;
 
 import org.cloudfoundry.operations.CloudFoundryOperations;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -34,9 +33,6 @@ import org.springframework.context.annotation.Configuration;
 @ConditionalOnProperty(value = "spring.cloud.cloudfoundry.discovery.enabled", matchIfMissing = true)
 @EnableConfigurationProperties(CloudFoundryDiscoveryProperties.class)
 public class CloudFoundryDiscoveryClientConfiguration {
-
-	@Autowired
-	private CloudFoundryDiscoveryProperties discovery;
 
 	@Bean
 	@ConditionalOnMissingBean(CloudFoundryDiscoveryClient.class)

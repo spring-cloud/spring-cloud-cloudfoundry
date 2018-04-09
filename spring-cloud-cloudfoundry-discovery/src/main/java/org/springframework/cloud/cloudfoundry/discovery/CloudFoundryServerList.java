@@ -30,12 +30,11 @@ import com.netflix.loadbalancer.AbstractServerList;
  * @author Josh Long
  */
 public class CloudFoundryServerList extends AbstractServerList<CloudFoundryServer> {
-
-	private String serviceId;
-
 	private final CloudFoundryService cloudFoundryService;
 	private final CloudFoundryDiscoveryProperties properties;
+
 	private IClientConfig clientConfig;
+	private String serviceId;
 
 	CloudFoundryServerList(CloudFoundryService svc, CloudFoundryDiscoveryProperties properties) {
 		this.cloudFoundryService = svc;
@@ -45,17 +44,17 @@ public class CloudFoundryServerList extends AbstractServerList<CloudFoundryServe
 	@Override
 	public void initWithNiwsConfig(IClientConfig clientConfig) {
 		this.clientConfig = clientConfig;
-		this.serviceId = this.clientConfig.getClientName();
+		this.serviceId = clientConfig.getClientName();
 	}
 
 	@Override
 	public List<CloudFoundryServer> getInitialListOfServers() {
-		return this.cloudFoundryServers();
+		return cloudFoundryServers();
 	}
 
 	@Override
 	public List<CloudFoundryServer> getUpdatedListOfServers() {
-		return this.cloudFoundryServers();
+		return cloudFoundryServers();
 	}
 
 	private List<CloudFoundryServer> cloudFoundryServers() {
@@ -69,7 +68,7 @@ public class CloudFoundryServerList extends AbstractServerList<CloudFoundryServe
 
 		final int port;
 		if (secure != null && secure && securePort != null) {
-		    port = securePort;
+			port = securePort;
 		} else if (nonSecurePort != null) {
 			port = nonSecurePort;
 		} else {

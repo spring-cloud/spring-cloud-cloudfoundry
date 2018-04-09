@@ -20,7 +20,6 @@ import org.cloudfoundry.operations.CloudFoundryOperations;
 import org.cloudfoundry.operations.applications.ApplicationDetail;
 import org.cloudfoundry.operations.applications.ApplicationSummary;
 import org.cloudfoundry.operations.applications.InstanceDetail;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.DefaultServiceInstance;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -43,10 +42,6 @@ public class CloudFoundryDiscoveryClient implements DiscoveryClient {
 	private final CloudFoundryOperations cloudFoundryOperations;
 
 	private final String description = "Cloud Foundry " + DiscoveryClient.class.getName() + " implementation";
-
-	@Value("${vcap.application.name:${spring.application.name:application}}")
-	private String vcapApplicationName = "application";
-
 
 	CloudFoundryDiscoveryClient(CloudFoundryOperations cloudFoundryOperations,
 								CloudFoundryService svc) {
@@ -86,8 +81,7 @@ public class CloudFoundryDiscoveryClient implements DiscoveryClient {
 
 	@Override
 	public List<String> getServices() {
-		return this
-				.cloudFoundryOperations
+		return this.cloudFoundryOperations
 				.applications()
 				.list()
 				.map(ApplicationSummary::getName)
