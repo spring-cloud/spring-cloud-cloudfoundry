@@ -1,7 +1,7 @@
-// to run on ur local machine this use:
+// to run locally use:
 //      spring run hi-service.groovy
 //
-// to deploy this to Cloud Foundry, use
+// to deploy to Cloud Foundry use:
 //      spring jar hi.jar hi-service.groovy
 //      cf push hi-service -p hi.jar
 

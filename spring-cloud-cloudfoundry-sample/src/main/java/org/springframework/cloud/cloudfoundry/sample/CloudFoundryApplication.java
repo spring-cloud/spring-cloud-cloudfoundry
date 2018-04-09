@@ -26,15 +26,27 @@ import org.springframework.cloud.cloudfoundry.discovery.EnableCloudFoundryClient
 import org.springframework.context.annotation.Bean;
 
 /**
- * This example assumes you've registered an application on
- * <A href="http://cloudfoundry.org">Cloud Foundry</A> named {@code hi-service} that
- * responds with a String at {@code /hi/ name} . There is a sample file in the project
- * root called {@code hi-service.groovy} which you can deploy using the {@code spring} CLI
- * and the {@code cf} CLI that works appropriately for this demonstration.
+ * This example uses the Spring Cloud {@code DiscoveryClient} abstraction to list all services
+ * available to the application. It should deployed to a Cloud Foundry organization and space that
+ * has other applications deployed to it.
+ *
+ * There is a sample file in the project root called {@code hi-service.groovy} which can be
+ * deployed using the {@code spring} CLI and the {@code cf} CLI that works appropriately for
+ * this example.
+ *
+ * Either modify this application's {@code application.yml} configuration file to provide credentials
+ * and other information for the Cloud Foundry the app is deployed to, or set the following
+ * environment variables on the application (using {@code cf set-env}):
+ *
+ * * {@code CF_USERNAME}
+ * * {@code CF_PASSWORD}
+ * * {@code CF_ORG}
+ * * {@code CF_SPACE}
  *
  * @author Josh Long
  * @author Spencer Gibb
  * @author Dave Syer
+ * @author Scott Frederick
  */
 @SpringBootApplication
 @EnableCloudFoundryClient
@@ -50,7 +62,7 @@ public class CloudFoundryApplication {
 		return args ->
 				discoveryClient.getServices().forEach(svc -> {
 					log.info("service = " + svc);
-					discoveryClient.getInstances(svc).forEach(si -> log.info("\t" + si));
+					discoveryClient.getInstances(svc).forEach(si -> log.info("\tinstance = " + si));
 				});
 	}
 }
