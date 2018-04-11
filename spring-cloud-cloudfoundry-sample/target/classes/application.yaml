@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: test-app
+  cloud:
+    cloudfoundry:
+      username: ${CF_USERNAME:starbuxman@gmail.com}
+      password: ${CF_PASSWORD:xxxx}
+      org: ${CF_ORG:}
+      space: ${CF_SPACE:}
