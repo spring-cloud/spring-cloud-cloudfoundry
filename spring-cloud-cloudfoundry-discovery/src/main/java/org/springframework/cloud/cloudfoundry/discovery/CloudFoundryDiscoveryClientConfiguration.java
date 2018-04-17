@@ -43,6 +43,30 @@ public class CloudFoundryDiscoveryClientConfiguration {
 		return new CloudFoundryDiscoveryClient(cf, svc, cloudFoundryDiscoveryProperties);
 	}
 
+	@Configuration
+	@ConditionalOnProperty(value = "spring.cloud.cloudfoundry.discovery.use-dns", havingValue = "false", matchIfMissing = true)
+	public static class CloudFoundryDiscoveryClientConfig {
+		@Bean
+		@ConditionalOnMissingBean(CloudFoundryDiscoveryClient.class)
+		public CloudFoundryDiscoveryClient cloudFoundryDiscoveryClient(
+				CloudFoundryOperations cf, CloudFoundryService svc,
+				CloudFoundryDiscoveryProperties cloudFoundryDiscoveryProperties) {
+			return new CloudFoundryDiscoveryClient(cf, svc, cloudFoundryDiscoveryProperties);
+		}
+	}
+
+	@Configuration
+	@ConditionalOnProperty(value = "spring.cloud.cloudfoundry.discovery.use-dns", havingValue = "true")
+	public static class DnsBasedCloudFoundryDiscoveryClientConfig {
+		@Bean
+		@ConditionalOnMissingBean(CloudFoundryDiscoveryClient.class)
+		public CloudFoundryDiscoveryClient cloudFoundryDiscoveryClient(
+				CloudFoundryOperations cf, CloudFoundryService svc,
+				CloudFoundryDiscoveryProperties cloudFoundryDiscoveryProperties) {
+			return new CloudFoundryAppServiceDiscoveryClient(cf, svc, cloudFoundryDiscoveryProperties);
+		}
+	}
+
 	@Bean
 	public CloudFoundryHeartbeatSender cloudFoundryHeartbeatSender(CloudFoundryDiscoveryClient client) {
 		return new CloudFoundryHeartbeatSender(client);
