@@ -72,7 +72,7 @@ public class CloudFoundryDiscoveryClientConfigurationTest {
 
 	@Test
 	public void testUseContainerIpTrue() {
-		this.contextRunner.withUserConfiguration(CloudFoundryConfig.class)
+		this.contextRunner
 				.withPropertyValues("spring.cloud.cloudfoundry.discovery.use-dns=true",
 						"spring.cloud.cloudfoundry.discovery.use-container-ip=true")
 				.run((context) -> {
