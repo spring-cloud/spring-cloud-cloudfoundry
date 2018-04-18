@@ -21,7 +21,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.cloudfoundry.discovery.CloudFoundryDiscoveryClient;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.cloudfoundry.discovery.EnableCloudFoundryClient;
 import org.springframework.context.annotation.Bean;
 
@@ -57,7 +57,7 @@ public class CloudFoundryApplication {
 	}
 
 	@Bean
-	CommandLineRunner demo(CloudFoundryDiscoveryClient discoveryClient) {
+	CommandLineRunner demo(DiscoveryClient discoveryClient) {
 		Log log = LogFactory.getLog(getClass());
 		return args ->
 				discoveryClient.getServices().forEach(svc -> {
