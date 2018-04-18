@@ -58,10 +58,10 @@ public class CloudFoundryDiscoveryClientConfigurationTest {
 	}
 
 	@Test
-	public void testUseIndexBasedRouteTrue() {
+	public void testUseContainerIpFalse() {
 		this.contextRunner.withUserConfiguration(CloudFoundryConfig.class)
 				.withPropertyValues("spring.cloud.cloudfoundry.discovery.use-dns=true",
-						"spring.cloud.cloudfoundry.discovery.use-index-based-route=true")
+						"spring.cloud.cloudfoundry.discovery.use-container-ip=false")
 				.run((context) -> {
 					DiscoveryClient discoveryClient = context
 							.getBean(DiscoveryClient.class);
@@ -71,10 +71,10 @@ public class CloudFoundryDiscoveryClientConfigurationTest {
 	}
 
 	@Test
-	public void testUseIndexBasedRouteFalse() {
+	public void testUseContainerIpTrue() {
 		this.contextRunner.withUserConfiguration(CloudFoundryConfig.class)
 				.withPropertyValues("spring.cloud.cloudfoundry.discovery.use-dns=true",
-						"spring.cloud.cloudfoundry.discovery.use-index-based-route=false")
+						"spring.cloud.cloudfoundry.discovery.use-container-ip=true")
 				.run((context) -> {
 					DiscoveryClient discoveryClient = context
 							.getBean(DiscoveryClient.class);
