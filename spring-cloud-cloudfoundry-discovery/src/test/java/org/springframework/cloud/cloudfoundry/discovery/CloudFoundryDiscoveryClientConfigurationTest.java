@@ -57,6 +57,32 @@ public class CloudFoundryDiscoveryClientConfigurationTest {
 				});
 	}
 
+	@Test
+	public void testUseIndexBasedRouteTrue() {
+		this.contextRunner.withUserConfiguration(CloudFoundryConfig.class)
+				.withPropertyValues("spring.cloud.cloudfoundry.discovery.use-dns=true",
+						"spring.cloud.cloudfoundry.discovery.use-index-based-route=true")
+				.run((context) -> {
+					DiscoveryClient discoveryClient = context
+							.getBean(DiscoveryClient.class);
+					assertThat(discoveryClient.getClass())
+							.isEqualTo(CloudFoundryAppServiceDiscoveryClient.class);
+				});
+	}
+
+	@Test
+	public void testUseIndexBasedRouteFalse() {
+		this.contextRunner.withUserConfiguration(CloudFoundryConfig.class)
+				.withPropertyValues("spring.cloud.cloudfoundry.discovery.use-dns=true",
+						"spring.cloud.cloudfoundry.discovery.use-index-based-route=false")
+				.run((context) -> {
+					DiscoveryClient discoveryClient = context
+							.getBean(DiscoveryClient.class);
+					assertThat(discoveryClient.getClass())
+							.isEqualTo(SimpleDnsBasedDiscoveryClient.class);
+				});
+	}
+
 	@Configuration
 	public static class CloudFoundryConfig {
 		@Bean
