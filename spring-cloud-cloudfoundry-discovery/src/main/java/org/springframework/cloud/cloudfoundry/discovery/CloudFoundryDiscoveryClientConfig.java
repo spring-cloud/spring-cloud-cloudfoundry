@@ -1,6 +1,7 @@
 package org.springframework.cloud.cloudfoundry.discovery;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.core.Ordered;
 
 /**
  * Properties used for configuring the CloudFoundry implementation of
@@ -11,7 +12,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("spring.cloud.discovery.client.cloudfoundry")
 public class CloudFoundryDiscoveryClientConfig {
 
-	private int order;
+	private int order = Ordered.LOWEST_PRECEDENCE;
 
 	public int getOrder() {
 		return order;
