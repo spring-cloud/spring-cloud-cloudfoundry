@@ -35,16 +35,16 @@ import org.springframework.context.annotation.Configuration;
 public class CloudFoundryDiscoveryClientConfiguration {
 
 	@Bean
-	public CloudFoundryDiscoveryClientConfig cloudFoundryDiscoveryClientConfig() {
-		return new CloudFoundryDiscoveryClientConfig();
+	public CloudFoundryDiscoveryClientProperties cloudFoundryDiscoveryClientProperties() {
+		return new CloudFoundryDiscoveryClientProperties();
 	}
 
 	@Bean
 	@ConditionalOnMissingBean(CloudFoundryDiscoveryClient.class)
 	public CloudFoundryDiscoveryClient cloudFoundryDiscoveryClient(
 			CloudFoundryOperations cf, CloudFoundryService svc,
-			CloudFoundryDiscoveryClientConfig discoveryClientConfig) {
-		return new CloudFoundryDiscoveryClient(cf, svc, discoveryClientConfig);
+			CloudFoundryDiscoveryClientProperties discoveryClientProperties) {
+		return new CloudFoundryDiscoveryClient(cf, svc, discoveryClientProperties);
 	}
 
 	@Bean

@@ -10,7 +10,7 @@ import org.springframework.core.Ordered;
  * @author Olga Maciaszek-Sharma
  */
 @ConfigurationProperties("spring.cloud.discovery.client.cloudfoundry")
-public class CloudFoundryDiscoveryClientConfig {
+public class CloudFoundryDiscoveryClientProperties {
 
 	private int order = Ordered.LOWEST_PRECEDENCE;
 

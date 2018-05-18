@@ -42,16 +42,16 @@ public class CloudFoundryDiscoveryClient implements DiscoveryClient {
 
 	private final CloudFoundryService cloudFoundryService;
 	private final CloudFoundryOperations cloudFoundryOperations;
-	private final CloudFoundryDiscoveryClientConfig discoveryClientConfig;
+	private final CloudFoundryDiscoveryClientProperties discoveryClientProperties;
 
 	private final String description = "Cloud Foundry " + DiscoveryClient.class.getName() + " implementation";
 
 	CloudFoundryDiscoveryClient(CloudFoundryOperations cloudFoundryOperations,
 	                            CloudFoundryService svc,
-	                            CloudFoundryDiscoveryClientConfig discoveryClientConfig) {
+	                            CloudFoundryDiscoveryClientProperties discoveryClientProperties) {
 		this.cloudFoundryService = svc;
 		this.cloudFoundryOperations = cloudFoundryOperations;
-		this.discoveryClientConfig = discoveryClientConfig;
+		this.discoveryClientProperties = discoveryClientProperties;
 	}
 
 	@Override
@@ -97,6 +97,6 @@ public class CloudFoundryDiscoveryClient implements DiscoveryClient {
 
 	@Override
 	public int getOrder() {
-		return this.discoveryClientConfig.getOrder();
+		return this.discoveryClientProperties.getOrder();
 	}
 }

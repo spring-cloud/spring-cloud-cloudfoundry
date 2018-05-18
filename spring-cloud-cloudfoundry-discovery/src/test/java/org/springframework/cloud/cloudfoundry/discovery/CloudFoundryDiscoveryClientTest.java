@@ -55,7 +55,7 @@ public class CloudFoundryDiscoveryClientTest {
 		this.ops = mock(CloudFoundryOperations.class);
 		this.svc = mock(CloudFoundryService.class);
 		this.cloudFoundryDiscoveryClient = new CloudFoundryDiscoveryClient(this.ops, this.svc,
-				new CloudFoundryDiscoveryClientConfig());
+				new CloudFoundryDiscoveryClientProperties());
 	}
 
 	@Test
