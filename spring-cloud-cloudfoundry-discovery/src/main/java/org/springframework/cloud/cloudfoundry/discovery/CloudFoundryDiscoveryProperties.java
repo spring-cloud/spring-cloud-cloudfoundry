@@ -40,6 +40,11 @@ public class CloudFoundryDiscoveryProperties {
 	 */
 	private int defaultServerPort = 80;
 
+	/**
+	 * Order of the discovery client used by `CompositeDiscoveryClient` for sorting available clients.
+	 */
+	private int order = 0;
+
 	public boolean isEnabled() {
 		return enabled;
 	}
@@ -64,12 +69,21 @@ public class CloudFoundryDiscoveryProperties {
 		this.defaultServerPort = defaultServerPort;
 	}
 
+	public int getOrder() {
+		return order;
+	}
+
+	public void setOrder(int order) {
+		this.order = order;
+	}
+
 	@Override
 	public String toString() {
 		return "CloudFoundryDiscoveryProperties{" +
 				"enabled=" + enabled +
 				", heartbeatFrequency=" + heartbeatFrequency +
 				", defaultServerPort=" + defaultServerPort +
+				", order=" + order +
 				'}';
 	}
 }
