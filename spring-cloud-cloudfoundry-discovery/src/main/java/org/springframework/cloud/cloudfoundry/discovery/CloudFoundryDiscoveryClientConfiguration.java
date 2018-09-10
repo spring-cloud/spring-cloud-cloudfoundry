@@ -17,6 +17,7 @@
 package org.springframework.cloud.cloudfoundry.discovery;
 
 import org.cloudfoundry.operations.CloudFoundryOperations;
+
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -37,8 +38,9 @@ public class CloudFoundryDiscoveryClientConfiguration {
 	@Bean
 	@ConditionalOnMissingBean(CloudFoundryDiscoveryClient.class)
 	public CloudFoundryDiscoveryClient cloudFoundryDiscoveryClient(
-			CloudFoundryOperations cf, CloudFoundryService svc) {
-		return new CloudFoundryDiscoveryClient(cf, svc);
+			CloudFoundryOperations cf, CloudFoundryService svc,
+			CloudFoundryDiscoveryProperties cloudFoundryDiscoveryProperties) {
+		return new CloudFoundryDiscoveryClient(cf, svc, cloudFoundryDiscoveryProperties);
 	}
 
 	@Bean

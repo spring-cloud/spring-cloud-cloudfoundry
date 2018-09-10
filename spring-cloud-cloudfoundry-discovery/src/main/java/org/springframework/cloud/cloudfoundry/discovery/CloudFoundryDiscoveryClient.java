@@ -30,23 +30,28 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Cloud Foundry maintains a registry of running applications which we expose here as CloudFoundryService instances.
+ * Cloud Foundry maintains a registry of running applications which we expose here as
+ * CloudFoundryService instances.
  *
  * @author Josh Long
  * @author Spencer Gibb
  * @author Dave Syer
+ * @author Olga Maciaszek-Sharma
  */
 public class CloudFoundryDiscoveryClient implements DiscoveryClient {
 
 	private final CloudFoundryService cloudFoundryService;
 	private final CloudFoundryOperations cloudFoundryOperations;
+	private final CloudFoundryDiscoveryProperties cloudFoundryDiscoveryProperties;
 
 	private final String description = "Cloud Foundry " + DiscoveryClient.class.getName() + " implementation";
 
 	CloudFoundryDiscoveryClient(CloudFoundryOperations cloudFoundryOperations,
-								CloudFoundryService svc) {
+	                            CloudFoundryService svc,
+	                            CloudFoundryDiscoveryProperties cloudFoundryDiscoveryProperties) {
 		this.cloudFoundryService = svc;
 		this.cloudFoundryOperations = cloudFoundryOperations;
+		this.cloudFoundryDiscoveryProperties = cloudFoundryDiscoveryProperties;
 	}
 
 	@Override
@@ -88,5 +93,10 @@ public class CloudFoundryDiscoveryClient implements DiscoveryClient {
 				.collectList()
 				.blockOptional()
 				.orElse(new ArrayList<>());
+	}
+
+	@Override
+	public int getOrder() {
+		return this.cloudFoundryDiscoveryProperties.getOrder();
 	}
 }
