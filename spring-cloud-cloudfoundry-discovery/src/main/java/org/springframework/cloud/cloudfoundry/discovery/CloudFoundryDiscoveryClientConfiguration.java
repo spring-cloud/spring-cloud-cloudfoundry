@@ -17,6 +17,7 @@
 package org.springframework.cloud.cloudfoundry.discovery;
 
 import org.cloudfoundry.operations.CloudFoundryOperations;
+
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
