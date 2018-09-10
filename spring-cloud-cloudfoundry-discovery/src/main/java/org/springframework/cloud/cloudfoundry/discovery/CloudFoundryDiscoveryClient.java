@@ -16,18 +16,19 @@
 
 package org.springframework.cloud.cloudfoundry.discovery;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import org.cloudfoundry.operations.CloudFoundryOperations;
 import org.cloudfoundry.operations.applications.ApplicationDetail;
 import org.cloudfoundry.operations.applications.ApplicationSummary;
 import org.cloudfoundry.operations.applications.InstanceDetail;
+
 import org.springframework.cloud.client.DefaultServiceInstance;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.cloudfoundry.CloudFoundryService;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 /**
  * Cloud Foundry maintains a registry of running applications which we expose here as
@@ -42,16 +43,16 @@ public class CloudFoundryDiscoveryClient implements DiscoveryClient {
 
 	private final CloudFoundryService cloudFoundryService;
 	private final CloudFoundryOperations cloudFoundryOperations;
-	private final CloudFoundryDiscoveryProperties cloudFoundryDiscoveryProperties;
+	private final CloudFoundryDiscoveryProperties properties;
 
 	private final String description = "Cloud Foundry " + DiscoveryClient.class.getName() + " implementation";
 
 	CloudFoundryDiscoveryClient(CloudFoundryOperations cloudFoundryOperations,
-	                            CloudFoundryService svc,
-	                            CloudFoundryDiscoveryProperties cloudFoundryDiscoveryProperties) {
+			CloudFoundryService svc,
+			CloudFoundryDiscoveryProperties properties) {
 		this.cloudFoundryService = svc;
 		this.cloudFoundryOperations = cloudFoundryOperations;
-		this.cloudFoundryDiscoveryProperties = cloudFoundryDiscoveryProperties;
+		this.properties = properties;
 	}
 
 	@Override
@@ -97,6 +98,6 @@ public class CloudFoundryDiscoveryClient implements DiscoveryClient {
 
 	@Override
 	public int getOrder() {
-		return this.cloudFoundryDiscoveryProperties.getOrder();
+		return this.properties.getOrder();
 	}
 }
