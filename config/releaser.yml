@@ -1,0 +1,3 @@
+releaser:
+  maven:
+    buildCommand: ./mvnw clean install -B -Pdocs
