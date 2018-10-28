@@ -100,5 +100,6 @@ public class CloudFoundryDiscoveryClientTest {
 		List<ServiceInstance> instances = this.cloudFoundryDiscoveryClient
 				.getInstances(this.hiServiceServiceId);
 		assertEquals("Wrong instances: " + instances, 1, instances.size());
+		assertEquals("Wrong instance ID", "id.0", instances.get(0).getInstanceId());
 	}
 }
