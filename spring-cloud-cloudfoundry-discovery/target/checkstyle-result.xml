@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="8.12">
+<file name="/opt/jenkins/data/workspace/spring-cloud-jdk11-spring-cloud-cloudfoundry-master-ci/spring-cloud-cloudfoundry-discovery/src/main/java/org/springframework/cloud/cloudfoundry/discovery/CloudFoundryDiscoveryProperties.java">
+</file>
+<file name="/opt/jenkins/data/workspace/spring-cloud-jdk11-spring-cloud-cloudfoundry-master-ci/spring-cloud-cloudfoundry-discovery/src/main/java/org/springframework/cloud/cloudfoundry/discovery/CloudFoundryRibbonClientConfiguration.java">
+</file>
+<file name="/opt/jenkins/data/workspace/spring-cloud-jdk11-spring-cloud-cloudfoundry-master-ci/spring-cloud-cloudfoundry-discovery/src/main/java/org/springframework/cloud/cloudfoundry/discovery/CloudFoundryServerList.java">
+</file>
+<file name="/opt/jenkins/data/workspace/spring-cloud-jdk11-spring-cloud-cloudfoundry-master-ci/spring-cloud-cloudfoundry-discovery/src/main/java/org/springframework/cloud/cloudfoundry/discovery/CloudFoundryDiscoveryClientConfiguration.java">
+</file>
+<file name="/opt/jenkins/data/workspace/spring-cloud-jdk11-spring-cloud-cloudfoundry-master-ci/spring-cloud-cloudfoundry-discovery/src/main/java/org/springframework/cloud/cloudfoundry/discovery/EnableCloudFoundryClient.java">
+</file>
+<file name="/opt/jenkins/data/workspace/spring-cloud-jdk11-spring-cloud-cloudfoundry-master-ci/spring-cloud-cloudfoundry-discovery/src/main/java/org/springframework/cloud/cloudfoundry/discovery/CloudFoundryHeartbeatSender.java">
+</file>
+<file name="/opt/jenkins/data/workspace/spring-cloud-jdk11-spring-cloud-cloudfoundry-master-ci/spring-cloud-cloudfoundry-discovery/src/main/java/org/springframework/cloud/cloudfoundry/discovery/CloudFoundryDiscoveryClient.java">
+</file>
+<file name="/opt/jenkins/data/workspace/spring-cloud-jdk11-spring-cloud-cloudfoundry-master-ci/spring-cloud-cloudfoundry-discovery/src/main/java/org/springframework/cloud/cloudfoundry/discovery/CloudFoundryServer.java">
+</file>
+<file name="/opt/jenkins/data/workspace/spring-cloud-jdk11-spring-cloud-cloudfoundry-master-ci/spring-cloud-cloudfoundry-discovery/src/main/java/org/springframework/cloud/cloudfoundry/discovery/RibbonCloudFoundryAutoConfiguration.java">
+</file>
+<file name="/opt/jenkins/data/workspace/spring-cloud-jdk11-spring-cloud-cloudfoundry-master-ci/spring-cloud-cloudfoundry-discovery/src/main/java/org/springframework/cloud/cloudfoundry/discovery/CloudFoundryDiscoveryClientProperties.java">
+</file>
+<file name="/opt/jenkins/data/workspace/spring-cloud-jdk11-spring-cloud-cloudfoundry-master-ci/spring-cloud-cloudfoundry-discovery/src/test/java/org/springframework/cloud/cloudfoundry/discovery/CloudFoundryDiscoveryClientTest.java">
+</file>
+<file name="/opt/jenkins/data/workspace/spring-cloud-jdk11-spring-cloud-cloudfoundry-master-ci/spring-cloud-cloudfoundry-discovery/src/test/java/org/springframework/cloud/cloudfoundry/discovery/CloudFoundryServerListTest.java">
+</file>
+<file name="/opt/jenkins/data/workspace/spring-cloud-jdk11-spring-cloud-cloudfoundry-master-ci/spring-cloud-cloudfoundry-discovery/src/test/java/org/springframework/cloud/cloudfoundry/discovery/AdhocTestSuite.java">
+</file>
+</checkstyle>
