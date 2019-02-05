@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2018 the original author or authors.
+ * Copyright 2013-2019 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,12 +41,13 @@ public class CloudFoundryDiscoveryProperties {
 	private int defaultServerPort = 80;
 
 	/**
-	 * Order of the discovery client used by `CompositeDiscoveryClient` for sorting available clients.
+	 * Order of the discovery client used by `CompositeDiscoveryClient` for sorting
+	 * available clients.
 	 */
 	private int order = 0;
 
 	public boolean isEnabled() {
-		return enabled;
+		return this.enabled;
 	}
 
 	public void setEnabled(boolean enabled) {
@@ -62,7 +63,7 @@ public class CloudFoundryDiscoveryProperties {
 	}
 
 	public int getDefaultServerPort() {
-		return defaultServerPort;
+		return this.defaultServerPort;
 	}
 
 	public void setDefaultServerPort(int defaultServerPort) {
@@ -70,7 +71,7 @@ public class CloudFoundryDiscoveryProperties {
 	}
 
 	public int getOrder() {
-		return order;
+		return this.order;
 	}
 
 	public void setOrder(int order) {
@@ -79,11 +80,10 @@ public class CloudFoundryDiscoveryProperties {
 
 	@Override
 	public String toString() {
-		return "CloudFoundryDiscoveryProperties{" +
-				"enabled=" + enabled +
-				", heartbeatFrequency=" + heartbeatFrequency +
-				", defaultServerPort=" + defaultServerPort +
-				", order=" + order +
-				'}';
+		return "CloudFoundryDiscoveryProperties{" + "enabled=" + this.enabled
+				+ ", heartbeatFrequency=" + this.heartbeatFrequency
+				+ ", defaultServerPort=" + this.defaultServerPort + ", order="
+				+ this.order + '}';
 	}
+
 }

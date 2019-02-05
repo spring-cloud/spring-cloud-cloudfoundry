@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 the original author or authors.
+ * Copyright 2013-2019 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,9 +26,10 @@ import java.lang.annotation.Target;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 /**
- * Convenience annotation for clients to enable Cloud Foundry discovery configuration (specifically).
- * Use this (optionally) in case you want discovery and know for sure that it is Cloud Foundry you want.
- * All it does is turn on discovery and let the auto-configuration find the Cloud Foundry classes.
+ * Convenience annotation for clients to enable Cloud Foundry discovery configuration
+ * (specifically). Use this (optionally) in case you want discovery and know for sure that
+ * it is Cloud Foundry you want. All it does is turn on discovery and let the
+ * auto-configuration find the Cloud Foundry classes.
  *
  * @author Josh Long
  */
@@ -38,4 +39,5 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 @Inherited
 @EnableDiscoveryClient
 public @interface EnableCloudFoundryClient {
+
 }

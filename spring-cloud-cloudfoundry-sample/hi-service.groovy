@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class GreetingRestController {
 
-    @RequestMapping("/hi/{name}")
-    def hi(@PathVariable String name) {
-     [greeting: "Hello, " + name + "!"]
-    }
+	@RequestMapping("/hi/{name}")
+	def hi(@PathVariable String name) {
+		[greeting: "Hello, " + name + "!"]
+	}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2018 the original author or authors.
+ * Copyright 2013-2019 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,14 +42,16 @@ import org.springframework.cloud.cloudfoundry.CloudFoundryService;
 public class CloudFoundryDiscoveryClient implements DiscoveryClient {
 
 	private final CloudFoundryService cloudFoundryService;
+
 	private final CloudFoundryOperations cloudFoundryOperations;
+
 	private final CloudFoundryDiscoveryProperties properties;
 
-	private final String description = "Cloud Foundry " + DiscoveryClient.class.getName() + " implementation";
+	private final String description = "Cloud Foundry " + DiscoveryClient.class.getName()
+			+ " implementation";
 
 	CloudFoundryDiscoveryClient(CloudFoundryOperations cloudFoundryOperations,
-			CloudFoundryService svc,
-			CloudFoundryDiscoveryProperties properties) {
+			CloudFoundryService svc, CloudFoundryDiscoveryProperties properties) {
 		this.cloudFoundryService = svc;
 		this.cloudFoundryOperations = cloudFoundryOperations;
 		this.properties = properties;
@@ -62,37 +64,30 @@ public class CloudFoundryDiscoveryClient implements DiscoveryClient {
 
 	@Override
 	public List<ServiceInstance> getInstances(String serviceId) {
-		return cloudFoundryService
-				.getApplicationInstances(serviceId)
-				.map(tuple -> {
-					ApplicationDetail applicationDetail = tuple.getT1();
-					InstanceDetail instanceDetail = tuple.getT2();
+		return this.cloudFoundryService.getApplicationInstances(serviceId).map(tuple -> {
+			ApplicationDetail applicationDetail = tuple.getT1();
+			InstanceDetail instanceDetail = tuple.getT2();
 
-					String applicationId = applicationDetail.getId();
-					String applicationIndex = instanceDetail.getIndex();
-					String name = applicationDetail.getName();
-					String url = applicationDetail.getUrls().size() > 0 ? applicationDetail.getUrls().get(0) : null;
-					boolean secure = (url + "").toLowerCase().startsWith("https");
+			String applicationId = applicationDetail.getId();
+			String applicationIndex = instanceDetail.getIndex();
+			String name = applicationDetail.getName();
+			String url = applicationDetail.getUrls().size() > 0
+					? applicationDetail.getUrls().get(0) : null;
+			boolean secure = (url + "").toLowerCase().startsWith("https");
 
-					HashMap<String, String> metadata = new HashMap<>();
-					metadata.put("applicationId", applicationId);
-					metadata.put("instanceId", applicationIndex);
+			HashMap<String, String> metadata = new HashMap<>();
+			metadata.put("applicationId", applicationId);
+			metadata.put("instanceId", applicationIndex);
 
-					return (ServiceInstance) new DefaultServiceInstance(name, url, 80, secure, metadata);
-				})
-				.collectList()
-				.blockOptional()
-				.orElse(new ArrayList<>());
+			return (ServiceInstance) new DefaultServiceInstance(name, url, 80, secure,
+					metadata);
+		}).collectList().blockOptional().orElse(new ArrayList<>());
 	}
 
 	@Override
 	public List<String> getServices() {
-		return this.cloudFoundryOperations
-				.applications()
-				.list()
-				.map(ApplicationSummary::getName)
-				.collectList()
-				.blockOptional()
+		return this.cloudFoundryOperations.applications().list()
+				.map(ApplicationSummary::getName).collectList().blockOptional()
 				.orElse(new ArrayList<>());
 	}
 
@@ -100,4 +95,5 @@ public class CloudFoundryDiscoveryClient implements DiscoveryClient {
 	public int getOrder() {
 		return this.properties.getOrder();
 	}
+
 }
