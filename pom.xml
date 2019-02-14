@@ -18,8 +18,8 @@
 		<cf-java-client.version>3.9.0.RELEASE</cf-java-client.version>
 		<bintray.package>cloudfoundry</bintray.package>
 		<main.basedir>${basedir}</main.basedir>
-		<spring-cloud-netflix.version>2.0.1.BUILD-SNAPSHOT</spring-cloud-netflix.version>
-		<spring-cloud-commons.version>2.0.1.BUILD-SNAPSHOT</spring-cloud-commons.version>
+		<spring-cloud-netflix.version>2.0.3.BUILD-SNAPSHOT</spring-cloud-netflix.version>
+		<spring-cloud-commons.version>2.0.3.BUILD-SNAPSHOT</spring-cloud-commons.version>
 	</properties>
 
 	<scm>
