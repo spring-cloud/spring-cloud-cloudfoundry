@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2018 the original author or authors.
+ * Copyright 2013-2019 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,15 +18,15 @@ package org.springframework.cloud.cloudfoundry.discovery;
 
 import javax.annotation.PostConstruct;
 
+import com.netflix.client.config.IClientConfig;
+import com.netflix.loadbalancer.ServerList;
+
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cloud.cloudfoundry.CloudFoundryService;
 import org.springframework.cloud.netflix.ribbon.RibbonClientName;
 import org.springframework.cloud.netflix.ribbon.RibbonUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import com.netflix.client.config.IClientConfig;
-import com.netflix.loadbalancer.ServerList;
 
 /**
  * @author Josh Long
@@ -47,8 +47,9 @@ public class CloudFoundryRibbonClientConfiguration {
 	@Bean
 	@ConditionalOnMissingBean
 	public ServerList<?> ribbonServerList(CloudFoundryService svc, IClientConfig config,
-										  CloudFoundryDiscoveryProperties properties) {
-		CloudFoundryServerList cloudFoundryServerList = new CloudFoundryServerList(svc, properties);
+			CloudFoundryDiscoveryProperties properties) {
+		CloudFoundryServerList cloudFoundryServerList = new CloudFoundryServerList(svc,
+				properties);
 		cloudFoundryServerList.initWithNiwsConfig(config);
 		return cloudFoundryServerList;
 	}

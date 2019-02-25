@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2018 the original author or authors.
+ * Copyright 2013-2019 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@ import org.cloudfoundry.reactor.tokenprovider.PasswordGrantTokenProvider;
 import org.cloudfoundry.reactor.uaa.ReactorUaaClient;
 import org.cloudfoundry.routing.RoutingClient;
 import org.cloudfoundry.uaa.UaaClient;
+
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -46,9 +47,12 @@ import org.springframework.context.annotation.Lazy;
  * @author Scott Frederick
  */
 @Configuration
-@ConditionalOnProperty(prefix = "spring.cloud.cloudfoundry", name = {"username", "password"})
-@ConditionalOnClass(name = {"reactor.core.publisher.Flux", "org.cloudfoundry.operations.DefaultCloudFoundryOperations",
-		"org.cloudfoundry.reactor.client.ReactorCloudFoundryClient", "org.reactivestreams.Publisher"})
+@ConditionalOnProperty(prefix = "spring.cloud.cloudfoundry", name = { "username",
+		"password" })
+@ConditionalOnClass(name = { "reactor.core.publisher.Flux",
+		"org.cloudfoundry.operations.DefaultCloudFoundryOperations",
+		"org.cloudfoundry.reactor.client.ReactorCloudFoundryClient",
+		"org.reactivestreams.Publisher" })
 @EnableConfigurationProperties(CloudFoundryProperties.class)
 public class CloudFoundryClientAutoConfiguration {
 
@@ -61,67 +65,59 @@ public class CloudFoundryClientAutoConfiguration {
 	@Bean
 	@Lazy
 	@ConditionalOnMissingBean
-	public CloudFoundryService cloudFoundryService(CloudFoundryOperations cloudFoundryOperations) {
+	public CloudFoundryService cloudFoundryService(
+			CloudFoundryOperations cloudFoundryOperations) {
 		return new CloudFoundryService(cloudFoundryOperations);
 	}
 
 	@Bean
 	@Lazy
 	@ConditionalOnMissingBean
-	public DefaultCloudFoundryOperations cloudFoundryOperations(CloudFoundryClient cloudFoundryClient,
-																DopplerClient dopplerClient,
-																RoutingClient routingClient,
-																UaaClient uaaClient) {
+	public DefaultCloudFoundryOperations cloudFoundryOperations(
+			CloudFoundryClient cloudFoundryClient, DopplerClient dopplerClient,
+			RoutingClient routingClient, UaaClient uaaClient) {
 		String organization = this.cloudFoundryProperties.getOrg();
 		String space = this.cloudFoundryProperties.getSpace();
-		return DefaultCloudFoundryOperations
-				.builder()
-				.cloudFoundryClient(cloudFoundryClient)
-				.dopplerClient(dopplerClient)
-				.routingClient(routingClient)
-				.uaaClient(uaaClient)
-				.organization(organization)
-				.space(space)
-				.build();
-	}
-	@Bean
-	@Lazy
-	@ConditionalOnMissingBean
-	public ReactorCloudFoundryClient cloudFoundryClient(ConnectionContext connectionContext, TokenProvider tokenProvider) {
-		return ReactorCloudFoundryClient.builder()
-				.connectionContext(connectionContext)
-				.tokenProvider(tokenProvider)
-				.build();
+		return DefaultCloudFoundryOperations.builder()
+				.cloudFoundryClient(cloudFoundryClient).dopplerClient(dopplerClient)
+				.routingClient(routingClient).uaaClient(uaaClient)
+				.organization(organization).space(space).build();
 	}
 
 	@Bean
 	@Lazy
 	@ConditionalOnMissingBean
-	public DopplerClient dopplerClient(ConnectionContext connectionContext, TokenProvider tokenProvider) {
-		return ReactorDopplerClient.builder()
-				.connectionContext(connectionContext)
-				.tokenProvider(tokenProvider)
-				.build();
+	public ReactorCloudFoundryClient cloudFoundryClient(
+			ConnectionContext connectionContext, TokenProvider tokenProvider) {
+		return ReactorCloudFoundryClient.builder().connectionContext(connectionContext)
+				.tokenProvider(tokenProvider).build();
 	}
 
 	@Bean
 	@Lazy
 	@ConditionalOnMissingBean
-	public RoutingClient routingClient(ConnectionContext connectionContext, TokenProvider tokenProvider) {
-		return ReactorRoutingClient.builder()
-				.connectionContext(connectionContext)
-				.tokenProvider(tokenProvider)
-				.build();
+	public DopplerClient dopplerClient(ConnectionContext connectionContext,
+			TokenProvider tokenProvider) {
+		return ReactorDopplerClient.builder().connectionContext(connectionContext)
+				.tokenProvider(tokenProvider).build();
 	}
 
 	@Bean
 	@Lazy
 	@ConditionalOnMissingBean
-	public ReactorUaaClient uaaClient(ConnectionContext connectionContext, TokenProvider tokenProvider) {
-		return ReactorUaaClient.builder()
-				.connectionContext(connectionContext)
-				.tokenProvider(tokenProvider)
-				.build();
+	public RoutingClient routingClient(ConnectionContext connectionContext,
+			TokenProvider tokenProvider) {
+		return ReactorRoutingClient.builder().connectionContext(connectionContext)
+				.tokenProvider(tokenProvider).build();
+	}
+
+	@Bean
+	@Lazy
+	@ConditionalOnMissingBean
+	public ReactorUaaClient uaaClient(ConnectionContext connectionContext,
+			TokenProvider tokenProvider) {
+		return ReactorUaaClient.builder().connectionContext(connectionContext)
+				.tokenProvider(tokenProvider).build();
 	}
 
 	@Bean
@@ -131,10 +127,8 @@ public class CloudFoundryClientAutoConfiguration {
 		String apiHost = this.cloudFoundryProperties.getUrl();
 		Boolean skipSslValidation = this.cloudFoundryProperties.isSkipSslValidation();
 
-		return DefaultConnectionContext.builder()
-				.apiHost(apiHost)
-				.skipSslValidation(skipSslValidation)
-				.build();
+		return DefaultConnectionContext.builder().apiHost(apiHost)
+				.skipSslValidation(skipSslValidation).build();
 	}
 
 	@Bean
@@ -143,11 +137,8 @@ public class CloudFoundryClientAutoConfiguration {
 	public PasswordGrantTokenProvider tokenProvider() {
 		String username = this.cloudFoundryProperties.getUsername();
 		String password = this.cloudFoundryProperties.getPassword();
-		return PasswordGrantTokenProvider.builder()
-				.password(password)
-				.username(username)
+		return PasswordGrantTokenProvider.builder().password(password).username(username)
 				.build();
 	}
+
 }
-
-

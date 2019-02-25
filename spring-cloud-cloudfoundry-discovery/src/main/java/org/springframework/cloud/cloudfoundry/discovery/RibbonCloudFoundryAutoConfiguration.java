@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2015 the original author or authors.
+ * Copyright 2013-2019 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 
 package org.springframework.cloud.cloudfoundry.discovery;
 
+import com.netflix.client.IClient;
+
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -26,8 +28,11 @@ import org.springframework.cloud.netflix.ribbon.RibbonClients;
 import org.springframework.cloud.netflix.ribbon.SpringClientFactory;
 import org.springframework.context.annotation.Configuration;
 
-import com.netflix.client.IClient;
-
+/**
+ * Auto configuration for Ribbon.
+ *
+ * @author Josh Long
+ */
 @Configuration
 @EnableConfigurationProperties
 @ConditionalOnClass(IClient.class)
@@ -36,4 +41,5 @@ import com.netflix.client.IClient;
 @AutoConfigureAfter(RibbonAutoConfiguration.class)
 @RibbonClients(defaultConfiguration = CloudFoundryRibbonClientConfiguration.class)
 public class RibbonCloudFoundryAutoConfiguration {
+
 }

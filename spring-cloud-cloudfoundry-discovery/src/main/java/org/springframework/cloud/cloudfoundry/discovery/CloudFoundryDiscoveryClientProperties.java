@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 the original author or authors.
+ * Copyright 2013-2019 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import org.springframework.core.Ordered;
 
 /**
  * Properties used for configuring the CloudFoundry implementation of
- * {@link org.springframework.cloud.client.discovery.DiscoveryClient}
+ * {@link org.springframework.cloud.client.discovery.DiscoveryClient}.
  *
  * @author Olga Maciaszek-Sharma
  */
@@ -37,4 +37,5 @@ public class CloudFoundryDiscoveryClientProperties {
 	public void setOrder(int order) {
 		this.order = order;
 	}
+
 }
