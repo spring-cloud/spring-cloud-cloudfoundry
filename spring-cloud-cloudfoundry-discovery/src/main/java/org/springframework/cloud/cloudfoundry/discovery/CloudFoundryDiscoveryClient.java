@@ -38,6 +38,7 @@ import org.springframework.cloud.cloudfoundry.CloudFoundryService;
  * @author Spencer Gibb
  * @author Dave Syer
  * @author Olga Maciaszek-Sharma
+ * @author Tim Ysewyn
  */
 public class CloudFoundryDiscoveryClient implements DiscoveryClient {
 
@@ -70,6 +71,7 @@ public class CloudFoundryDiscoveryClient implements DiscoveryClient {
 
 			String applicationId = applicationDetail.getId();
 			String applicationIndex = instanceDetail.getIndex();
+			String instanceId = applicationId + "." + applicationIndex;
 			String name = applicationDetail.getName();
 			String url = applicationDetail.getUrls().size() > 0
 					? applicationDetail.getUrls().get(0) : null;
@@ -79,7 +81,7 @@ public class CloudFoundryDiscoveryClient implements DiscoveryClient {
 			metadata.put("applicationId", applicationId);
 			metadata.put("instanceId", applicationIndex);
 
-			return (ServiceInstance) new DefaultServiceInstance(name, url, 80, secure,
+			return (ServiceInstance) new DefaultServiceInstance(instanceId, name, url, 80, secure,
 					metadata);
 		}).collectList().blockOptional().orElse(new ArrayList<>());
 	}
