@@ -1,0 +1,15 @@
+= Spring Cloud for Cloudfoundry
+
+image:https://circleci.com/gh/spring-cloud/spring-cloud-cloudfoundry.svg?style=svg["CircleCI", link="https://circleci.com/gh/spring-cloud/spring-cloud-cloudfoundry"]
+
+include::intro.adoc[]
+
+> NOTE: if you are looking for a way to bind to services then this is the wrong library. Check out the [Spring Cloud Connectors](https://github.com/spring-cloud/spring-cloud-connectors) instead.
+
+== Building
+
+include::https://raw.githubusercontent.com/spring-cloud/spring-cloud-build/master/docs/src/main/asciidoc/building.adoc[]
+
+== Contributing
+
+include::https://raw.githubusercontent.com/spring-cloud/spring-cloud-build/master/docs/src/main/asciidoc/contributing.adoc[]

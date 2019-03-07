@@ -1,0 +1,30 @@
+Here's a Spring Cloud app with Cloud Foundry discovery:
+
+.app.groovy
+[source,java]
+----
+@Grab('org.springframework.cloud:spring-cloud-cloudfoundry')
+@RestController
+@EnableDiscoveryClient
+class Application {
+
+  @Autowired
+  DiscoveryClient client
+  
+  @RequestMapping('/')
+  String home() {
+    'Hello from ' + client.getLocalServiceInstance()
+  }
+
+}
+----
+
+If you run it without any service bindings:
+
+----
+$ spring jar app.jar app.groovy
+$ cf push -p app.jar
+----
+
+It will show its app name in the home page.
+
