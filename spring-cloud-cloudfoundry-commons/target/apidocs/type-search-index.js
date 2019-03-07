@@ -1,1 +1,0 @@
-typeSearchIndex = [{"p":"org.springframework.cloud.cloudfoundry","l":"CloudFoundryClientAutoConfiguration"},{"p":"org.springframework.cloud.cloudfoundry","l":"CloudFoundryProperties"},{"p":"org.springframework.cloud.cloudfoundry","l":"CloudFoundryService"}]

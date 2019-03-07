@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<checkstyle version="8.12">
-<file name="/opt/jenkins/data/workspace/spring-cloud-jdk11-spring-cloud-cloudfoundry-master-ci/spring-cloud-cloudfoundry-sample/src/main/java/org/springframework/cloud/cloudfoundry/sample/CloudFoundryApplication.java">
-</file>
-<file name="/opt/jenkins/data/workspace/spring-cloud-jdk11-spring-cloud-cloudfoundry-master-ci/spring-cloud-cloudfoundry-sample/src/test/java/org/springframework/cloud/cloudfoundry/sample/CloudFoundryApplicationTests.java">
-</file>
-<file name="/opt/jenkins/data/workspace/spring-cloud-jdk11-spring-cloud-cloudfoundry-master-ci/spring-cloud-cloudfoundry-sample/src/main/resources/bootstrap.properties">
-</file>
-</checkstyle>

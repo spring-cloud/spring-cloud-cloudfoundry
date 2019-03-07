@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"org.springframework.cloud.cloudfoundry.environment"},{"l":"org.springframework.cloud.cloudfoundry.session"}]

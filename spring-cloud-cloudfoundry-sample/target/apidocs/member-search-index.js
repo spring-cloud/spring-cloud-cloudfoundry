@@ -1,1 +1,0 @@
-memberSearchIndex = [{"p":"org.springframework.cloud.cloudfoundry.sample","c":"CloudFoundryApplication","l":"CloudFoundryApplication()"},{"p":"org.springframework.cloud.cloudfoundry.sample","c":"CloudFoundryApplication","l":"main(String[])","url":"main(java.lang.String[])"}]
