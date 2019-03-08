@@ -1,0 +1,22 @@
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>1.&nbsp;Discovery</title><link rel="stylesheet" type="text/css" href="css/manual-multipage.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.1"><link rel="home" href="multi_spring-cloud-cloudfoundry.html" title="Spring Cloud for Cloud Foundry"><link rel="up" href="multi_spring-cloud-cloudfoundry.html" title="Spring Cloud for Cloud Foundry"><link rel="prev" href="multi_pr01.html" title=""><link rel="next" href="multi__single_sign_on.html" title="2.&nbsp;Single Sign On"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">1.&nbsp;Discovery</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="multi_pr01.html">Prev</a>&nbsp;</td><th width="60%" align="center">&nbsp;</th><td width="20%" align="right">&nbsp;<a accesskey="n" href="multi__single_sign_on.html">Next</a></td></tr></table><hr></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="_discovery" href="#_discovery"></a>1.&nbsp;Discovery</h1></div></div></div><p>Here&#8217;s a Spring Cloud app with Cloud Foundry discovery:</p><p><b>app.groovy.&nbsp;</b>
+</p><pre class="programlisting"><em><span class="hl-annotation" style="color: gray">@Grab('org.springframework.cloud:spring-cloud-cloudfoundry')</span></em>
+<em><span class="hl-annotation" style="color: gray">@RestController</span></em>
+<em><span class="hl-annotation" style="color: gray">@EnableDiscoveryClient</span></em>
+<span xmlns:d="http://docbook.org/ns/docbook" class="hl-keyword">class</span> Application {
+
+  <em><span class="hl-annotation" style="color: gray">@Autowired</span></em>
+  DiscoveryClient client
+
+  <em><span class="hl-annotation" style="color: gray">@RequestMapping('/')</span></em>
+  String home() {
+    <span xmlns:d="http://docbook.org/ns/docbook" class="hl-string">'Hello from '</span> + client.getLocalServiceInstance()
+  }
+
+}</pre><p>
+</p><p>If you run it without any service bindings:</p><pre class="screen">$ spring jar app.jar app.groovy
+$ cf push -p app.jar</pre><p>It will show its app name in the home page.</p><p>The <code class="literal">DiscoveryClient</code> can lists all the apps in a space, according to
+the credentials it is authenticated with, where the space defaults to
+the one the client is running in (if any). If neither org nor space
+are configured, they default per the user&#8217;s profile in Cloud Foundry.</p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="multi_pr01.html">Prev</a>&nbsp;</td><td width="20%" align="center">&nbsp;</td><td width="40%" align="right">&nbsp;<a accesskey="n" href="multi__single_sign_on.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">&nbsp;</td><td width="20%" align="center"><a accesskey="h" href="multi_spring-cloud-cloudfoundry.html">Home</a></td><td width="40%" align="right" valign="top">&nbsp;2.&nbsp;Single Sign On</td></tr></table></div></body></html>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?asciidoc-toc?>
+<?asciidoc-numbered?>
+<book xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
+<info>
+<title>Spring Cloud for Cloud Foundry</title>
+<date>2019-03-08</date>
+</info>
+<preface>
+<title></title>
+<simpara>Spring Cloud for Cloudfoundry makes it easy to run
+<link xl:href="https://github.com/spring-cloud">Spring Cloud</link> apps in
+<link xl:href="https://github.com/cloudfoundry">Cloud Foundry</link> (the Platform as a
+Service). Cloud Foundry has the notion of a "service", which is
+middlware that you "bind" to an app, essentially providing it with an
+environment variable containing credentials (e.g. the location and
+username to use for the service).</simpara>
+<simpara>The <literal>spring-cloud-cloudfoundry-commons</literal> module configures the
+Reactor-based Cloud Foundry Java client, v 3.0, and can be used standalone.</simpara>
+<simpara>The <literal>spring-cloud-cloudfoundry-web</literal> project provides basic support for
+some enhanced features of webapps in Cloud Foundry: binding
+automatically to single-sign-on services and optionally enabling
+sticky routing for discovery.</simpara>
+<simpara>The <literal>spring-cloud-cloudfoundry-discovery</literal> project provides an
+implementation of Spring Cloud Commons <literal>DiscoveryClient</literal> so you can
+<literal>@EnableDiscoveryClient</literal> and provide your credentials as
+<literal>spring.cloud.cloudfoundry.discovery.[username,password]</literal> (also <literal>*.url</literal> if you are not connecting to <link xl:href="https://run.pivotal.io">Pivotal Web Services</link>) and then you
+can use the <literal>DiscoveryClient</literal> directly or via a <literal>LoadBalancerClient</literal>.</simpara>
+<simpara>The first time you use it the discovery client might be slow owing to
+the fact that it has to get an access token from Cloud Foundry.</simpara>
+</preface>
+<chapter xml:id="_discovery">
+<title>Discovery</title>
+<simpara>Here&#8217;s a Spring Cloud app with Cloud Foundry discovery:</simpara>
+<formalpara>
+<title>app.groovy</title>
+<para>
+<programlisting language="java" linenumbering="unnumbered">@Grab('org.springframework.cloud:spring-cloud-cloudfoundry')
+@RestController
+@EnableDiscoveryClient
+class Application {
+
+  @Autowired
+  DiscoveryClient client
+
+  @RequestMapping('/')
+  String home() {
+    'Hello from ' + client.getLocalServiceInstance()
+  }
+
+}</programlisting>
+</para>
+</formalpara>
+<simpara>If you run it without any service bindings:</simpara>
+<screen>$ spring jar app.jar app.groovy
+$ cf push -p app.jar</screen>
+<simpara>It will show its app name in the home page.</simpara>
+<simpara>The <literal>DiscoveryClient</literal> can lists all the apps in a space, according to
+the credentials it is authenticated with, where the space defaults to
+the one the client is running in (if any). If neither org nor space
+are configured, they default per the user&#8217;s profile in Cloud Foundry.</simpara>
+</chapter>
+<chapter xml:id="_single_sign_on">
+<title>Single Sign On</title>
+<note>
+<simpara>All of the OAuth2 SSO and resource server features moved to Spring Boot
+in version 1.3. You can find documentation in the
+<link xl:href="http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/">Spring Boot user guide</link>.</simpara>
+</note>
+<simpara>This project provides automatic binding from CloudFoundry service
+credentials to the Spring Boot features. If you have a CloudFoundry
+service called "sso", for instance, with credentials containing
+"client_id", "client_secret" and "auth_domain", it will bind
+automatically to the Spring OAuth2 client that you enable with
+<literal>@EnableOAuth2Sso</literal> (from Spring Boot). The name of the service can be
+parameterized using <literal>spring.oauth2.sso.serviceId</literal>.</simpara>
+</chapter>
+</book>
