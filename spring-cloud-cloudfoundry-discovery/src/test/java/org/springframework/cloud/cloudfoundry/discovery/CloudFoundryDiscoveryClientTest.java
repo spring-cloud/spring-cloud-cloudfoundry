@@ -83,7 +83,7 @@ public class CloudFoundryDiscoveryClientTest {
 		ApplicationDetail applicationDetail = ApplicationDetail.builder().instances(2)
 				.name("my-app").stack("stack").memoryLimit(1024).id("id")
 				.requestedState("requestedState").runningInstances(2)
-				.url("http://my-app.cfapps.io").diskQuota(20).build();
+				.url("https://my-app.cfapps.io").diskQuota(20).build();
 		InstanceDetail instanceDetail = InstanceDetail.builder().index("0").build();
 		Tuple2<ApplicationDetail, InstanceDetail> tuple2 = Tuples.of(applicationDetail,
 				instanceDetail);
