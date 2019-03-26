@@ -30,7 +30,7 @@ import org.springframework.context.annotation.Bean;
 
 /**
  * This example assumes you've registered an application on
- * <A href="http://cloudfoundry.org">Cloud Foundry</A> named {@code hi-service} that
+ * <A href="https://cloudfoundry.org">Cloud Foundry</A> named {@code hi-service} that
  * responds with a String at {@code /hi/ name} . There is a sample file in the project
  * root called {@code hi-service.groovy} which you can deploy using the {@code spring} CLI
  * and the {@code cf} CLI that works appropriately for this demonstration.
