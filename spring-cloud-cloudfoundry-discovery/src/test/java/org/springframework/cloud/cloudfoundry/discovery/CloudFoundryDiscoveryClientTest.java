@@ -87,7 +87,7 @@ public class CloudFoundryDiscoveryClientTest {
 				.id("id")
 				.requestedState("requestedState")
 				.runningInstances(2)
-				.url("http://my-app.cfapps.io")
+				.url("http://my-app-cfapps-io")
 				.diskQuota(20)
 				.build();
 		InstanceDetail instanceDetail = InstanceDetail
