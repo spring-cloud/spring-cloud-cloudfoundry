@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -83,7 +83,7 @@ public class CloudFoundryDiscoveryClientTest {
 		ApplicationDetail applicationDetail = ApplicationDetail.builder().instances(2)
 				.name("my-app").stack("stack").memoryLimit(1024).id("id")
 				.requestedState("requestedState").runningInstances(2)
-				.url("https://my-app.cfapps.io").diskQuota(20).build();
+				.url("http://my-app-cfapps-io").diskQuota(20).build();
 		InstanceDetail instanceDetail = InstanceDetail.builder().index("0").build();
 		Tuple2<ApplicationDetail, InstanceDetail> tuple2 = Tuples.of(applicationDetail,
 				instanceDetail);
@@ -92,7 +92,8 @@ public class CloudFoundryDiscoveryClientTest {
 		List<ServiceInstance> instances = this.cloudFoundryDiscoveryClient
 				.getInstances(this.hiServiceServiceId);
 		assertThat(instances.size()).as("Wrong instances: " + instances).isEqualTo(1);
-		assertThat(instances.get(0).getInstanceId()).as("Wrong instance ID").isEqualTo("id.0");
+		assertThat(instances.get(0).getInstanceId()).as("Wrong instance ID")
+				.isEqualTo("id.0");
 	}
 
 }

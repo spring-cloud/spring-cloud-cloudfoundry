@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -72,56 +72,56 @@ public class VcapServiceCredentialsEnvironmentPostProcessorTests {
 	@Test
 	public void addTokenUri() {
 		TestPropertyValues
-				.of("vcap.services.sso.credentials.accessTokenUri:https://example.com")
+				.of("vcap.services.sso.credentials.accessTokenUri:http://exampledomain")
 				.applyTo(this.environment);
 		this.listener.postProcessEnvironment(this.environment, new SpringApplication());
 		assertThat(this.environment
 				.resolvePlaceholders("${security.oauth2.client.access-token-uri}"))
-						.isEqualTo("https://example.com");
+						.isEqualTo("http://exampledomain");
 	}
 
 	@Test
 	public void addTokenUriAuthDomain() {
 		TestPropertyValues
-				.of("vcap.services.sso.credentials.auth-domain:https://example.com")
+				.of("vcap.services.sso.credentials.auth-domain:http://exampledomain")
 				.applyTo(this.environment);
 		this.listener.postProcessEnvironment(this.environment, new SpringApplication());
 		assertThat(this.environment
 				.resolvePlaceholders("${security.oauth2.client.access-token-uri}"))
-						.isEqualTo("https://example.com/oauth/token");
+						.isEqualTo("http://exampledomain/oauth/token");
 	}
 
 	@Test
 	public void addUserInfoUri() {
 		TestPropertyValues
-				.of("vcap.services.sso.credentials.userInfoUri:https://example.com")
+				.of("vcap.services.sso.credentials.userInfoUri:http://exampledomain")
 				.applyTo(this.environment);
 		this.listener.postProcessEnvironment(this.environment, new SpringApplication());
 		assertThat(this.environment
 				.resolvePlaceholders("${security.oauth2.resource.user-info-uri}"))
-						.isEqualTo("https://example.com");
+						.isEqualTo("http://exampledomain");
 	}
 
 	@Test
 	public void addServiceId() {
 		TestPropertyValues
-				.of("vcap.services.my.credentials.accessTokenUri:https://example.com",
+				.of("vcap.services.my.credentials.accessTokenUri:http://exampledomain",
 						"security.oauth2.sso.serviceId:my")
 				.applyTo(this.environment);
 		this.listener.postProcessEnvironment(this.environment, new SpringApplication());
 		assertThat(this.environment
 				.resolvePlaceholders("${security.oauth2.client.access-token-uri}"))
-						.isEqualTo("https://example.com");
+						.isEqualTo("http://exampledomain");
 	}
 
 	@Test
 	public void addJwtKeyUri() {
-		TestPropertyValues.of("vcap.services.sso.credentials.keyUri:https://example.com")
+		TestPropertyValues.of("vcap.services.sso.credentials.keyUri:http://exampledomain")
 				.applyTo(this.environment);
 		this.listener.postProcessEnvironment(this.environment, new SpringApplication());
 		assertThat(this.environment
 				.resolvePlaceholders("${security.oauth2.resource.jwt.key-uri}"))
-						.isEqualTo("https://example.com");
+						.isEqualTo("http://exampledomain");
 	}
 
 }
