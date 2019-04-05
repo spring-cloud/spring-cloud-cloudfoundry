@@ -16,15 +16,15 @@ implementation of Spring Cloud Commons <code class="literal">DiscoveryClient</co
 <code class="literal">spring.cloud.cloudfoundry.discovery.[username,password]</code> (also <code class="literal">*.url</code> if you are not connecting to <a class="link" href="https://run.pivotal.io" target="_top">Pivotal Web Services</a>) and then you
 can use the <code class="literal">DiscoveryClient</code> directly or via a <code class="literal">LoadBalancerClient</code>.</p><p>The first time you use it the discovery client might be slow owing to
 the fact that it has to get an access token from Cloud Foundry.</p></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="_discovery" href="#_discovery"></a>1.&nbsp;Discovery</h1></div></div></div><p>Here&#8217;s a Spring Cloud app with Cloud Foundry discovery:</p><p><b>app.groovy.&nbsp;</b>
-</p><pre class="programlisting"><em><span class="hl-annotation" style="color: gray">@Grab('org.springframework.cloud:spring-cloud-cloudfoundry')</span></em>
-<em><span class="hl-annotation" style="color: gray">@RestController</span></em>
-<em><span class="hl-annotation" style="color: gray">@EnableDiscoveryClient</span></em>
+</p><pre class="programlisting"><xslthl:annotation xmlns:xslthl="http://xslthl.sourceforge.net/">@Grab('org.springframework.cloud:spring-cloud-cloudfoundry')</xslthl:annotation>
+<xslthl:annotation xmlns:xslthl="http://xslthl.sourceforge.net/">@RestController</xslthl:annotation>
+<xslthl:annotation xmlns:xslthl="http://xslthl.sourceforge.net/">@EnableDiscoveryClient</xslthl:annotation>
 <span xmlns:d="http://docbook.org/ns/docbook" class="hl-keyword">class</span> Application {
 
-  <em><span class="hl-annotation" style="color: gray">@Autowired</span></em>
+  <xslthl:annotation xmlns:xslthl="http://xslthl.sourceforge.net/">@Autowired</xslthl:annotation>
   DiscoveryClient client
 
-  <em><span class="hl-annotation" style="color: gray">@RequestMapping('/')</span></em>
+  <xslthl:annotation xmlns:xslthl="http://xslthl.sourceforge.net/">@RequestMapping('/')</xslthl:annotation>
   String home() {
     <span xmlns:d="http://docbook.org/ns/docbook" class="hl-string">'Hello from '</span> + client.getLocalServiceInstance()
   }
