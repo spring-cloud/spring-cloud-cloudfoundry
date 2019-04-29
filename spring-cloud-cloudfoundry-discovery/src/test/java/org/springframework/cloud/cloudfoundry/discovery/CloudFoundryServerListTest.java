@@ -1,11 +1,11 @@
 /*
- * Copyright 2013-2018 the original author or authors.
+ * Copyright 2013-2019 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,22 +18,21 @@ package org.springframework.cloud.cloudfoundry.discovery;
 
 import java.util.List;
 
+import com.netflix.client.config.CommonClientConfigKey;
+import com.netflix.client.config.IClientConfig;
 import org.cloudfoundry.operations.applications.ApplicationDetail;
 import org.cloudfoundry.operations.applications.InstanceDetail;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.cloud.cloudfoundry.CloudFoundryService;
+import reactor.core.publisher.Flux;
+import reactor.util.function.Tuple2;
+import reactor.util.function.Tuples;
 
-import com.netflix.client.config.CommonClientConfigKey;
-import com.netflix.client.config.IClientConfig;
+import org.springframework.cloud.cloudfoundry.CloudFoundryService;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
-import reactor.core.publisher.Flux;
-import reactor.util.function.Tuple2;
-import reactor.util.function.Tuples;
 
 /**
  * @author Josh Long
@@ -41,13 +40,13 @@ import reactor.util.function.Tuples;
 public class CloudFoundryServerListTest {
 
 	private CloudFoundryServerList cloudFoundryServerList;
+
 	private String serviceId = "foo-service";
 
 	@Before
 	public void setUp() {
 		IClientConfig iClientConfig = IClientConfig.Builder.newBuilder(this.serviceId)
-				.withSecure(true)
-				.build();
+				.withSecure(true).build();
 		iClientConfig.set(CommonClientConfigKey.SecurePort, 443);
 
 		Tuple2<ApplicationDetail, InstanceDetail> tuple2 = getInstanceDetail();
@@ -55,7 +54,8 @@ public class CloudFoundryServerListTest {
 		CloudFoundryService cfs = mock(CloudFoundryService.class);
 		when(cfs.getApplicationInstances(this.serviceId)).thenReturn(Flux.just(tuple2));
 
-		this.cloudFoundryServerList = new CloudFoundryServerList(cfs, new CloudFoundryDiscoveryProperties());
+		this.cloudFoundryServerList = new CloudFoundryServerList(cfs,
+				new CloudFoundryDiscoveryProperties());
 		this.cloudFoundryServerList.initWithNiwsConfig(iClientConfig);
 	}
 
@@ -85,8 +85,10 @@ public class CloudFoundryServerListTest {
 
 	@Test
 	public void testListOfServers() {
-		List<CloudFoundryServer> initialListOfServers = this.cloudFoundryServerList.getInitialListOfServers();
-		List<CloudFoundryServer> updatedListOfServers = this.cloudFoundryServerList.getUpdatedListOfServers();
+		List<CloudFoundryServer> initialListOfServers = this.cloudFoundryServerList
+				.getInitialListOfServers();
+		List<CloudFoundryServer> updatedListOfServers = this.cloudFoundryServerList
+				.getUpdatedListOfServers();
 		assertThat(initialListOfServers)
 				.containsExactly(updatedListOfServers.toArray(new CloudFoundryServer[0]))
 				.hasSize(1);
@@ -105,7 +107,8 @@ public class CloudFoundryServerListTest {
 		CloudFoundryService cfs = mock(CloudFoundryService.class);
 		when(cfs.getApplicationInstances(this.serviceId)).thenReturn(Flux.just(tuple2));
 
-		CloudFoundryServerList serverList = new CloudFoundryServerList(cfs, new CloudFoundryDiscoveryProperties());
+		CloudFoundryServerList serverList = new CloudFoundryServerList(cfs,
+				new CloudFoundryDiscoveryProperties());
 		serverList.initWithNiwsConfig(iClientConfig);
 
 		CloudFoundryServer server = serverList.getInitialListOfServers().get(0);

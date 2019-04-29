@@ -1,11 +1,11 @@
 /*
- * Copyright 2013-2018 the original author or authors.
+ * Copyright 2013-2019 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,16 +16,16 @@
 
 package org.springframework.cloud.cloudfoundry;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Configuration properties for a connection to a Cloud Foundry platform.
@@ -69,6 +69,10 @@ public class CloudFoundryProperties implements InitializingBean {
 		return this.url;
 	}
 
+	public void setUrl(String cloudControllerUrl) {
+		this.url = cloudControllerUrl;
+	}
+
 	private String safeUrl(String t) {
 		String input = t.trim().toLowerCase();
 		Pattern p = Pattern.compile("(http(s)?://)(.*)");
@@ -80,10 +84,6 @@ public class CloudFoundryProperties implements InitializingBean {
 			}
 		}
 		return t;
-	}
-
-	public void setUrl(String cloudControllerUrl) {
-		this.url = cloudControllerUrl;
 	}
 
 	public String getUsername() {
@@ -119,7 +119,7 @@ public class CloudFoundryProperties implements InitializingBean {
 	}
 
 	public boolean isSkipSslValidation() {
-		return skipSslValidation;
+		return this.skipSslValidation;
 	}
 
 	public boolean getSkipSslValidation() {
@@ -146,6 +146,8 @@ public class CloudFoundryProperties implements InitializingBean {
 		vals.put("url", getUrl());
 		vals.put("username", getUsername());
 		vals.put("password", getPassword());
-		vals.forEach((key, value) -> Assert.hasText(value, String.format("'%s' must be provided", key)));
+		vals.forEach((key, value) -> Assert.hasText(value,
+				String.format("'%s' must be provided", key)));
 	}
+
 }
