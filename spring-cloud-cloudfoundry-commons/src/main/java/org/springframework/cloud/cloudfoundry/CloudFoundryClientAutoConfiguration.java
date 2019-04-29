@@ -47,8 +47,8 @@ import org.springframework.context.annotation.Lazy;
  * @author Scott Frederick
  */
 @Configuration
-@ConditionalOnProperty(prefix = "spring.cloud.cloudfoundry", name = { "username",
-		"password" })
+@ConditionalOnProperty(prefix = "spring.cloud.cloudfoundry",
+		name = { "username", "password" })
 @ConditionalOnClass(name = { "reactor.core.publisher.Flux",
 		"org.cloudfoundry.operations.DefaultCloudFoundryOperations",
 		"org.cloudfoundry.reactor.client.ReactorCloudFoundryClient",
