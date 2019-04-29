@@ -34,27 +34,24 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
  * Discovery.
  *
  * @author Toshiaki Maki
- *
  * @see <a href=
  * "https://www.cloudfoundry.org/blog/polyglot-service-discovery-container-networking-cloud-foundry/">Polyglot
  * Service Discovery for Container Networking in Cloud Foundry</a>
  */
 public class SimpleDnsBasedDiscoveryClient implements DiscoveryClient {
-	public static final String INTERNAL_DOMAIN = "apps.internal";
-	private final Logger log = LoggerFactory
+
+	private static final Logger log = LoggerFactory
 			.getLogger(SimpleDnsBasedDiscoveryClient.class);
+
 	private final ServiceIdToHostnameConverter serviceIdToHostnameConverter;
 
-	private static final ServiceIdToHostnameConverter DEFAULT_CONVERTER = serviceId -> serviceId
-			+ "." + INTERNAL_DOMAIN;
-
-	public SimpleDnsBasedDiscoveryClient(
+	public SimpleDnsBasedDiscoveryClient(CloudFoundryDiscoveryProperties properties,
 			ServiceIdToHostnameConverter serviceIdToHostnameConverter) {
 		this.serviceIdToHostnameConverter = serviceIdToHostnameConverter;
 	}
 
-	public SimpleDnsBasedDiscoveryClient() {
-		this(DEFAULT_CONVERTER);
+	public SimpleDnsBasedDiscoveryClient(CloudFoundryDiscoveryProperties properties) {
+		this(properties, serviceId -> serviceId + "." + properties.getInternalDomain());
 	}
 
 	@Override
@@ -91,6 +88,9 @@ public class SimpleDnsBasedDiscoveryClient implements DiscoveryClient {
 
 	@FunctionalInterface
 	public interface ServiceIdToHostnameConverter {
+
 		String toHostname(String serviceId);
+
 	}
+
 }

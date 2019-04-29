@@ -17,6 +17,7 @@
 package org.springframework.cloud.cloudfoundry.discovery;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.core.style.ToStringCreator;
 
 /**
  * @author Josh Long
@@ -45,6 +46,11 @@ public class CloudFoundryDiscoveryProperties {
 	 * available clients.
 	 */
 	private int order = 0;
+
+	/**
+	 * Default internal domain when configured to use Native DNS service discovery.
+	 */
+	private String internalDomain = "apps.internal";
 
 	public boolean isEnabled() {
 		return this.enabled;
@@ -78,12 +84,25 @@ public class CloudFoundryDiscoveryProperties {
 		this.order = order;
 	}
 
+	public String getInternalDomain() {
+		return this.internalDomain;
+	}
+
+	public void setInternalDomain(String internalDomain) {
+		this.internalDomain = internalDomain;
+	}
+
 	@Override
 	public String toString() {
-		return "CloudFoundryDiscoveryProperties{" + "enabled=" + this.enabled
-				+ ", heartbeatFrequency=" + this.heartbeatFrequency
-				+ ", defaultServerPort=" + this.defaultServerPort + ", order="
-				+ this.order + '}';
+		// @formatter:off
+		return new ToStringCreator(this)
+			.append("enabled", enabled)
+			.append("heartbeatFrequency", heartbeatFrequency)
+			.append("defaultServerPort", defaultServerPort)
+			.append("order", order)
+			.append("internalDomain", internalDomain)
+			.toString();
+		// @formatter:on
 	}
 
 }
