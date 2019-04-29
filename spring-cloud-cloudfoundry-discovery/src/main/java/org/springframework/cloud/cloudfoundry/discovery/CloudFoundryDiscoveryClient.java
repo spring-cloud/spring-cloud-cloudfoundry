@@ -98,4 +98,7 @@ public class CloudFoundryDiscoveryClient implements DiscoveryClient {
 		return this.properties.getOrder();
 	}
 
+	CloudFoundryService getCloudFoundryService() {
+		return this.cloudFoundryService;
+	}
 }

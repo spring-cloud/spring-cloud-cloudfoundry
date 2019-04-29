@@ -1,0 +1,16 @@
+{
+  "properties": [
+    {
+      "name": "spring.cloud.cloudfoundry.discovery.use-dns",
+      "type": "java.lang.Boolean",
+      "description": "Whether to use BOSH DNS for the discovery. In order to use this feature, your Cloud Foundry installation must support Service Discovery.",
+      "defaultValue": false
+    },
+    {
+      "name": "spring.cloud.cloudfoundry.discovery.use-container-ip",
+      "type": "java.lang.Boolean",
+      "description": "Whether to resolve hostname when BOSH DNS is used. In order to use this feature, spring.cloud.cloudfoundry.discovery.use-dns must be true.",
+      "defaultValue": false
+    }
+  ]
+}
