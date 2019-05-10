@@ -101,4 +101,5 @@ public class CloudFoundryDiscoveryClient implements DiscoveryClient {
 	CloudFoundryService getCloudFoundryService() {
 		return this.cloudFoundryService;
 	}
+
 }

@@ -31,6 +31,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Tests for {@link CloudFoundryDiscoveryClientConfiguration}.
+ *
  * @author Toshiaki Maki
  */
 public class CloudFoundryDiscoveryClientConfigurationTest {
@@ -102,6 +103,7 @@ public class CloudFoundryDiscoveryClientConfigurationTest {
 
 	@Configuration
 	public static class CloudFoundryConfig {
+
 		@Bean
 		public CloudFoundryOperations cloudFoundryOperations() {
 			return Mockito.mock(CloudFoundryOperations.class);
@@ -111,5 +113,7 @@ public class CloudFoundryDiscoveryClientConfigurationTest {
 		public CloudFoundryService cloudFoundryService() {
 			return Mockito.mock(CloudFoundryService.class);
 		}
+
 	}
+
 }

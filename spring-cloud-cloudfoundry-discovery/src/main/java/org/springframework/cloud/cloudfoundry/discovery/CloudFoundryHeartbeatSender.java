@@ -42,7 +42,8 @@ public class CloudFoundryHeartbeatSender implements ApplicationEventPublisherAwa
 		this.client = client;
 	}
 
-	@Scheduled(fixedDelayString = "${spring.cloud.cloudfoundry.discovery.heartbeatFrequency:5000}")
+	@Scheduled(
+			fixedDelayString = "${spring.cloud.cloudfoundry.discovery.heartbeatFrequency:5000}")
 	public void poll() {
 		if (this.publisher != null) {
 			List<String> services = this.client.getServices();

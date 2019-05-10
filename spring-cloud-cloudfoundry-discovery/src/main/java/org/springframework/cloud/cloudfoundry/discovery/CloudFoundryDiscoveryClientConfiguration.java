@@ -35,7 +35,8 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @ConditionalOnClass(CloudFoundryOperations.class)
-@ConditionalOnProperty(value = "spring.cloud.cloudfoundry.discovery.enabled", matchIfMissing = true)
+@ConditionalOnProperty(value = "spring.cloud.cloudfoundry.discovery.enabled",
+		matchIfMissing = true)
 @EnableConfigurationProperties(CloudFoundryDiscoveryProperties.class)
 public class CloudFoundryDiscoveryClientConfiguration {
 
@@ -47,24 +48,30 @@ public class CloudFoundryDiscoveryClientConfiguration {
 	}
 
 	@Configuration
-	@ConditionalOnProperty(value = "spring.cloud.cloudfoundry.discovery.use-dns", havingValue = "false", matchIfMissing = true)
+	@ConditionalOnProperty(value = "spring.cloud.cloudfoundry.discovery.use-dns",
+			havingValue = "false", matchIfMissing = true)
 	public static class CloudFoundryDiscoveryClientConfig {
+
 		@Bean
 		@ConditionalOnMissingBean(DiscoveryClient.class)
-		public CloudFoundryDiscoveryClient cloudFoundryDiscoveryClient(CloudFoundryOperations cf,
-				CloudFoundryService svc,
+		public CloudFoundryDiscoveryClient cloudFoundryDiscoveryClient(
+				CloudFoundryOperations cf, CloudFoundryService svc,
 				CloudFoundryDiscoveryProperties cloudFoundryDiscoveryProperties) {
 			return new CloudFoundryDiscoveryClient(cf, svc,
 					cloudFoundryDiscoveryProperties);
 		}
+
 	}
 
 	@Configuration
-	@ConditionalOnProperty(value = "spring.cloud.cloudfoundry.discovery.use-dns", havingValue = "true")
+	@ConditionalOnProperty(value = "spring.cloud.cloudfoundry.discovery.use-dns",
+			havingValue = "true")
 	public static class DnsBasedCloudFoundryDiscoveryClientConfig {
 
 		@Bean
-		@ConditionalOnProperty(value = "spring.cloud.cloudfoundry.discovery.use-container-ip", havingValue = "true")
+		@ConditionalOnProperty(
+				value = "spring.cloud.cloudfoundry.discovery.use-container-ip",
+				havingValue = "true")
 		@ConditionalOnMissingBean(DiscoveryClient.class)
 		public SimpleDnsBasedDiscoveryClient discoveryClient(
 				ObjectProvider<ServiceIdToHostnameConverter> provider,
@@ -75,7 +82,9 @@ public class CloudFoundryDiscoveryClientConfiguration {
 		}
 
 		@Bean
-		@ConditionalOnProperty(value = "spring.cloud.cloudfoundry.discovery.use-container-ip", havingValue = "false", matchIfMissing = true)
+		@ConditionalOnProperty(
+				value = "spring.cloud.cloudfoundry.discovery.use-container-ip",
+				havingValue = "false", matchIfMissing = true)
 		@ConditionalOnMissingBean(DiscoveryClient.class)
 		public CloudFoundryAppServiceDiscoveryClient cloudFoundryDiscoveryClient(
 				CloudFoundryOperations cf, CloudFoundryService svc,

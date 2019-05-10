@@ -39,8 +39,11 @@ import static org.mockito.Mockito.mock;
  * @author Toshiaki Maki
  */
 public class CloudFoundryAppServiceDiscoveryClientTest {
+
 	private CloudFoundryAppServiceDiscoveryClient discoveryClient;
+
 	private CloudFoundryOperations cloudFoundryOperations;
+
 	private CloudFoundryService cloudFoundryService;
 
 	@Before
@@ -129,4 +132,5 @@ public class CloudFoundryAppServiceDiscoveryClientTest {
 
 		assertThat(instances).isEmpty();
 	}
+
 }

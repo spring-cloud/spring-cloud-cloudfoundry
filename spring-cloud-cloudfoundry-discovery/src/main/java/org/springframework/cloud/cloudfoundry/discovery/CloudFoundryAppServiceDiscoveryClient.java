@@ -33,7 +33,6 @@ import org.springframework.cloud.cloudfoundry.CloudFoundryService;
  * Discovery.
  *
  * @author Toshiaki Maki
- *
  * @see <a href="https://github.com/cloudfoundry/cf-app-sd-release">CF App Service
  * Discovery Release</a>
  * @see <a href=
@@ -45,7 +44,8 @@ public class CloudFoundryAppServiceDiscoveryClient extends CloudFoundryDiscovery
 	private static final String INTERNAL_DOMAIN = "apps.internal";
 
 	CloudFoundryAppServiceDiscoveryClient(CloudFoundryOperations cloudFoundryOperations,
-			CloudFoundryService svc, CloudFoundryDiscoveryProperties cloudFoundryDiscoveryProperties) {
+			CloudFoundryService svc,
+			CloudFoundryDiscoveryProperties cloudFoundryDiscoveryProperties) {
 		super(cloudFoundryOperations, svc, cloudFoundryDiscoveryProperties);
 	}
 
@@ -57,9 +57,8 @@ public class CloudFoundryAppServiceDiscoveryClient extends CloudFoundryDiscovery
 	@Override
 	public List<ServiceInstance> getInstances(String serviceId) {
 		return getCloudFoundryService()
-				.getApplicationInstances(serviceId)
-				.filter(tuple -> tuple.getT1().getUrls().stream()
-						.anyMatch(this::isInternalDomain))
+				.getApplicationInstances(serviceId).filter(tuple -> tuple.getT1()
+						.getUrls().stream().anyMatch(this::isInternalDomain))
 				.map(tuple -> {
 					ApplicationDetail applicationDetail = tuple.getT1();
 					InstanceDetail instanceDetail = tuple.getT2();
@@ -67,21 +66,18 @@ public class CloudFoundryAppServiceDiscoveryClient extends CloudFoundryDiscovery
 					String applicationIndex = instanceDetail.getIndex();
 					String name = applicationDetail.getName();
 					String url = applicationDetail.getUrls().stream()
-							.filter(this::isInternalDomain)
-							.findFirst()
-							.map(x -> instanceDetail.getIndex() + "." + x)
-							.get();
+							.filter(this::isInternalDomain).findFirst()
+							.map(x -> instanceDetail.getIndex() + "." + x).get();
 					HashMap<String, String> metadata = new HashMap<>();
 					metadata.put("applicationId", applicationId);
 					metadata.put("instanceId", applicationIndex);
 					return (ServiceInstance) new DefaultServiceInstance(name, url, 8080,
 							false, metadata);
-				})
-				.collectList()
-				.block();
+				}).collectList().block();
 	}
 
 	private boolean isInternalDomain(String url) {
 		return url != null && url.endsWith(INTERNAL_DOMAIN);
 	}
+
 }
