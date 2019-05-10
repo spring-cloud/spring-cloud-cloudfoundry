@@ -81,8 +81,8 @@ public class CloudFoundryDiscoveryClient implements DiscoveryClient {
 			metadata.put("applicationId", applicationId);
 			metadata.put("instanceId", applicationIndex);
 
-			return (ServiceInstance) new DefaultServiceInstance(instanceId, name, url, 80, secure,
-					metadata);
+			return (ServiceInstance) new DefaultServiceInstance(instanceId, name, url, 80,
+					secure, metadata);
 		}).collectList().blockOptional().orElse(new ArrayList<>());
 	}
 
