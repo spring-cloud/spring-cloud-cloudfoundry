@@ -34,6 +34,7 @@ import org.springframework.cloud.cloudfoundry.CloudFoundryService;
  * Discovery.
  *
  * @author Toshiaki Maki
+ * @author Srinivasa Vasu
  * @see <a href="https://github.com/cloudfoundry/cf-app-sd-release">CF App Service
  * Discovery Release</a>
  * @see <a href=
