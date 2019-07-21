@@ -33,6 +33,7 @@ import org.springframework.cloud.cloudfoundry.CloudFoundryService;
  * Discovery.
  *
  * @author Toshiaki Maki
+ * @author Srinivasa Vasu
  * @see <a href="https://github.com/cloudfoundry/cf-app-sd-release">CF App Service
  * Discovery Release</a>
  * @see <a href=
@@ -64,6 +65,7 @@ public class CloudFoundryAppServiceDiscoveryClient extends CloudFoundryDiscovery
 					InstanceDetail instanceDetail = tuple.getT2();
 					String applicationId = applicationDetail.getId();
 					String applicationIndex = instanceDetail.getIndex();
+					String instanceId = applicationId + "." + applicationIndex;
 					String name = applicationDetail.getName();
 					String url = applicationDetail.getUrls().stream()
 							.filter(this::isInternalDomain).findFirst()
@@ -71,9 +73,9 @@ public class CloudFoundryAppServiceDiscoveryClient extends CloudFoundryDiscovery
 					HashMap<String, String> metadata = new HashMap<>();
 					metadata.put("applicationId", applicationId);
 					metadata.put("instanceId", applicationIndex);
-					return (ServiceInstance) new DefaultServiceInstance(name, url, 8080,
-							false, metadata);
-				}).collectList().block();
+					return (ServiceInstance) new DefaultServiceInstance(instanceId, name,
+							url, 8080, false, metadata);
+				}).collectList().toFuture().join();
 	}
 
 	private boolean isInternalDomain(String url) {

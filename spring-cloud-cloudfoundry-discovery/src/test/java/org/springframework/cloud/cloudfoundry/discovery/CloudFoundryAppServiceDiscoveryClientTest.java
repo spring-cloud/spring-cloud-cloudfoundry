@@ -37,6 +37,7 @@ import static org.mockito.Mockito.mock;
 
 /**
  * @author Toshiaki Maki
+ * @author Srinivasa Vasu
  */
 public class CloudFoundryAppServiceDiscoveryClientTest {
 
@@ -58,20 +59,22 @@ public class CloudFoundryAppServiceDiscoveryClientTest {
 	@Test
 	public void getInstancesOneInstance() {
 		String serviceId = "billing";
-		ApplicationDetail applicationDetail = ApplicationDetail.builder().id("billing1")
-				.name("billing").instances(1).memoryLimit(1024).stack("cflinux2")
+		ApplicationDetail applicationDetail = ApplicationDetail.builder().id(serviceId)
+				.name(serviceId).instances(1).memoryLimit(1024).stack("cflinux2")
 				.diskQuota(1024).requestedState("Running").runningInstances(1)
-				.url("billing.apps.example.com", "billing.apps.internal").build();
+				.url(serviceId + ".apps.example.com", serviceId + ".apps.internal")
+				.build();
 		given(this.cloudFoundryService.getApplicationInstances(serviceId))
 				.willReturn(Flux.just(Tuples.of(applicationDetail,
 						InstanceDetail.builder().index("0").build())));
 		List<ServiceInstance> instances = this.discoveryClient.getInstances(serviceId);
 
 		assertThat(instances).hasSize(1);
-		assertThat(instances.get(0)).isEqualTo(new DefaultServiceInstance(serviceId,
-				"0.billing.apps.internal", 8080, false, new HashMap<String, String>() {
+		assertThat(instances.get(0)).isEqualTo(new DefaultServiceInstance(
+				serviceId + ".0", serviceId, "0.billing.apps.internal", 8080, false,
+				new HashMap<String, String>() {
 					{
-						put("applicationId", "billing1");
+						put("applicationId", serviceId);
 						put("instanceId", "0");
 					}
 				}));
@@ -80,10 +83,11 @@ public class CloudFoundryAppServiceDiscoveryClientTest {
 	@Test
 	public void getInstancesThreeInstance() {
 		String serviceId = "billing";
-		ApplicationDetail applicationDetail = ApplicationDetail.builder().id("billing-id")
-				.name("billing").instances(3).memoryLimit(1024).stack("cflinux2")
+		ApplicationDetail applicationDetail = ApplicationDetail.builder().id(serviceId)
+				.name(serviceId).instances(3).memoryLimit(1024).stack("cflinux2")
 				.diskQuota(1024).requestedState("Running").runningInstances(3)
-				.url("billing.apps.example.com", "billing.apps.internal").build();
+				.url(serviceId + ".apps.example.com", serviceId + ".apps.internal")
+				.build();
 		given(this.cloudFoundryService.getApplicationInstances(serviceId))
 				.willReturn(Flux.just(
 						Tuples.of(applicationDetail,
@@ -95,24 +99,27 @@ public class CloudFoundryAppServiceDiscoveryClientTest {
 		List<ServiceInstance> instances = this.discoveryClient.getInstances(serviceId);
 
 		assertThat(instances).hasSize(3);
-		assertThat(instances.get(0)).isEqualTo(new DefaultServiceInstance(serviceId,
-				"0.billing.apps.internal", 8080, false, new HashMap<String, String>() {
+		assertThat(instances.get(0)).isEqualTo(new DefaultServiceInstance(
+				serviceId + ".0", serviceId, "0." + serviceId + ".apps.internal", 8080,
+				false, new HashMap<String, String>() {
 					{
-						put("applicationId", "billing-id");
+						put("applicationId", serviceId);
 						put("instanceId", "0");
 					}
 				}));
-		assertThat(instances.get(1)).isEqualTo(new DefaultServiceInstance(serviceId,
-				"1.billing.apps.internal", 8080, false, new HashMap<String, String>() {
+		assertThat(instances.get(1)).isEqualTo(new DefaultServiceInstance(
+				serviceId + ".1", serviceId, "1." + serviceId + ".apps.internal", 8080,
+				false, new HashMap<String, String>() {
 					{
-						put("applicationId", "billing-id");
+						put("applicationId", serviceId);
 						put("instanceId", "1");
 					}
 				}));
-		assertThat(instances.get(2)).isEqualTo(new DefaultServiceInstance(serviceId,
-				"2.billing.apps.internal", 8080, false, new HashMap<String, String>() {
+		assertThat(instances.get(2)).isEqualTo(new DefaultServiceInstance(
+				serviceId + ".2", serviceId, "2." + serviceId + ".apps.internal", 8080,
+				false, new HashMap<String, String>() {
 					{
-						put("applicationId", "billing-id");
+						put("applicationId", serviceId);
 						put("instanceId", "2");
 					}
 				}));
@@ -121,10 +128,10 @@ public class CloudFoundryAppServiceDiscoveryClientTest {
 	@Test
 	public void getInstancesEmpty() {
 		String serviceId = "billing";
-		ApplicationDetail applicationDetail = ApplicationDetail.builder().id("billing1")
-				.name("billing").instances(1).memoryLimit(1024).stack("cflinux2")
+		ApplicationDetail applicationDetail = ApplicationDetail.builder().id(serviceId)
+				.name(serviceId).instances(1).memoryLimit(1024).stack("cflinux2")
 				.diskQuota(1024).requestedState("Running").runningInstances(1)
-				.url("billing.apps.example.com").build();
+				.url(serviceId + ".apps.example.com").build();
 		given(this.cloudFoundryService.getApplicationInstances(serviceId))
 				.willReturn(Flux.just(Tuples.of(applicationDetail,
 						InstanceDetail.builder().index("0").build())));

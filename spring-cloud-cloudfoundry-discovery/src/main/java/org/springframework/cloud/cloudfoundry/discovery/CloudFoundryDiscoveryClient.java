@@ -39,6 +39,7 @@ import org.springframework.cloud.cloudfoundry.CloudFoundryService;
  * @author Dave Syer
  * @author Olga Maciaszek-Sharma
  * @author Tim Ysewyn
+ * @author Srinivasa Vasu
  */
 public class CloudFoundryDiscoveryClient implements DiscoveryClient {
 
@@ -83,7 +84,7 @@ public class CloudFoundryDiscoveryClient implements DiscoveryClient {
 
 			return (ServiceInstance) new DefaultServiceInstance(instanceId, name, url, 80,
 					secure, metadata);
-		}).collectList().blockOptional().orElse(new ArrayList<>());
+		}).collectList().toFuture().join();
 	}
 
 	@Override
