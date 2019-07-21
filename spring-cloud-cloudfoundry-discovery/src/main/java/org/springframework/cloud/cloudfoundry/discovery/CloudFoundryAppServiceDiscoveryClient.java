@@ -16,6 +16,7 @@
 
 package org.springframework.cloud.cloudfoundry.discovery;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -56,6 +57,7 @@ public class CloudFoundryAppServiceDiscoveryClient extends CloudFoundryDiscovery
 
 	@Override
 	public List<ServiceInstance> getInstances(String serviceId) {
+		List<ServiceInstance> instanceList = Collections.emptyList();
 		return getCloudFoundryService()
 				.getApplicationInstances(serviceId).filter(tuple -> tuple.getT1()
 						.getUrls().stream().anyMatch(this::isInternalDomain))
@@ -73,7 +75,10 @@ public class CloudFoundryAppServiceDiscoveryClient extends CloudFoundryDiscovery
 					metadata.put("instanceId", applicationIndex);
 					return (ServiceInstance) new DefaultServiceInstance(name, url, 8080,
 							false, metadata);
-				}).collectList().block();
+				}).as(pub -> {
+					pub.subscribe(instanceList::add);
+					return instanceList;
+				});
 	}
 
 	private boolean isInternalDomain(String url) {
