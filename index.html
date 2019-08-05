@@ -1,60 +1,12 @@
----
-# The name of your project
-title: Spring Cloud Cloud Foundry
-
-badges:
-
-  # Customize your project's badges. Delete any entries that do not apply.
-  custom:
-    - name: Source (GitHub)
-      url:  https://github.com/spring-cloud/spring-cloud-cloudfoundry
-      icon: github
-
-    - name: StackOverflow
-      url:  https://stackoverflow.com/questions/tagged/spring-cloud
-      icon: stackoverflow
-
----
 <!DOCTYPE HTML>
-<html lang="en-US">
 
-<!-- Specify the parent of this project (or delete if none) to influence the rendering of the breadcrumb -->
-{% capture parent_link %}
-[Spring Cloud]({{ site.projects_site_url }}/spring-cloud)
-{% endcapture %}
+<meta charset="UTF-8">
+<meta http-equiv="refresh" content="1; url=https://cloud.spring.io/spring-cloud-cloudfoundry/reference/html/">
 
+<script>
+  window.location.href = "https://cloud.spring.io/spring-cloud-cloudfoundry/reference/html/"
+</script>
 
-{% capture billboard_description %}
+<title>Page Redirection</title>
 
-Spring Cloud for Cloudfoundry makes it easy to run [Spring Cloud](https://github.com/spring-cloud) apps in [Cloud Foundry](https://github.com/cloudfoundry) (the Platform as a Service). Cloud Foundry has the notion of a "service", which is middlware that you "bind" to an app, essentially providing it with an environment variable containing credentials (e.g. the location and username to use for the service).
-
-{% endcapture %}
-
-{% capture main_content %}
-
-## Features
-
-The `spring-cloud-cloudfoundry-web` project provides basic support for some enhanced features of webapps in Cloud Foundry: binding automatically to single-sign-on services and optionally enabling sticky routing for discovery.
-
-The `spring-cloud-cloudfoundry-discovery` project provides an implementation of Spring Cloud Commons `DiscoveryClient` so you can `@EnableDiscoveryClient` and provide your credentials as `spring.cloud.cloudfoundry.discovery.[email,password]` and then you can use the `DiscoveryClient` directly or via a `LoadBalancerClient` (also `*.url` if you are not connecting to [Pivotal Web Services](https://run.pivotal.io)).
-
-> NOTE: if you are looking for a way to bind to services then this is the wrong library. Check out the [Spring Cloud Connectors](https://github.com/spring-cloud/spring-cloud-connectors) instead.
-
-<span id="quick-start"></span>
-
-## Quick Start
-
-{% include download_widget.md %}
-
-{% endcapture %}
-
-{% capture related_resources %}
-
-### Sample Projects
-
-* [Cloud Foundry Sample](https://github.com/spring-cloud/spring-cloud-cloudfoundry/tree/master/spring-cloud-cloudfoundry-sample)
-
-{% endcapture %}
-
-{% include project_page.html %}
-</html>
+If you are not redirected automatically, follow the <a href='https://cloud.spring.io/spring-cloud-cloudfoundry/reference/html/'>link to latest snapshot documentation</a>
