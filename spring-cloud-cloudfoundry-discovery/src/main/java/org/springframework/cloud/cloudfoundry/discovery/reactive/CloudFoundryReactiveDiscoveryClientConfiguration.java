@@ -1,0 +1,101 @@
+/*
+ * Copyright 2019-2019 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.springframework.cloud.cloudfoundry.discovery.reactive;
+
+import org.cloudfoundry.operations.CloudFoundryOperations;
+
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cloud.client.ConditionalOnDiscoveryEnabled;
+import org.springframework.cloud.cloudfoundry.CloudFoundryService;
+import org.springframework.cloud.cloudfoundry.discovery.CloudFoundryDiscoveryProperties;
+import org.springframework.cloud.cloudfoundry.discovery.reactive.SimpleDnsBasedReactiveDiscoveryClient.ServiceIdToHostnameConverter;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.reactive.function.client.WebClient;
+
+/**
+ * Configuration related to service discovery when using Cloud Foundry.
+ * @author Tim Ysewyn
+ */
+@Configuration
+@ConditionalOnClass({ CloudFoundryOperations.class, WebClient.class })
+@ConditionalOnDiscoveryEnabled
+@ConditionalOnProperty(value = "spring.cloud.cloudfoundry.discovery.enabled",
+		matchIfMissing = true)
+@EnableConfigurationProperties(CloudFoundryDiscoveryProperties.class)
+public class CloudFoundryReactiveDiscoveryClientConfiguration {
+
+	@Bean
+	@ConditionalOnBean(CloudFoundryReactiveDiscoveryClient.class)
+	public CloudFoundryReactiveHeartbeatSender cloudFoundryHeartbeatSender(
+			CloudFoundryReactiveDiscoveryClient client) {
+		return new CloudFoundryReactiveHeartbeatSender(client);
+	}
+
+	@Configuration
+	@ConditionalOnProperty(value = "spring.cloud.cloudfoundry.discovery.use-dns",
+			havingValue = "false", matchIfMissing = true)
+	public static class CloudFoundryReactiveDiscoveryClientConfig {
+
+		@Bean
+		@ConditionalOnMissingBean(CloudFoundryReactiveDiscoveryClient.class)
+		public CloudFoundryReactiveDiscoveryClient nativeCloudFoundryDiscoveryClient(
+				CloudFoundryOperations cf, CloudFoundryService svc,
+				CloudFoundryDiscoveryProperties cloudFoundryDiscoveryProperties) {
+			return new CloudFoundryReactiveDiscoveryClient(cf, svc,
+					cloudFoundryDiscoveryProperties);
+		}
+
+	}
+
+	@Configuration
+	@ConditionalOnProperty(value = "spring.cloud.cloudfoundry.discovery.use-dns",
+			havingValue = "true")
+	public static class DnsBasedCloudFoundryReactiveDiscoveryClientConfig {
+
+		@Bean
+		@ConditionalOnProperty(
+				value = "spring.cloud.cloudfoundry.discovery.use-container-ip",
+				havingValue = "true")
+		@ConditionalOnMissingBean(CloudFoundryReactiveDiscoveryClient.class)
+		public SimpleDnsBasedReactiveDiscoveryClient dnsBasedReactiveDiscoveryClient(
+				ObjectProvider<ServiceIdToHostnameConverter> provider,
+				CloudFoundryDiscoveryProperties properties) {
+			ServiceIdToHostnameConverter converter = provider.getIfAvailable();
+			return converter == null ? new SimpleDnsBasedReactiveDiscoveryClient(properties)
+					: new SimpleDnsBasedReactiveDiscoveryClient(properties, converter);
+		}
+
+		@Bean
+		@ConditionalOnProperty(
+				value = "spring.cloud.cloudfoundry.discovery.use-container-ip",
+				havingValue = "false", matchIfMissing = true)
+		@ConditionalOnMissingBean(CloudFoundryReactiveDiscoveryClient.class)
+		public CloudFoundryAppServiceReactiveDiscoveryClient appServiceReactiveDiscoveryClient(
+				CloudFoundryOperations cf, CloudFoundryService svc,
+				CloudFoundryDiscoveryProperties properties) {
+			return new CloudFoundryAppServiceReactiveDiscoveryClient(cf, svc, properties);
+		}
+
+	}
+
+}
