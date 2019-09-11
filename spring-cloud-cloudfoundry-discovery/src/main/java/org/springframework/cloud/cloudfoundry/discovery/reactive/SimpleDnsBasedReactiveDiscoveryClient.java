@@ -18,9 +18,6 @@ package org.springframework.cloud.cloudfoundry.discovery.reactive;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.function.Function;
 
 import org.reactivestreams.Publisher;
@@ -50,13 +47,14 @@ public class SimpleDnsBasedReactiveDiscoveryClient implements ReactiveDiscoveryC
 
 	private final ServiceIdToHostnameConverter serviceIdToHostnameConverter;
 
-	public SimpleDnsBasedReactiveDiscoveryClient(CloudFoundryDiscoveryProperties properties,
+	public SimpleDnsBasedReactiveDiscoveryClient(
 			ServiceIdToHostnameConverter serviceIdToHostnameConverter) {
 		this.serviceIdToHostnameConverter = serviceIdToHostnameConverter;
 	}
 
-	public SimpleDnsBasedReactiveDiscoveryClient(CloudFoundryDiscoveryProperties properties) {
-		this(properties, serviceId -> serviceId + "." + properties.getInternalDomain());
+	public SimpleDnsBasedReactiveDiscoveryClient(
+			CloudFoundryDiscoveryProperties properties) {
+		this(serviceId -> serviceId + "." + properties.getInternalDomain());
 	}
 
 	@Override
@@ -67,16 +65,17 @@ public class SimpleDnsBasedReactiveDiscoveryClient implements ReactiveDiscoveryC
 	@Override
 	public Flux<ServiceInstance> getInstances(String serviceId) {
 		return Mono.justOrEmpty(this.serviceIdToHostnameConverter.toHostname(serviceId))
-			.flatMapMany(getInetAddresses())
-			.map(address -> new DefaultServiceInstance(
-				serviceId, address.getHostAddress(), 8080, false));
+				.flatMapMany(getInetAddresses())
+				.map(address -> new DefaultServiceInstance(serviceId,
+						address.getHostAddress(), 8080, false));
 	}
 
 	private Function<String, Publisher<? extends InetAddress>> getInetAddresses() {
 		return hostname -> {
 			try {
 				return Flux.fromArray(InetAddress.getAllByName(hostname));
-			} catch (UnknownHostException e) {
+			}
+			catch (UnknownHostException e) {
 				log.warn("{}", e.getMessage());
 				return Flux.empty();
 			}

@@ -23,19 +23,21 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 /**
- * Publishes a {@link HeartbeatEvent} with a `Flux` of services as its state
- * indicator. If consumers detect a change it doesn't necessarily mean there is a change in the catalog.
+ * Publishes a {@link HeartbeatEvent} with a `Flux` of services as its state indicator. If
+ * consumers detect a change it doesn't necessarily mean there is a change in the catalog.
  *
  * @author Tim Ysewyn
  */
 @Component
-public class CloudFoundryReactiveHeartbeatSender implements ApplicationEventPublisherAware {
+public class CloudFoundryReactiveHeartbeatSender
+		implements ApplicationEventPublisherAware {
 
 	private final CloudFoundryReactiveDiscoveryClient client;
 
 	private ApplicationEventPublisher publisher;
 
-	public CloudFoundryReactiveHeartbeatSender(CloudFoundryReactiveDiscoveryClient client) {
+	public CloudFoundryReactiveHeartbeatSender(
+			CloudFoundryReactiveDiscoveryClient client) {
 		this.client = client;
 	}
 
@@ -43,7 +45,8 @@ public class CloudFoundryReactiveHeartbeatSender implements ApplicationEventPubl
 			fixedDelayString = "${spring.cloud.cloudfoundry.discovery.heartbeatFrequency:5000}")
 	public void poll() {
 		if (this.publisher != null) {
-			this.publisher.publishEvent(new HeartbeatEvent(this.client, this.client.getServices()));
+			this.publisher.publishEvent(
+					new HeartbeatEvent(this.client, this.client.getServices()));
 		}
 	}
 

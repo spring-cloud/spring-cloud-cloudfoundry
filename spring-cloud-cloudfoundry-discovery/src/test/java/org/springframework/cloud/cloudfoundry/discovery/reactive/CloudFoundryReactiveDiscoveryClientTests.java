@@ -1,3 +1,19 @@
+/*
+ * Copyright 2019-2019 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.springframework.cloud.cloudfoundry.discovery.reactive;
 
 import java.util.UUID;
@@ -31,12 +47,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class CloudFoundryReactiveDiscoveryClientTests {
 
-//	private final SimpleDiscoveryProperties.SimpleServiceInstance service1Inst1 = new SimpleDiscoveryProperties.SimpleServiceInstance(
-//		URI.create("http://host1:8080"));
-//
-//	private final SimpleDiscoveryProperties.SimpleServiceInstance service1Inst2 = new SimpleDiscoveryProperties.SimpleServiceInstance(
-//		URI.create("https://host2:8443"));
-
 	@Mock
 	private CloudFoundryOperations operations;
 
@@ -52,7 +62,8 @@ class CloudFoundryReactiveDiscoveryClientTests {
 	@Test
 	public void verifyDefaults() {
 		when(properties.getOrder()).thenReturn(0);
-		assertThat(client.description()).isEqualTo("Cloud Foundry org.springframework.cloud.client.discovery.ReactiveDiscoveryClient implementation");
+		assertThat(client.description()).isEqualTo(
+				"Cloud Foundry org.springframework.cloud.client.discovery.ReactiveDiscoveryClient implementation");
 		assertThat(client.getOrder()).isEqualTo(0);
 	}
 
@@ -61,9 +72,9 @@ class CloudFoundryReactiveDiscoveryClientTests {
 		Applications apps = mock(Applications.class);
 		when(operations.applications()).thenReturn(apps);
 		ApplicationSummary summary = ApplicationSummary.builder()
-			.id(UUID.randomUUID().toString()).instances(1).memoryLimit(1024)
-			.requestedState("requestedState").diskQuota(1024)
-			.name("service").runningInstances(1).build();
+				.id(UUID.randomUUID().toString()).instances(1).memoryLimit(1024)
+				.requestedState("requestedState").diskQuota(1024).name("service")
+				.runningInstances(1).build();
 		when(apps.list()).thenReturn(Flux.just(summary));
 		Flux<String> services = this.client.getServices();
 		StepVerifier.create(services).expectNext("service").expectComplete().verify();
@@ -79,14 +90,13 @@ class CloudFoundryReactiveDiscoveryClientTests {
 	@Test
 	public void shouldReturnFluxOfServiceInstances() {
 		ApplicationDetail applicationDetail = ApplicationDetail.builder()
-			.id(UUID.randomUUID().toString()).stack("stack").instances(1).memoryLimit(1024)
-			.requestedState("requestedState").diskQuota(1024)
-			.name("service").runningInstances(1).build();
+				.id(UUID.randomUUID().toString()).stack("stack").instances(1)
+				.memoryLimit(1024).requestedState("requestedState").diskQuota(1024)
+				.name("service").runningInstances(1).build();
 		InstanceDetail instanceDetail = InstanceDetail.builder().index("0").build();
 		Tuple2<ApplicationDetail, InstanceDetail> instance = Tuples.of(applicationDetail,
-			instanceDetail);
-		when(this.svc.getApplicationInstances("service"))
-			.thenReturn(Flux.just(instance));
+				instanceDetail);
+		when(this.svc.getApplicationInstances("service")).thenReturn(Flux.just(instance));
 		Flux<ServiceInstance> instances = this.client.getInstances("service");
 		StepVerifier.create(instances).expectNextCount(1).expectComplete().verify();
 	}

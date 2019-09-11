@@ -25,22 +25,24 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.client.ConditionalOnDiscoveryEnabled;
+import org.springframework.cloud.client.ConditionalOnReactiveDiscoveryEnabled;
 import org.springframework.cloud.cloudfoundry.CloudFoundryService;
 import org.springframework.cloud.cloudfoundry.discovery.CloudFoundryDiscoveryProperties;
+import org.springframework.cloud.cloudfoundry.discovery.ConditionalOnCloudFoundryDiscoveryEnabled;
 import org.springframework.cloud.cloudfoundry.discovery.reactive.SimpleDnsBasedReactiveDiscoveryClient.ServiceIdToHostnameConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.reactive.function.client.WebClient;
 
 /**
  * Configuration related to service discovery when using Cloud Foundry.
+ *
  * @author Tim Ysewyn
  */
 @Configuration
-@ConditionalOnClass({ CloudFoundryOperations.class, WebClient.class })
+@ConditionalOnClass(CloudFoundryOperations.class)
 @ConditionalOnDiscoveryEnabled
-@ConditionalOnProperty(value = "spring.cloud.cloudfoundry.discovery.enabled",
-		matchIfMissing = true)
+@ConditionalOnReactiveDiscoveryEnabled
+@ConditionalOnCloudFoundryDiscoveryEnabled
 @EnableConfigurationProperties(CloudFoundryDiscoveryProperties.class)
 public class CloudFoundryReactiveDiscoveryClientConfiguration {
 
@@ -81,8 +83,9 @@ public class CloudFoundryReactiveDiscoveryClientConfiguration {
 				ObjectProvider<ServiceIdToHostnameConverter> provider,
 				CloudFoundryDiscoveryProperties properties) {
 			ServiceIdToHostnameConverter converter = provider.getIfAvailable();
-			return converter == null ? new SimpleDnsBasedReactiveDiscoveryClient(properties)
-					: new SimpleDnsBasedReactiveDiscoveryClient(properties, converter);
+			return converter == null
+					? new SimpleDnsBasedReactiveDiscoveryClient(properties)
+					: new SimpleDnsBasedReactiveDiscoveryClient(converter);
 		}
 
 		@Bean
