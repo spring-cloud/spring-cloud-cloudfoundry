@@ -45,7 +45,7 @@ import static org.mockito.Mockito.when;
  * @author Tim Ysewyn
  */
 @ExtendWith(MockitoExtension.class)
-class CloudFoundryReactiveDiscoveryClientTests {
+class CloudFoundryNativeReactiveDiscoveryClientTests {
 
 	@Mock
 	private CloudFoundryOperations operations;
@@ -57,7 +57,7 @@ class CloudFoundryReactiveDiscoveryClientTests {
 	private CloudFoundryDiscoveryProperties properties;
 
 	@InjectMocks
-	private CloudFoundryReactiveDiscoveryClient client;
+	private CloudFoundryNativeReactiveDiscoveryClient client;
 
 	@Test
 	public void verifyDefaults() {
