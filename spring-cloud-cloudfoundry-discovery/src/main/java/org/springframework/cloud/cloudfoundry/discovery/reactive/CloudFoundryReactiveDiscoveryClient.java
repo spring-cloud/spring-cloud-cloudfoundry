@@ -19,7 +19,8 @@ package org.springframework.cloud.cloudfoundry.discovery.reactive;
 import org.springframework.cloud.client.discovery.ReactiveDiscoveryClient;
 
 /**
- * Interface used as marker to have only a single reactive discovery client for Cloud Foundry.
+ * Interface used as marker to have only a single reactive discovery client for Cloud
+ * Foundry.
  *
  * @author Tim Ysewyn
  */

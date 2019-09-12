@@ -39,7 +39,8 @@ import org.springframework.cloud.cloudfoundry.discovery.CloudFoundryDiscoveryPro
  * "https://www.cloudfoundry.org/blog/polyglot-service-discovery-container-networking-cloud-foundry/">Polyglot
  * Service Discovery for Container Networking in Cloud Foundry</a>
  */
-public class SimpleDnsBasedReactiveDiscoveryClient implements CloudFoundryReactiveDiscoveryClient {
+public class SimpleDnsBasedReactiveDiscoveryClient
+		implements CloudFoundryReactiveDiscoveryClient {
 
 	private static final Logger log = LoggerFactory
 			.getLogger(SimpleDnsBasedReactiveDiscoveryClient.class);
