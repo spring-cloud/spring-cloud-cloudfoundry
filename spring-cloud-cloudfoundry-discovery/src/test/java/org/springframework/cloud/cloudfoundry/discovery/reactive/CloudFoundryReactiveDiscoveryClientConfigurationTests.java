@@ -18,10 +18,16 @@ package org.springframework.cloud.cloudfoundry.discovery.reactive;
 
 import org.cloudfoundry.operations.CloudFoundryOperations;
 import org.junit.jupiter.api.Test;
+import reactor.core.publisher.Flux;
 
 import org.springframework.boot.autoconfigure.AutoConfigurations;
+import org.springframework.boot.test.context.FilteredClassLoader;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
+import org.springframework.cloud.client.ReactiveCommonsClientAutoConfiguration;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.ReactiveDiscoveryClient;
+import org.springframework.cloud.client.discovery.health.reactive.ReactiveDiscoveryClientHealthIndicator;
 import org.springframework.cloud.cloudfoundry.CloudFoundryService;
 import org.springframework.context.annotation.Bean;
 
@@ -42,14 +48,9 @@ class CloudFoundryReactiveDiscoveryClientConfigurationTests {
 	public void shouldNotHaveDiscoveryClientsWhenDiscoveryDisabled() {
 		contextRunner.withPropertyValues("spring.cloud.discovery.enabled=false")
 				.run(context -> {
-					assertThat(context.containsBean("cloudFoundryHeartbeatSender"))
-							.isFalse();
-					assertThat(context.containsBean("nativeCloudFoundryDiscoveryClient"))
-							.isFalse();
-					assertThat(context.containsBean("dnsBasedReactiveDiscoveryClient"))
-							.isFalse();
-					assertThat(context.containsBean("appServiceReactiveDiscoveryClient"))
-							.isFalse();
+					assertThat(context).doesNotHaveBean("cloudFoundryHeartbeatSender");
+					assertThat(context).doesNotHaveBean(ReactiveDiscoveryClient.class);
+					assertThat(context).doesNotHaveBean(ReactiveDiscoveryClientHealthIndicator.class);
 				});
 	}
 
@@ -57,14 +58,9 @@ class CloudFoundryReactiveDiscoveryClientConfigurationTests {
 	public void shouldNotHaveDiscoveryClientsWhenReactiveDiscoveryDisabled() {
 		contextRunner.withPropertyValues("spring.cloud.discovery.reactive.enabled=false")
 				.run(context -> {
-					assertThat(context.containsBean("cloudFoundryHeartbeatSender"))
-							.isFalse();
-					assertThat(context.containsBean("nativeCloudFoundryDiscoveryClient"))
-							.isFalse();
-					assertThat(context.containsBean("dnsBasedReactiveDiscoveryClient"))
-							.isFalse();
-					assertThat(context.containsBean("appServiceReactiveDiscoveryClient"))
-							.isFalse();
+					assertThat(context).doesNotHaveBean("cloudFoundryHeartbeatSender");
+					assertThat(context).doesNotHaveBean(ReactiveDiscoveryClient.class);
+					assertThat(context).doesNotHaveBean(ReactiveDiscoveryClientHealthIndicator.class);
 				});
 	}
 
@@ -73,56 +69,89 @@ class CloudFoundryReactiveDiscoveryClientConfigurationTests {
 		contextRunner
 				.withPropertyValues("spring.cloud.cloudfoundry.discovery.enabled=false")
 				.run(context -> {
-					assertThat(context.containsBean("cloudFoundryHeartbeatSender"))
-							.isFalse();
-					assertThat(context.containsBean("nativeCloudFoundryDiscoveryClient"))
-							.isFalse();
-					assertThat(context.containsBean("dnsBasedReactiveDiscoveryClient"))
-							.isFalse();
-					assertThat(context.containsBean("appServiceReactiveDiscoveryClient"))
-							.isFalse();
+					assertThat(context).doesNotHaveBean("cloudFoundryHeartbeatSender");
+					assertThat(context).doesNotHaveBean(ReactiveDiscoveryClient.class);
+					assertThat(context).doesNotHaveBean(ReactiveDiscoveryClientHealthIndicator.class);
 				});
 	}
 
 	@Test
 	public void shouldUseNativeDiscovery() {
-		contextRunner.run(context -> {
-			assertThat(context.containsBean("nativeCloudFoundryDiscoveryClient"))
-					.isTrue();
-			assertThat(context.containsBean("dnsBasedReactiveDiscoveryClient")).isFalse();
-			assertThat(context.containsBean("appServiceReactiveDiscoveryClient"))
-					.isFalse();
+		contextRunner
+			.withConfiguration(AutoConfigurations.of(ReactiveCommonsClientAutoConfiguration.class))
+			.run(context -> {
+			assertThat(context).hasSingleBean(CloudFoundryReactiveHeartbeatSender.class);
+			assertThat(context).hasSingleBean(ReactiveDiscoveryClient.class);
+			assertThat(context).hasBean("nativeCloudFoundryDiscoveryClient");
+			assertThat(context).hasSingleBean(ReactiveDiscoveryClientHealthIndicator.class);
 		});
 	}
 
 	@Test
 	public void shouldUseDnsDiscovery() {
 		contextRunner
+				.withConfiguration(AutoConfigurations.of(ReactiveCommonsClientAutoConfiguration.class))
 				.withPropertyValues("spring.cloud.cloudfoundry.discovery.use-dns=true",
 						"spring.cloud.cloudfoundry.discovery.use-container-ip=true")
 				.run(context -> {
-					assertThat(context.containsBean("nativeCloudFoundryDiscoveryClient"))
-							.isFalse();
-					assertThat(context.containsBean("dnsBasedReactiveDiscoveryClient"))
-							.isTrue();
-					assertThat(context.containsBean("appServiceReactiveDiscoveryClient"))
-							.isFalse();
+					assertThat(context).hasSingleBean(CloudFoundryReactiveHeartbeatSender.class);
+					assertThat(context).hasSingleBean(ReactiveDiscoveryClient.class);
+					assertThat(context).hasBean("dnsBasedReactiveDiscoveryClient");
+					assertThat(context).hasSingleBean(ReactiveDiscoveryClientHealthIndicator.class);
 				});
 	}
 
 	@Test
 	public void shouldUseAppServiceDiscovery() {
 		contextRunner
+				.withConfiguration(AutoConfigurations.of(ReactiveCommonsClientAutoConfiguration.class))
 				.withPropertyValues("spring.cloud.cloudfoundry.discovery.use-dns=true",
 						"spring.cloud.cloudfoundry.discovery.use-container-ip=false")
 				.run(context -> {
-					assertThat(context.containsBean("nativeCloudFoundryDiscoveryClient"))
-							.isFalse();
-					assertThat(context.containsBean("dnsBasedReactiveDiscoveryClient"))
-							.isFalse();
-					assertThat(context.containsBean("appServiceReactiveDiscoveryClient"))
-							.isTrue();
+					assertThat(context).hasSingleBean(CloudFoundryReactiveHeartbeatSender.class);
+					assertThat(context).hasSingleBean(ReactiveDiscoveryClient.class);
+					assertThat(context).hasBean("appServiceReactiveDiscoveryClient");
+					assertThat(context).hasSingleBean(ReactiveDiscoveryClientHealthIndicator.class);
 				});
+	}
+
+	@Test
+	public void shouldUseCustomServiceDiscovery() {
+		contextRunner
+				.withConfiguration(AutoConfigurations.of(ReactiveCommonsClientAutoConfiguration.class))
+				.withUserConfiguration(CustomCloudFoundryReactiveDiscoveryClientConfiguration.class)
+				.run(context -> {
+					assertThat(context).hasSingleBean(CloudFoundryReactiveHeartbeatSender.class);
+					assertThat(context).hasSingleBean(ReactiveDiscoveryClient.class);
+					assertThat(context).doesNotHaveBean("nativeCloudFoundryDiscoveryClient");
+					assertThat(context).doesNotHaveBean("dnsBasedReactiveDiscoveryClient");
+					assertThat(context).doesNotHaveBean("appServiceReactiveDiscoveryClient");
+					assertThat(context).hasSingleBean(ReactiveDiscoveryClientHealthIndicator.class);
+				});
+	}
+
+	@Test
+	public void worksWithoutWebflux() {
+		contextRunner
+			.withClassLoader(
+				new FilteredClassLoader("org.springframework.web.reactive"))
+				.run(context -> {
+					assertThat(context).doesNotHaveBean(CloudFoundryReactiveHeartbeatSender.class);
+					assertThat(context).doesNotHaveBean(CloudFoundryReactiveDiscoveryClient.class);
+					assertThat(context).doesNotHaveBean(ReactiveDiscoveryClientHealthIndicator.class);
+				});
+	}
+
+	@Test
+	public void worksWithoutActuator() {
+		contextRunner
+			.withClassLoader(
+				new FilteredClassLoader("org.springframework.boot.actuate"))
+			.run(context -> {
+				assertThat(context).hasSingleBean(CloudFoundryReactiveHeartbeatSender.class);
+				assertThat(context).hasSingleBean(ReactiveDiscoveryClient.class);
+				assertThat(context).doesNotHaveBean(ReactiveDiscoveryClientHealthIndicator.class);
+			});
 	}
 
 	@TestConfiguration
@@ -136,6 +165,31 @@ class CloudFoundryReactiveDiscoveryClientConfigurationTests {
 		@Bean
 		public CloudFoundryService mockedService() {
 			return mock(CloudFoundryService.class);
+		}
+
+	}
+
+	@TestConfiguration
+	static class CustomCloudFoundryReactiveDiscoveryClientConfiguration {
+
+		@Bean
+		public CloudFoundryReactiveDiscoveryClient customDiscoveryClient() {
+			return new CloudFoundryReactiveDiscoveryClient() {
+				@Override
+				public String description() {
+					return "Custom CF Reactive Discovery Client";
+				}
+
+				@Override
+				public Flux<ServiceInstance> getInstances(String serviceId) {
+					return Flux.empty();
+				}
+
+				@Override
+				public Flux<String> getServices() {
+					return Flux.empty();
+				}
+			};
 		}
 
 	}

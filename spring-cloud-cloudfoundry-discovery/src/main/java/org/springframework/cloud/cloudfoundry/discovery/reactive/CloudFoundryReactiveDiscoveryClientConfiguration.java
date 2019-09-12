@@ -19,13 +19,22 @@ package org.springframework.cloud.cloudfoundry.discovery.reactive;
 import org.cloudfoundry.operations.CloudFoundryOperations;
 
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.actuate.health.ReactiveHealthIndicator;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cloud.client.CommonsClientAutoConfiguration;
 import org.springframework.cloud.client.ConditionalOnDiscoveryEnabled;
+import org.springframework.cloud.client.ConditionalOnDiscoveryHealthIndicatorEnabled;
 import org.springframework.cloud.client.ConditionalOnReactiveDiscoveryEnabled;
+import org.springframework.cloud.client.ReactiveCommonsClientAutoConfiguration;
+import org.springframework.cloud.client.discovery.composite.reactive.ReactiveCompositeDiscoveryClientAutoConfiguration;
+import org.springframework.cloud.client.discovery.health.DiscoveryClientHealthIndicatorProperties;
+import org.springframework.cloud.client.discovery.health.reactive.ReactiveDiscoveryClientHealthIndicator;
 import org.springframework.cloud.cloudfoundry.CloudFoundryService;
 import org.springframework.cloud.cloudfoundry.discovery.CloudFoundryDiscoveryProperties;
 import org.springframework.cloud.cloudfoundry.discovery.ConditionalOnCloudFoundryDiscoveryEnabled;
@@ -44,6 +53,8 @@ import org.springframework.context.annotation.Configuration;
 @ConditionalOnReactiveDiscoveryEnabled
 @ConditionalOnCloudFoundryDiscoveryEnabled
 @EnableConfigurationProperties(CloudFoundryDiscoveryProperties.class)
+@AutoConfigureAfter(ReactiveCompositeDiscoveryClientAutoConfiguration.class)
+@AutoConfigureBefore(ReactiveCommonsClientAutoConfiguration.class)
 public class CloudFoundryReactiveDiscoveryClientConfiguration {
 
 	@Bean
@@ -51,6 +62,16 @@ public class CloudFoundryReactiveDiscoveryClientConfiguration {
 	public CloudFoundryReactiveHeartbeatSender cloudFoundryHeartbeatSender(
 			CloudFoundryReactiveDiscoveryClient client) {
 		return new CloudFoundryReactiveHeartbeatSender(client);
+	}
+
+	@Bean
+	@ConditionalOnClass(ReactiveHealthIndicator.class)
+	@ConditionalOnDiscoveryHealthIndicatorEnabled
+	@ConditionalOnBean(CloudFoundryReactiveDiscoveryClient.class)
+	public ReactiveDiscoveryClientHealthIndicator cloudFoundryReactiveDiscoveryClientHealthIndicator(
+			CloudFoundryReactiveDiscoveryClient client,
+		DiscoveryClientHealthIndicatorProperties properties) {
+		return new ReactiveDiscoveryClientHealthIndicator(client, properties);
 	}
 
 	@Configuration
@@ -63,7 +84,7 @@ public class CloudFoundryReactiveDiscoveryClientConfiguration {
 		public CloudFoundryReactiveDiscoveryClient nativeCloudFoundryDiscoveryClient(
 				CloudFoundryOperations cf, CloudFoundryService svc,
 				CloudFoundryDiscoveryProperties cloudFoundryDiscoveryProperties) {
-			return new CloudFoundryReactiveDiscoveryClient(cf, svc,
+			return new CloudFoundryNativeReactiveDiscoveryClient(cf, svc,
 					cloudFoundryDiscoveryProperties);
 		}
 
@@ -79,7 +100,7 @@ public class CloudFoundryReactiveDiscoveryClientConfiguration {
 				value = "spring.cloud.cloudfoundry.discovery.use-container-ip",
 				havingValue = "true")
 		@ConditionalOnMissingBean(CloudFoundryReactiveDiscoveryClient.class)
-		public SimpleDnsBasedReactiveDiscoveryClient dnsBasedReactiveDiscoveryClient(
+		public CloudFoundryReactiveDiscoveryClient dnsBasedReactiveDiscoveryClient(
 				ObjectProvider<ServiceIdToHostnameConverter> provider,
 				CloudFoundryDiscoveryProperties properties) {
 			ServiceIdToHostnameConverter converter = provider.getIfAvailable();
@@ -93,7 +114,7 @@ public class CloudFoundryReactiveDiscoveryClientConfiguration {
 				value = "spring.cloud.cloudfoundry.discovery.use-container-ip",
 				havingValue = "false", matchIfMissing = true)
 		@ConditionalOnMissingBean(CloudFoundryReactiveDiscoveryClient.class)
-		public CloudFoundryAppServiceReactiveDiscoveryClient appServiceReactiveDiscoveryClient(
+		public CloudFoundryReactiveDiscoveryClient appServiceReactiveDiscoveryClient(
 				CloudFoundryOperations cf, CloudFoundryService svc,
 				CloudFoundryDiscoveryProperties properties) {
 			return new CloudFoundryAppServiceReactiveDiscoveryClient(cf, svc, properties);

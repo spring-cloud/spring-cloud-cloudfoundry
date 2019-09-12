@@ -35,7 +35,7 @@ import org.springframework.cloud.cloudfoundry.discovery.CloudFoundryDiscoveryPro
  * Service Discovery for Container Networking in Cloud Foundry</a>
  */
 public class CloudFoundryAppServiceReactiveDiscoveryClient
-		extends CloudFoundryReactiveDiscoveryClient {
+		extends CloudFoundryNativeReactiveDiscoveryClient {
 
 	private static final String INTERNAL_DOMAIN = "apps.internal";
 
