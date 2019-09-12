@@ -46,9 +46,6 @@ public class CloudFoundryNativeReactiveDiscoveryClient
 
 	private final CloudFoundryDiscoveryProperties properties;
 
-	private final String description = "Cloud Foundry "
-			+ ReactiveDiscoveryClient.class.getName() + " implementation";
-
 	CloudFoundryNativeReactiveDiscoveryClient(CloudFoundryOperations operations,
 			CloudFoundryService svc, CloudFoundryDiscoveryProperties properties) {
 		this.cloudFoundryService = svc;
@@ -58,7 +55,7 @@ public class CloudFoundryNativeReactiveDiscoveryClient
 
 	@Override
 	public String description() {
-		return this.description;
+		return "CF Reactive Service Discovery Client";
 	}
 
 	@Override

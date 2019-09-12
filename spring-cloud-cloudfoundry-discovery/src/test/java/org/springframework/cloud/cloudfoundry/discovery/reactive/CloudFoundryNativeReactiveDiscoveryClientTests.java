@@ -63,7 +63,7 @@ class CloudFoundryNativeReactiveDiscoveryClientTests {
 	public void verifyDefaults() {
 		when(properties.getOrder()).thenReturn(0);
 		assertThat(client.description()).isEqualTo(
-				"Cloud Foundry org.springframework.cloud.client.discovery.ReactiveDiscoveryClient implementation");
+				"CF Reactive Service Discovery Client");
 		assertThat(client.getOrder()).isEqualTo(0);
 	}
 
