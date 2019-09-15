@@ -92,7 +92,8 @@ public class CloudFoundryNativeReactiveDiscoveryClient
 		metadata.put("applicationId", applicationId);
 		metadata.put("instanceId", applicationIndex);
 
-		return new DefaultServiceInstance(instanceId, name, url, 80, secure, metadata);
+		return new DefaultServiceInstance(instanceId, name, url, secure ? 443 : 80,
+				secure, metadata);
 	}
 
 }
