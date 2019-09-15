@@ -28,6 +28,7 @@ import reactor.core.publisher.Mono;
 
 import org.springframework.cloud.client.DefaultServiceInstance;
 import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.ReactiveDiscoveryClient;
 import org.springframework.cloud.cloudfoundry.discovery.CloudFoundryDiscoveryProperties;
 
 /**
@@ -39,8 +40,7 @@ import org.springframework.cloud.cloudfoundry.discovery.CloudFoundryDiscoveryPro
  * "https://www.cloudfoundry.org/blog/polyglot-service-discovery-container-networking-cloud-foundry/">Polyglot
  * Service Discovery for Container Networking in Cloud Foundry</a>
  */
-public class SimpleDnsBasedReactiveDiscoveryClient
-		implements CloudFoundryReactiveDiscoveryClient {
+public class SimpleDnsBasedReactiveDiscoveryClient implements ReactiveDiscoveryClient {
 
 	private static final Logger log = LoggerFactory
 			.getLogger(SimpleDnsBasedReactiveDiscoveryClient.class);
@@ -64,7 +64,7 @@ public class SimpleDnsBasedReactiveDiscoveryClient
 
 	@Override
 	public Flux<ServiceInstance> getInstances(String serviceId) {
-		return Mono.justOrEmpty(this.serviceIdToHostnameConverter.toHostname(serviceId))
+		return Mono.justOrEmpty(serviceIdToHostnameConverter.toHostname(serviceId))
 				.flatMapMany(getInetAddresses())
 				.map(address -> new DefaultServiceInstance(serviceId,
 						address.getHostAddress(), 8080, false));

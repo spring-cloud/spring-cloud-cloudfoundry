@@ -16,6 +16,7 @@
 
 package org.springframework.cloud.cloudfoundry.discovery.reactive;
 
+import org.springframework.cloud.client.discovery.ReactiveDiscoveryClient;
 import org.springframework.cloud.client.discovery.event.HeartbeatEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
@@ -32,12 +33,11 @@ import org.springframework.stereotype.Component;
 public class CloudFoundryReactiveHeartbeatSender
 		implements ApplicationEventPublisherAware {
 
-	private final CloudFoundryReactiveDiscoveryClient client;
+	private final ReactiveDiscoveryClient client;
 
 	private ApplicationEventPublisher publisher;
 
-	public CloudFoundryReactiveHeartbeatSender(
-			CloudFoundryReactiveDiscoveryClient client) {
+	public CloudFoundryReactiveHeartbeatSender(ReactiveDiscoveryClient client) {
 		this.client = client;
 	}
 

@@ -137,13 +137,9 @@ class CloudFoundryReactiveDiscoveryClientConfigurationTests {
 				.run(context -> {
 					assertThat(context)
 							.hasSingleBean(CloudFoundryReactiveHeartbeatSender.class);
-					assertThat(context).hasSingleBean(ReactiveDiscoveryClient.class);
-					assertThat(context)
-							.doesNotHaveBean("nativeCloudFoundryDiscoveryClient");
-					assertThat(context)
-							.doesNotHaveBean("dnsBasedReactiveDiscoveryClient");
-					assertThat(context)
-							.doesNotHaveBean("appServiceReactiveDiscoveryClient");
+					assertThat(context).getBeans(ReactiveDiscoveryClient.class)
+							.hasSize(2);
+					assertThat(context).hasBean("nativeCloudFoundryDiscoveryClient");
 					assertThat(context)
 							.hasSingleBean(ReactiveDiscoveryClientHealthIndicator.class);
 				});
@@ -157,8 +153,7 @@ class CloudFoundryReactiveDiscoveryClientConfigurationTests {
 				.run(context -> {
 					assertThat(context)
 							.doesNotHaveBean(CloudFoundryReactiveHeartbeatSender.class);
-					assertThat(context)
-							.doesNotHaveBean(CloudFoundryReactiveDiscoveryClient.class);
+					assertThat(context).doesNotHaveBean(ReactiveDiscoveryClient.class);
 					assertThat(context).doesNotHaveBean(
 							ReactiveDiscoveryClientHealthIndicator.class);
 				});
@@ -197,11 +192,11 @@ class CloudFoundryReactiveDiscoveryClientConfigurationTests {
 	static class CustomCloudFoundryReactiveDiscoveryClientConfiguration {
 
 		@Bean
-		public CloudFoundryReactiveDiscoveryClient customDiscoveryClient() {
-			return new CloudFoundryReactiveDiscoveryClient() {
+		public ReactiveDiscoveryClient customDiscoveryClient() {
+			return new ReactiveDiscoveryClient() {
 				@Override
 				public String description() {
-					return "Custom CF Reactive Discovery Client";
+					return "Custom Reactive Discovery Client";
 				}
 
 				@Override

@@ -62,8 +62,8 @@ class CloudFoundryNativeReactiveDiscoveryClientTests {
 	@Test
 	public void verifyDefaults() {
 		when(properties.getOrder()).thenReturn(0);
-		assertThat(client.description()).isEqualTo(
-				"CF Reactive Service Discovery Client");
+		assertThat(client.description())
+				.isEqualTo("CF Reactive Service Discovery Client");
 		assertThat(client.getOrder()).isEqualTo(0);
 	}
 

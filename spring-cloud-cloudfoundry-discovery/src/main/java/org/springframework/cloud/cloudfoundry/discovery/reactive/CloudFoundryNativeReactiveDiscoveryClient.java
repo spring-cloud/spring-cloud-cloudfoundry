@@ -38,7 +38,7 @@ import org.springframework.cloud.cloudfoundry.discovery.CloudFoundryDiscoveryPro
  * @author Tim Ysewyn
  */
 public class CloudFoundryNativeReactiveDiscoveryClient
-		implements CloudFoundryReactiveDiscoveryClient {
+		implements ReactiveDiscoveryClient {
 
 	private final CloudFoundryService cloudFoundryService;
 
