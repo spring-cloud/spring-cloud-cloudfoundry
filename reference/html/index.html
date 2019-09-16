@@ -96,8 +96,9 @@ $(addBlockSwitches);
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_discovery">Discovery</a></li>
-<li><a href="#_single_sign_on">Single Sign On</a></li>
+<li><a href="#discovery">1. Discovery</a></li>
+<li><a href="#single-sign-on">2. Single Sign On</a></li>
+<li><a href="#configuration">3. Configuration</a></li>
 </ul>
 </div>
 </div>
@@ -137,7 +138,7 @@ the fact that it has to get an access token from Cloud Foundry.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_discovery"><a class="link" href="#_discovery">Discovery</a></h2>
+<h2 id="discovery"><a class="anchor" href="#discovery"></a><a class="link" href="#discovery">1. Discovery</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Here&#8217;s a Spring Cloud app with Cloud Foundry discovery:</p>
@@ -182,7 +183,7 @@ are configured, they default per the user&#8217;s profile in Cloud Foundry.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_single_sign_on"><a class="link" href="#_single_sign_on">Single Sign On</a></h2>
+<h2 id="single-sign-on"><a class="anchor" href="#single-sign-on"></a><a class="link" href="#single-sign-on">2. Single Sign On</a></h2>
 <div class="sectionbody">
 <div class="admonitionblock note">
 <table>
@@ -206,6 +207,14 @@ service called "sso", for instance, with credentials containing
 automatically to the Spring OAuth2 client that you enable with
 <code>@EnableOAuth2Sso</code> (from Spring Boot). The name of the service can be
 parameterized using <code>spring.oauth2.sso.serviceId</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="configuration"><a class="anchor" href="#configuration"></a><a class="link" href="#configuration">3. Configuration</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To see the list of all Sleuth related configuration properties please check <a href="appendix.html">the Appendix page</a>.</p>
 </div>
 </div>
 </div>
