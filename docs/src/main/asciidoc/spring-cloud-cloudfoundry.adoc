@@ -31,4 +31,4 @@ parameterized using `spring.oauth2.sso.serviceId`.
 
 == Configuration
 
-To see the list of all Sleuth related configuration properties please check link:appendix.html[the Appendix page].
+To see the list of all Spring Cloud Sloud Foundry related configuration properties please check link:appendix.html[the Appendix page].
