@@ -1,5 +1,5 @@
 = Spring Cloud for Cloud Foundry
-:nofooter:
+include::_attributes.adoc[]
 
 include::intro.adoc[]
 
@@ -28,3 +28,7 @@ service called "sso", for instance, with credentials containing
 automatically to the Spring OAuth2 client that you enable with
 `@EnableOAuth2Sso` (from Spring Boot). The name of the service can be
 parameterized using `spring.oauth2.sso.serviceId`.
+
+== Configuration
+
+To see the list of all Spring Cloud Sloud Foundry related configuration properties please check link:appendix.html[the Appendix page].
