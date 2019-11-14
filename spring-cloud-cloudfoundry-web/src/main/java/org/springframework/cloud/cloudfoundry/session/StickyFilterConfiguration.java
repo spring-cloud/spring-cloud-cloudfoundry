@@ -36,7 +36,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 /**
  * @author Dave Syer
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @PropertySource("spring-cloud-cloudfoundry.properties")
 public class StickyFilterConfiguration {
 

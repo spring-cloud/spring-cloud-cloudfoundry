@@ -46,7 +46,7 @@ import org.springframework.context.annotation.Lazy;
  * @author Ben Hale
  * @author Scott Frederick
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @ConditionalOnProperty(prefix = "spring.cloud.cloudfoundry",
 		name = { "username", "password" })
 @ConditionalOnClass(name = { "reactor.core.publisher.Flux",

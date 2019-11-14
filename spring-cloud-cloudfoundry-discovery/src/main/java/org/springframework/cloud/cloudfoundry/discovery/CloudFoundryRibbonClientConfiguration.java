@@ -31,7 +31,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * @author Josh Long
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class CloudFoundryRibbonClientConfiguration {
 
 	@RibbonClientName

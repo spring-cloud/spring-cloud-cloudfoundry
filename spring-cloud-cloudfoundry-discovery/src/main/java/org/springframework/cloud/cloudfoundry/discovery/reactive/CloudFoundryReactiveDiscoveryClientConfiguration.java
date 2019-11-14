@@ -44,7 +44,7 @@ import org.springframework.context.annotation.Configuration;
  *
  * @author Tim Ysewyn
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @ConditionalOnClass(CloudFoundryOperations.class)
 @ConditionalOnDiscoveryEnabled
 @ConditionalOnReactiveDiscoveryEnabled
@@ -54,7 +54,7 @@ import org.springframework.context.annotation.Configuration;
 @AutoConfigureBefore(ReactiveCommonsClientAutoConfiguration.class)
 public class CloudFoundryReactiveDiscoveryClientConfiguration {
 
-	@Configuration
+	@Configuration(proxyBeanMethods = false)
 	@ConditionalOnProperty(value = "spring.cloud.cloudfoundry.discovery.use-dns",
 			havingValue = "false", matchIfMissing = true)
 	public static class CloudFoundryNativeReactiveDiscoveryClientConfig {
@@ -86,12 +86,12 @@ public class CloudFoundryReactiveDiscoveryClientConfiguration {
 
 	}
 
-	@Configuration
+	@Configuration(proxyBeanMethods = false)
 	@ConditionalOnProperty(value = "spring.cloud.cloudfoundry.discovery.use-dns",
 			havingValue = "true")
 	public static class DnsBasedCloudFoundryReactiveDiscoveryClientConfig {
 
-		@Configuration
+		@Configuration(proxyBeanMethods = false)
 		@ConditionalOnProperty(
 				value = "spring.cloud.cloudfoundry.discovery.use-container-ip",
 				havingValue = "true")
@@ -126,7 +126,7 @@ public class CloudFoundryReactiveDiscoveryClientConfiguration {
 
 		}
 
-		@Configuration
+		@Configuration(proxyBeanMethods = false)
 		@ConditionalOnProperty(
 				value = "spring.cloud.cloudfoundry.discovery.use-container-ip",
 				havingValue = "false", matchIfMissing = true)

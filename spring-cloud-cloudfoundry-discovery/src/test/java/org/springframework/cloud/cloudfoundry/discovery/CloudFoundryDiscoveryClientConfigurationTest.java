@@ -101,7 +101,7 @@ public class CloudFoundryDiscoveryClientConfigurationTest {
 				});
 	}
 
-	@Configuration
+	@Configuration(proxyBeanMethods = false)
 	public static class CloudFoundryConfig {
 
 		@Bean

@@ -35,7 +35,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * @author Josh Long
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @ConditionalOnClass(CloudFoundryOperations.class)
 @ConditionalOnDiscoveryEnabled
 @ConditionalOnBlockingDiscoveryEnabled
@@ -50,7 +50,7 @@ public class CloudFoundryDiscoveryClientConfiguration {
 		return new CloudFoundryHeartbeatSender(client);
 	}
 
-	@Configuration
+	@Configuration(proxyBeanMethods = false)
 	@ConditionalOnProperty(value = "spring.cloud.cloudfoundry.discovery.use-dns",
 			havingValue = "false", matchIfMissing = true)
 	public static class CloudFoundryDiscoveryClientConfig {
@@ -66,7 +66,7 @@ public class CloudFoundryDiscoveryClientConfiguration {
 
 	}
 
-	@Configuration
+	@Configuration(proxyBeanMethods = false)
 	@ConditionalOnProperty(value = "spring.cloud.cloudfoundry.discovery.use-dns",
 			havingValue = "true")
 	public static class DnsBasedCloudFoundryDiscoveryClientConfig {
