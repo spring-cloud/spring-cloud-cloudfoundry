@@ -5,12 +5,12 @@
   <parent>
     <groupId>org.springframework.cloud</groupId>
     <artifactId>spring-cloud-cloudfoundry</artifactId>
-    <version>2.2.0.BUILD-SNAPSHOT</version>
+    <version>2.2.0.RELEASE</version>
     <relativePath>..</relativePath>
   </parent>
   <groupId>org.springframework.cloud</groupId>
   <artifactId>spring-cloud-cloudfoundry-web</artifactId>
-  <version>2.2.0.BUILD-SNAPSHOT</version>
+  <version>2.2.0.RELEASE</version>
   <description>Spring Cloud CloudFoundry Web</description>
   <url>https://spring.io/spring-cloud/spring-cloud-cloudfoundry/spring-cloud-cloudfoundry-web</url>
   <organization>
