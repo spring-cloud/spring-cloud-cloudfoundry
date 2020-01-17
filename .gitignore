@@ -17,3 +17,5 @@ bin
 .factorypath
 
 .vscode/
+.flattened-pom.xml
+
