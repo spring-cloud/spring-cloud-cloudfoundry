@@ -1,5 +1,4 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-org.springframework.cloud.cloudfoundry.discovery.RibbonCloudFoundryAutoConfiguration
+#org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 # Discovery Client Configuration
 org.springframework.cloud.client.discovery.EnableDiscoveryClient=\
 org.springframework.cloud.cloudfoundry.discovery.CloudFoundryDiscoveryClientConfiguration, \

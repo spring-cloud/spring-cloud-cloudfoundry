@@ -27,7 +27,7 @@ import org.junit.runners.Suite.SuiteClasses;
  * @author Dave Syer
  */
 @RunWith(Suite.class)
-@SuiteClasses({ CloudFoundryServerListTest.class })
+@SuiteClasses({})
 @Ignore
 public class AdhocTestSuite {
 
