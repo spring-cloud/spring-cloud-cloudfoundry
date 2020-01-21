@@ -37,7 +37,7 @@ public class CloudFoundryDiscoveryProperties {
 	private long heartbeatFrequency = 5000;
 
 	/**
-	 * Port to use when no port is defined by ribbon.
+	 * Port to use when no port is defined by service discovery.
 	 */
 	private int defaultServerPort = 80;
 
