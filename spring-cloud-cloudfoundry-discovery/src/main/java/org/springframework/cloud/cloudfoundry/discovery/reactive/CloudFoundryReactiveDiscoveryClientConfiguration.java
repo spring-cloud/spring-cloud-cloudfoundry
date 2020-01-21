@@ -89,13 +89,13 @@ public class CloudFoundryReactiveDiscoveryClientConfiguration {
 	@Configuration(proxyBeanMethods = false)
 	@ConditionalOnProperty(value = "spring.cloud.cloudfoundry.discovery.use-dns",
 			havingValue = "true")
-	public static class DnsBasedCloudFoundryReactiveDiscoveryClientConfig {
+	public static class DnsConfig {
 
 		@Configuration(proxyBeanMethods = false)
 		@ConditionalOnProperty(
 				value = "spring.cloud.cloudfoundry.discovery.use-container-ip",
 				havingValue = "true")
-		public static class CloudFoundrySimpleDnsBasedReactiveDiscoveryClientConfig {
+		public static class SimpleDnsConfig {
 
 			@Bean
 			@ConditionalOnMissingBean
@@ -130,7 +130,7 @@ public class CloudFoundryReactiveDiscoveryClientConfiguration {
 		@ConditionalOnProperty(
 				value = "spring.cloud.cloudfoundry.discovery.use-container-ip",
 				havingValue = "false", matchIfMissing = true)
-		public static class CloudFoundryAppServiceReactiveDiscoveryClientConfig {
+		public static class AppServiceConfig {
 
 			@Bean
 			@ConditionalOnMissingBean
