@@ -62,7 +62,12 @@ public class CloudFoundryAppServiceReactiveDiscoveryClient
 	}
 
 	protected String getRouteURL(List<String> urls) {
-		return urls.stream().filter(this::isInternalDomain).findFirst().orElse("");
+		for (String url : urls) {
+			if (isInternalDomain(url)) {
+				return url;
+			}
+		}
+		return "";
 	}
 
 }

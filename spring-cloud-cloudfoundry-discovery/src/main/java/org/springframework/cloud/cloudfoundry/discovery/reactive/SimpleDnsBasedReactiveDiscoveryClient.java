@@ -50,6 +50,18 @@ public class SimpleDnsBasedReactiveDiscoveryClient implements ReactiveDiscoveryC
 	private final CloudFoundryDiscoveryProperties properties;
 
 	public SimpleDnsBasedReactiveDiscoveryClient(
+			ServiceIdToHostnameConverter serviceIdToHostnameConverter) {
+		this.serviceIdToHostnameConverter = serviceIdToHostnameConverter;
+		// added for backward compatibility
+		this.properties = new CloudFoundryDiscoveryProperties();
+	}
+
+	public SimpleDnsBasedReactiveDiscoveryClient(
+			CloudFoundryDiscoveryProperties properties) {
+		this(serviceId -> serviceId + "." + properties.getInternalDomain());
+	}
+
+	public SimpleDnsBasedReactiveDiscoveryClient(
 			CloudFoundryDiscoveryProperties properties,
 			ServiceIdToHostnameConverter serviceIdToHostnameConverter) {
 		this.properties = properties;
