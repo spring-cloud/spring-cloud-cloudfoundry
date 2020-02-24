@@ -47,14 +47,15 @@ public class SimpleDnsBasedReactiveDiscoveryClient implements ReactiveDiscoveryC
 
 	private final ServiceIdToHostnameConverter serviceIdToHostnameConverter;
 
-	public SimpleDnsBasedReactiveDiscoveryClient(
-			ServiceIdToHostnameConverter serviceIdToHostnameConverter) {
-		this.serviceIdToHostnameConverter = serviceIdToHostnameConverter;
-	}
+	private final CloudFoundryDiscoveryProperties properties;
 
 	public SimpleDnsBasedReactiveDiscoveryClient(
-			CloudFoundryDiscoveryProperties properties) {
-		this(serviceId -> serviceId + "." + properties.getInternalDomain());
+			CloudFoundryDiscoveryProperties properties,
+			ServiceIdToHostnameConverter serviceIdToHostnameConverter) {
+		this.properties = properties;
+		this.serviceIdToHostnameConverter = serviceIdToHostnameConverter == null
+				? (serviceId -> serviceId + "." + this.properties.getInternalDomain())
+				: serviceIdToHostnameConverter;
 	}
 
 	@Override
@@ -67,7 +68,13 @@ public class SimpleDnsBasedReactiveDiscoveryClient implements ReactiveDiscoveryC
 		return Mono.justOrEmpty(serviceIdToHostnameConverter.toHostname(serviceId))
 				.flatMapMany(getInetAddresses())
 				.map(address -> new DefaultServiceInstance(serviceId,
-						address.getHostAddress(), 8080, false));
+						address.getHostAddress(),
+						properties.getDefaultServerPort() != 80
+								? properties.getDefaultServerPort()
+								: (serviceIdToHostnameConverter.toHostname(serviceId)
+										.endsWith(properties.getInternalDomain()) ? 8080
+												: properties.getDefaultServerPort()),
+						false));
 	}
 
 	private Function<String, Publisher<? extends InetAddress>> getInetAddresses() {

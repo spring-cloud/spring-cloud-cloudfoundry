@@ -16,6 +16,8 @@
 
 package org.springframework.cloud.cloudfoundry.discovery.reactive;
 
+import java.util.List;
+
 import org.cloudfoundry.operations.CloudFoundryOperations;
 import reactor.core.publisher.Flux;
 
@@ -36,8 +38,6 @@ import org.springframework.cloud.cloudfoundry.discovery.CloudFoundryDiscoveryPro
  */
 public class CloudFoundryAppServiceReactiveDiscoveryClient
 		extends CloudFoundryNativeReactiveDiscoveryClient {
-
-	private static final String INTERNAL_DOMAIN = "apps.internal";
 
 	private final CloudFoundryService cloudFoundryService;
 
@@ -61,8 +61,8 @@ public class CloudFoundryAppServiceReactiveDiscoveryClient
 				.map(this::mapApplicationInstanceToServiceInstance);
 	}
 
-	private boolean isInternalDomain(String url) {
-		return url != null && url.endsWith(INTERNAL_DOMAIN);
+	protected String getRouteURL(List<String> urls) {
+		return urls.stream().filter(this::isInternalDomain).findFirst().orElse("");
 	}
 
 }

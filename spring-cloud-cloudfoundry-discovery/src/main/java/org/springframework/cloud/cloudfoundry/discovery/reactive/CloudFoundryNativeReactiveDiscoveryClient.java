@@ -17,6 +17,7 @@
 package org.springframework.cloud.cloudfoundry.discovery.reactive;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.cloudfoundry.operations.CloudFoundryOperations;
 import org.cloudfoundry.operations.applications.ApplicationDetail;
@@ -85,15 +86,25 @@ public class CloudFoundryNativeReactiveDiscoveryClient
 		String instanceId = applicationId + "." + applicationIndex;
 		String name = applicationDetail.getName();
 		String url = applicationDetail.getUrls().size() > 0
-				? applicationDetail.getUrls().get(0) : null;
-		boolean secure = (url + "").toLowerCase().startsWith("https");
+				? getRouteURL(applicationDetail.getUrls()) : "";
 
 		HashMap<String, String> metadata = new HashMap<>();
 		metadata.put("applicationId", applicationId);
 		metadata.put("instanceId", applicationIndex);
 
-		return new DefaultServiceInstance(instanceId, name, url, secure ? 443 : 80,
-				secure, metadata);
+		return new DefaultServiceInstance(instanceId, name, url,
+				properties.getDefaultServerPort() != 80
+						? properties.getDefaultServerPort() : (isInternalDomain(url))
+								? 8080 : properties.getDefaultServerPort(),
+				false, metadata);
+	}
+
+	protected final boolean isInternalDomain(String url) {
+		return (url != null) && url.endsWith(properties.getInternalDomain());
+	}
+
+	protected String getRouteURL(List<String> urls) {
+		return urls.get(0);
 	}
 
 }
