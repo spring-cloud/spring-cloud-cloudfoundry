@@ -19,7 +19,6 @@
 		<cf-java-client.version>3.9.0.RELEASE</cf-java-client.version>
 		<bintray.package>cloudfoundry</bintray.package>
 		<main.basedir>${basedir}</main.basedir>
-		<spring-cloud-netflix.version>3.0.0.BUILD-SNAPSHOT</spring-cloud-netflix.version>
 		<spring-cloud-commons.version>3.0.0.BUILD-SNAPSHOT</spring-cloud-commons.version>
 	</properties>
 
@@ -84,13 +83,6 @@
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-cloudfoundry-dependencies</artifactId>
 				<version>${project.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-netflix-dependencies</artifactId>
-				<version>${spring-cloud-netflix.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
