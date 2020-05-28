@@ -8,11 +8,11 @@
 |spring.cloud.cloudfoundry.discovery.order | 0 | Order of the discovery client used by `CompositeDiscoveryClient` for sorting available clients.
 |spring.cloud.cloudfoundry.discovery.use-container-ip | false | Whether to resolve hostname when BOSH DNS is used. In order to use this feature, spring.cloud.cloudfoundry.discovery.use-dns must be true.
 |spring.cloud.cloudfoundry.discovery.use-dns | false | Whether to use BOSH DNS for the discovery. In order to use this feature, your Cloud Foundry installation must support Service Discovery.
-|spring.cloud.cloudfoundry.org | null | Organization name to initially target.
-|spring.cloud.cloudfoundry.password | null | Password for user to authenticate and obtain token.
+|spring.cloud.cloudfoundry.org |  | Organization name to initially target.
+|spring.cloud.cloudfoundry.password |  | Password for user to authenticate and obtain token.
 |spring.cloud.cloudfoundry.skip-ssl-validation | false | null
-|spring.cloud.cloudfoundry.space | null | Space name to initially target.
-|spring.cloud.cloudfoundry.url | null | URL of Cloud Foundry API (Cloud Controller).
-|spring.cloud.cloudfoundry.username | null | Username to authenticate (usually an email address).
+|spring.cloud.cloudfoundry.space |  | Space name to initially target.
+|spring.cloud.cloudfoundry.url |  | URL of Cloud Foundry API (Cloud Controller).
+|spring.cloud.cloudfoundry.username |  | Username to authenticate (usually an email address).
 
 |===
