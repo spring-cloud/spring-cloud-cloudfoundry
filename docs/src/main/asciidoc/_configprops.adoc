@@ -10,7 +10,7 @@
 |spring.cloud.cloudfoundry.discovery.use-dns | false | Whether to use BOSH DNS for the discovery. In order to use this feature, your Cloud Foundry installation must support Service Discovery.
 |spring.cloud.cloudfoundry.org |  | Organization name to initially target.
 |spring.cloud.cloudfoundry.password |  | Password for user to authenticate and obtain token.
-|spring.cloud.cloudfoundry.skip-ssl-validation | false | null
+|spring.cloud.cloudfoundry.skip-ssl-validation | false | 
 |spring.cloud.cloudfoundry.space |  | Space name to initially target.
 |spring.cloud.cloudfoundry.url |  | URL of Cloud Foundry API (Cloud Controller).
 |spring.cloud.cloudfoundry.username |  | Username to authenticate (usually an email address).
