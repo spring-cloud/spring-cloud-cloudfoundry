@@ -15,7 +15,6 @@
 	<properties>
 		<docs.main>spring-cloud-cloudfoundry</docs.main>
 		<main.basedir>${basedir}/..</main.basedir>
-		<docs.whitelisted.branches>1.0.x,1.1.x,2.1.x</docs.whitelisted.branches>
 		<configprops.inclusionPattern>spring.cloud.cloudfoundry.*</configprops.inclusionPattern>
 		<upload-docs-zip.phase>deploy</upload-docs-zip.phase>
 	</properties>
@@ -38,14 +37,7 @@
 		</dependency>
 	</dependencies>
 	<build>
-		<plugins>
-			<plugin>
-				<artifactId>maven-deploy-plugin</artifactId>
-				<configuration>
-					<skip>true</skip>
-				</configuration>
-			</plugin>
-		</plugins>
+		<sourceDirectory>src/main/asciidoc</sourceDirectory>
 	</build>
 	<profiles>
 		<profile>
