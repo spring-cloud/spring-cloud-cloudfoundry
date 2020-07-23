@@ -16,7 +16,7 @@
 	</parent>
 
 	<properties>
-		<cf-java-client.version>3.9.0.RELEASE</cf-java-client.version>
+		<cf-java-client.version>3.25.0.RELEASE</cf-java-client.version>
 		<bintray.package>cloudfoundry</bintray.package>
 		<main.basedir>${basedir}</main.basedir>
 		<spring-cloud-netflix.version>2.2.4.BUILD-SNAPSHOT</spring-cloud-netflix.version>

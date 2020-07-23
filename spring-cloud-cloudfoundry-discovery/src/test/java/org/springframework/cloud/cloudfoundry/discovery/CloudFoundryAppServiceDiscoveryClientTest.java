@@ -61,7 +61,7 @@ public class CloudFoundryAppServiceDiscoveryClientTest {
 		ApplicationDetail applicationDetail = ApplicationDetail.builder().id("billing1")
 				.name("billing").instances(1).memoryLimit(1024).stack("cflinux2")
 				.diskQuota(1024).requestedState("Running").runningInstances(1)
-				.url("billing.apps.example.com", "billing.apps.internal").build();
+				.urls("billing.apps.example.com", "billing.apps.internal").build();
 		given(this.cloudFoundryService.getApplicationInstances(serviceId))
 				.willReturn(Flux.just(Tuples.of(applicationDetail,
 						InstanceDetail.builder().index("0").build())));
@@ -83,7 +83,7 @@ public class CloudFoundryAppServiceDiscoveryClientTest {
 		ApplicationDetail applicationDetail = ApplicationDetail.builder().id("billing-id")
 				.name("billing").instances(3).memoryLimit(1024).stack("cflinux2")
 				.diskQuota(1024).requestedState("Running").runningInstances(3)
-				.url("billing.apps.example.com", "billing.apps.internal").build();
+				.urls("billing.apps.example.com", "billing.apps.internal").build();
 		given(this.cloudFoundryService.getApplicationInstances(serviceId))
 				.willReturn(Flux.just(
 						Tuples.of(applicationDetail,
