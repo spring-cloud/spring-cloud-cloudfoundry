@@ -26,7 +26,6 @@ import org.cloudfoundry.reactor.tokenprovider.PasswordGrantTokenProvider;
 import org.cloudfoundry.reactor.uaa.ReactorUaaClient;
 import org.cloudfoundry.routing.RoutingClient;
 import org.junit.Assume;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import org.springframework.boot.autoconfigure.AutoConfigurations;
@@ -58,7 +57,7 @@ public class CloudFoundryClientAutoConfigurationTest {
 	}
 
 	@Test
-	@Ignore // see https://github.com/spring-cloud/spring-cloud-cloudfoundry/issues/65
+	// @Ignore // see https://github.com/spring-cloud/spring-cloud-cloudfoundry/issues/65
 	public void autoConfiguresBeansWithAllProperties() {
 		this.contextRunner.withPropertyValues("spring.cloud.cloudfoundry.username=user",
 				"spring.cloud.cloudfoundry.password=secret",
@@ -74,7 +73,7 @@ public class CloudFoundryClientAutoConfigurationTest {
 	}
 
 	@Test
-	@Ignore // see https://github.com/spring-cloud/spring-cloud-cloudfoundry/issues/65
+	// @Ignore // see https://github.com/spring-cloud/spring-cloud-cloudfoundry/issues/65
 	public void autoConfiguresBeansWithMinimalProperties() {
 		this.contextRunner.withPropertyValues("spring.cloud.cloudfoundry.username=user",
 				"spring.cloud.cloudfoundry.password=secret").run((context) -> {
