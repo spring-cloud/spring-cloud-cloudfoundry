@@ -57,7 +57,6 @@ public class CloudFoundryClientAutoConfigurationTest {
 	}
 
 	@Test
-	// @Ignore // see https://github.com/spring-cloud/spring-cloud-cloudfoundry/issues/65
 	public void autoConfiguresBeansWithAllProperties() {
 		this.contextRunner.withPropertyValues("spring.cloud.cloudfoundry.username=user",
 				"spring.cloud.cloudfoundry.password=secret",
@@ -73,7 +72,6 @@ public class CloudFoundryClientAutoConfigurationTest {
 	}
 
 	@Test
-	// @Ignore // see https://github.com/spring-cloud/spring-cloud-cloudfoundry/issues/65
 	public void autoConfiguresBeansWithMinimalProperties() {
 		this.contextRunner.withPropertyValues("spring.cloud.cloudfoundry.username=user",
 				"spring.cloud.cloudfoundry.password=secret").run((context) -> {
