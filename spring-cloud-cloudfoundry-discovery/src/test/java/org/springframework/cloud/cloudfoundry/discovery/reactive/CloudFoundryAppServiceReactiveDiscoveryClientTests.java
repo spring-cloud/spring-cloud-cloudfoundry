@@ -32,6 +32,7 @@ import reactor.util.function.Tuples;
 
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.cloudfoundry.CloudFoundryService;
+import org.springframework.cloud.cloudfoundry.discovery.CloudFoundryDiscoveryProperties;
 
 import static org.mockito.Mockito.when;
 
@@ -44,11 +45,15 @@ class CloudFoundryAppServiceReactiveDiscoveryClientTests {
 	@Mock
 	private CloudFoundryService svc;
 
+	@Mock
+	private CloudFoundryDiscoveryProperties properties;
+
 	@InjectMocks
 	private CloudFoundryAppServiceReactiveDiscoveryClient client;
 
 	@Test
 	public void shouldReturnFluxOfServiceInstances() {
+		when(properties.getInternalDomain()).thenReturn("apps.internal");
 		ApplicationDetail appDetail1 = ApplicationDetail.builder()
 				.id(UUID.randomUUID().toString()).stack("stack").instances(1)
 				.memoryLimit(1024).requestedState("requestedState").diskQuota(1024)

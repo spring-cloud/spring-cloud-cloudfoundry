@@ -103,9 +103,7 @@ public class CloudFoundryReactiveDiscoveryClientConfiguration {
 					ObjectProvider<ServiceIdToHostnameConverter> provider,
 					CloudFoundryDiscoveryProperties properties) {
 				ServiceIdToHostnameConverter converter = provider.getIfAvailable();
-				return converter == null
-						? new SimpleDnsBasedReactiveDiscoveryClient(properties)
-						: new SimpleDnsBasedReactiveDiscoveryClient(converter);
+				return new SimpleDnsBasedReactiveDiscoveryClient(properties, converter);
 			}
 
 			@Bean
