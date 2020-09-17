@@ -34,16 +34,14 @@ import org.springframework.cloud.cloudfoundry.discovery.CloudFoundryDiscoveryPro
  * "https://www.cloudfoundry.org/blog/polyglot-service-discovery-container-networking-cloud-foundry/">Polyglot
  * Service Discovery for Container Networking in Cloud Foundry</a>
  */
-public class CloudFoundryAppServiceReactiveDiscoveryClient
-		extends CloudFoundryNativeReactiveDiscoveryClient {
+public class CloudFoundryAppServiceReactiveDiscoveryClient extends CloudFoundryNativeReactiveDiscoveryClient {
 
 	private static final String INTERNAL_DOMAIN = "apps.internal";
 
 	private final CloudFoundryService cloudFoundryService;
 
-	CloudFoundryAppServiceReactiveDiscoveryClient(
-			CloudFoundryOperations cloudFoundryOperations, CloudFoundryService svc,
-			CloudFoundryDiscoveryProperties cloudFoundryDiscoveryProperties) {
+	CloudFoundryAppServiceReactiveDiscoveryClient(CloudFoundryOperations cloudFoundryOperations,
+			CloudFoundryService svc, CloudFoundryDiscoveryProperties cloudFoundryDiscoveryProperties) {
 		super(cloudFoundryOperations, svc, cloudFoundryDiscoveryProperties);
 		this.cloudFoundryService = svc;
 	}
@@ -56,8 +54,7 @@ public class CloudFoundryAppServiceReactiveDiscoveryClient
 	@Override
 	public Flux<ServiceInstance> getInstances(String serviceId) {
 		return cloudFoundryService.getApplicationInstances(serviceId)
-				.filter(tuple -> tuple.getT1().getUrls().stream()
-						.anyMatch(this::isInternalDomain))
+				.filter(tuple -> tuple.getT1().getUrls().stream().anyMatch(this::isInternalDomain))
 				.map(this::mapApplicationInstanceToServiceInstance);
 	}
 

@@ -48,11 +48,10 @@ public class CloudFoundryDiscoveryClient implements DiscoveryClient {
 
 	private final CloudFoundryDiscoveryProperties properties;
 
-	private final String description = "Cloud Foundry " + DiscoveryClient.class.getName()
-			+ " implementation";
+	private final String description = "Cloud Foundry " + DiscoveryClient.class.getName() + " implementation";
 
-	CloudFoundryDiscoveryClient(CloudFoundryOperations cloudFoundryOperations,
-			CloudFoundryService svc, CloudFoundryDiscoveryProperties properties) {
+	CloudFoundryDiscoveryClient(CloudFoundryOperations cloudFoundryOperations, CloudFoundryService svc,
+			CloudFoundryDiscoveryProperties properties) {
 		this.cloudFoundryService = svc;
 		this.cloudFoundryOperations = cloudFoundryOperations;
 		this.properties = properties;
@@ -73,24 +72,22 @@ public class CloudFoundryDiscoveryClient implements DiscoveryClient {
 			String applicationIndex = instanceDetail.getIndex();
 			String instanceId = applicationId + "." + applicationIndex;
 			String name = applicationDetail.getName();
-			String url = applicationDetail.getUrls().size() > 0
-					? applicationDetail.getUrls().get(0) : null;
+			String url = applicationDetail.getUrls().size() > 0 ? applicationDetail.getUrls().get(0) : null;
 			boolean secure = (url + "").toLowerCase().startsWith("https");
 
 			HashMap<String, String> metadata = new HashMap<>();
 			metadata.put("applicationId", applicationId);
 			metadata.put("instanceId", applicationIndex);
 
-			return (ServiceInstance) new DefaultServiceInstance(instanceId, name, url,
-					secure ? 443 : 80, secure, metadata);
+			return (ServiceInstance) new DefaultServiceInstance(instanceId, name, url, secure ? 443 : 80, secure,
+					metadata);
 		}).collectList().blockOptional().orElse(new ArrayList<>());
 	}
 
 	@Override
 	public List<String> getServices() {
-		return this.cloudFoundryOperations.applications().list()
-				.map(ApplicationSummary::getName).collectList().blockOptional()
-				.orElse(new ArrayList<>());
+		return this.cloudFoundryOperations.applications().list().map(ApplicationSummary::getName).collectList()
+				.blockOptional().orElse(new ArrayList<>());
 	}
 
 	@Override

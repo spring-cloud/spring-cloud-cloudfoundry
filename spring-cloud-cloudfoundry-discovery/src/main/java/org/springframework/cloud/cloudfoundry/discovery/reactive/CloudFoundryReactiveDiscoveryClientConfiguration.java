@@ -55,26 +55,22 @@ import org.springframework.context.annotation.Configuration;
 public class CloudFoundryReactiveDiscoveryClientConfiguration {
 
 	@Configuration(proxyBeanMethods = false)
-	@ConditionalOnProperty(value = "spring.cloud.cloudfoundry.discovery.use-dns",
-			havingValue = "false", matchIfMissing = true)
+	@ConditionalOnProperty(value = "spring.cloud.cloudfoundry.discovery.use-dns", havingValue = "false",
+			matchIfMissing = true)
 	public static class CloudFoundryNativeReactiveDiscoveryClientConfig {
 
 		@Bean
 		@ConditionalOnMissingBean
-		public CloudFoundryNativeReactiveDiscoveryClient nativeCloudFoundryDiscoveryClient(
-				CloudFoundryOperations cf, CloudFoundryService svc,
-				CloudFoundryDiscoveryProperties cloudFoundryDiscoveryProperties) {
-			return new CloudFoundryNativeReactiveDiscoveryClient(cf, svc,
-					cloudFoundryDiscoveryProperties);
+		public CloudFoundryNativeReactiveDiscoveryClient nativeCloudFoundryDiscoveryClient(CloudFoundryOperations cf,
+				CloudFoundryService svc, CloudFoundryDiscoveryProperties cloudFoundryDiscoveryProperties) {
+			return new CloudFoundryNativeReactiveDiscoveryClient(cf, svc, cloudFoundryDiscoveryProperties);
 		}
 
 		@Bean
-		@ConditionalOnClass(
-				name = "org.springframework.boot.actuate.health.ReactiveHealthIndicator")
+		@ConditionalOnClass(name = "org.springframework.boot.actuate.health.ReactiveHealthIndicator")
 		@ConditionalOnDiscoveryHealthIndicatorEnabled
 		public ReactiveDiscoveryClientHealthIndicator cloudFoundryReactiveDiscoveryClientHealthIndicator(
-				CloudFoundryNativeReactiveDiscoveryClient client,
-				DiscoveryClientHealthIndicatorProperties properties) {
+				CloudFoundryNativeReactiveDiscoveryClient client, DiscoveryClientHealthIndicatorProperties properties) {
 			return new ReactiveDiscoveryClientHealthIndicator(client, properties);
 		}
 
@@ -87,34 +83,27 @@ public class CloudFoundryReactiveDiscoveryClientConfiguration {
 	}
 
 	@Configuration(proxyBeanMethods = false)
-	@ConditionalOnProperty(value = "spring.cloud.cloudfoundry.discovery.use-dns",
-			havingValue = "true")
+	@ConditionalOnProperty(value = "spring.cloud.cloudfoundry.discovery.use-dns", havingValue = "true")
 	public static class DnsConfig {
 
 		@Configuration(proxyBeanMethods = false)
-		@ConditionalOnProperty(
-				value = "spring.cloud.cloudfoundry.discovery.use-container-ip",
-				havingValue = "true")
+		@ConditionalOnProperty(value = "spring.cloud.cloudfoundry.discovery.use-container-ip", havingValue = "true")
 		public static class SimpleDnsConfig {
 
 			@Bean
 			@ConditionalOnMissingBean
 			public SimpleDnsBasedReactiveDiscoveryClient dnsBasedReactiveDiscoveryClient(
-					ObjectProvider<ServiceIdToHostnameConverter> provider,
-					CloudFoundryDiscoveryProperties properties) {
+					ObjectProvider<ServiceIdToHostnameConverter> provider, CloudFoundryDiscoveryProperties properties) {
 				ServiceIdToHostnameConverter converter = provider.getIfAvailable();
-				return converter == null
-						? new SimpleDnsBasedReactiveDiscoveryClient(properties)
+				return converter == null ? new SimpleDnsBasedReactiveDiscoveryClient(properties)
 						: new SimpleDnsBasedReactiveDiscoveryClient(converter);
 			}
 
 			@Bean
-			@ConditionalOnClass(
-					name = "org.springframework.boot.actuate.health.ReactiveHealthIndicator")
+			@ConditionalOnClass(name = "org.springframework.boot.actuate.health.ReactiveHealthIndicator")
 			@ConditionalOnDiscoveryHealthIndicatorEnabled
 			public ReactiveDiscoveryClientHealthIndicator cloudFoundryReactiveDiscoveryClientHealthIndicator(
-					SimpleDnsBasedReactiveDiscoveryClient client,
-					DiscoveryClientHealthIndicatorProperties properties) {
+					SimpleDnsBasedReactiveDiscoveryClient client, DiscoveryClientHealthIndicatorProperties properties) {
 				return new ReactiveDiscoveryClientHealthIndicator(client, properties);
 			}
 
@@ -127,23 +116,19 @@ public class CloudFoundryReactiveDiscoveryClientConfiguration {
 		}
 
 		@Configuration(proxyBeanMethods = false)
-		@ConditionalOnProperty(
-				value = "spring.cloud.cloudfoundry.discovery.use-container-ip",
-				havingValue = "false", matchIfMissing = true)
+		@ConditionalOnProperty(value = "spring.cloud.cloudfoundry.discovery.use-container-ip", havingValue = "false",
+				matchIfMissing = true)
 		public static class AppServiceConfig {
 
 			@Bean
 			@ConditionalOnMissingBean
 			public CloudFoundryAppServiceReactiveDiscoveryClient appServiceReactiveDiscoveryClient(
-					CloudFoundryOperations cf, CloudFoundryService svc,
-					CloudFoundryDiscoveryProperties properties) {
-				return new CloudFoundryAppServiceReactiveDiscoveryClient(cf, svc,
-						properties);
+					CloudFoundryOperations cf, CloudFoundryService svc, CloudFoundryDiscoveryProperties properties) {
+				return new CloudFoundryAppServiceReactiveDiscoveryClient(cf, svc, properties);
 			}
 
 			@Bean
-			@ConditionalOnClass(
-					name = "org.springframework.boot.actuate.health.ReactiveHealthIndicator")
+			@ConditionalOnClass(name = "org.springframework.boot.actuate.health.ReactiveHealthIndicator")
 			@ConditionalOnDiscoveryHealthIndicatorEnabled
 			public ReactiveDiscoveryClientHealthIndicator cloudFoundryReactiveDiscoveryClientHealthIndicator(
 					CloudFoundryAppServiceReactiveDiscoveryClient client,

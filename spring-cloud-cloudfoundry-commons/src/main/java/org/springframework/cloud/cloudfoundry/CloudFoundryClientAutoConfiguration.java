@@ -47,12 +47,9 @@ import org.springframework.context.annotation.Lazy;
  * @author Scott Frederick
  */
 @Configuration(proxyBeanMethods = false)
-@ConditionalOnProperty(prefix = "spring.cloud.cloudfoundry",
-		name = { "username", "password" })
-@ConditionalOnClass(name = { "reactor.core.publisher.Flux",
-		"org.cloudfoundry.operations.DefaultCloudFoundryOperations",
-		"org.cloudfoundry.reactor.client.ReactorCloudFoundryClient",
-		"org.reactivestreams.Publisher" })
+@ConditionalOnProperty(prefix = "spring.cloud.cloudfoundry", name = { "username", "password" })
+@ConditionalOnClass(name = { "reactor.core.publisher.Flux", "org.cloudfoundry.operations.DefaultCloudFoundryOperations",
+		"org.cloudfoundry.reactor.client.ReactorCloudFoundryClient", "org.reactivestreams.Publisher" })
 @EnableConfigurationProperties(CloudFoundryProperties.class)
 public class CloudFoundryClientAutoConfiguration {
 
@@ -65,59 +62,50 @@ public class CloudFoundryClientAutoConfiguration {
 	@Bean
 	@Lazy
 	@ConditionalOnMissingBean
-	public CloudFoundryService cloudFoundryService(
-			CloudFoundryOperations cloudFoundryOperations) {
+	public CloudFoundryService cloudFoundryService(CloudFoundryOperations cloudFoundryOperations) {
 		return new CloudFoundryService(cloudFoundryOperations);
 	}
 
 	@Bean
 	@Lazy
 	@ConditionalOnMissingBean
-	public DefaultCloudFoundryOperations cloudFoundryOperations(
-			CloudFoundryClient cloudFoundryClient, DopplerClient dopplerClient,
-			RoutingClient routingClient, UaaClient uaaClient) {
+	public DefaultCloudFoundryOperations cloudFoundryOperations(CloudFoundryClient cloudFoundryClient,
+			DopplerClient dopplerClient, RoutingClient routingClient, UaaClient uaaClient) {
 		String organization = this.cloudFoundryProperties.getOrg();
 		String space = this.cloudFoundryProperties.getSpace();
-		return DefaultCloudFoundryOperations.builder()
-				.cloudFoundryClient(cloudFoundryClient).dopplerClient(dopplerClient)
-				.routingClient(routingClient).uaaClient(uaaClient)
+		return DefaultCloudFoundryOperations.builder().cloudFoundryClient(cloudFoundryClient)
+				.dopplerClient(dopplerClient).routingClient(routingClient).uaaClient(uaaClient)
 				.organization(organization).space(space).build();
 	}
 
 	@Bean
 	@Lazy
 	@ConditionalOnMissingBean
-	public ReactorCloudFoundryClient cloudFoundryClient(
-			ConnectionContext connectionContext, TokenProvider tokenProvider) {
-		return ReactorCloudFoundryClient.builder().connectionContext(connectionContext)
-				.tokenProvider(tokenProvider).build();
+	public ReactorCloudFoundryClient cloudFoundryClient(ConnectionContext connectionContext,
+			TokenProvider tokenProvider) {
+		return ReactorCloudFoundryClient.builder().connectionContext(connectionContext).tokenProvider(tokenProvider)
+				.build();
 	}
 
 	@Bean
 	@Lazy
 	@ConditionalOnMissingBean
-	public DopplerClient dopplerClient(ConnectionContext connectionContext,
-			TokenProvider tokenProvider) {
-		return ReactorDopplerClient.builder().connectionContext(connectionContext)
-				.tokenProvider(tokenProvider).build();
+	public DopplerClient dopplerClient(ConnectionContext connectionContext, TokenProvider tokenProvider) {
+		return ReactorDopplerClient.builder().connectionContext(connectionContext).tokenProvider(tokenProvider).build();
 	}
 
 	@Bean
 	@Lazy
 	@ConditionalOnMissingBean
-	public RoutingClient routingClient(ConnectionContext connectionContext,
-			TokenProvider tokenProvider) {
-		return ReactorRoutingClient.builder().connectionContext(connectionContext)
-				.tokenProvider(tokenProvider).build();
+	public RoutingClient routingClient(ConnectionContext connectionContext, TokenProvider tokenProvider) {
+		return ReactorRoutingClient.builder().connectionContext(connectionContext).tokenProvider(tokenProvider).build();
 	}
 
 	@Bean
 	@Lazy
 	@ConditionalOnMissingBean
-	public ReactorUaaClient uaaClient(ConnectionContext connectionContext,
-			TokenProvider tokenProvider) {
-		return ReactorUaaClient.builder().connectionContext(connectionContext)
-				.tokenProvider(tokenProvider).build();
+	public ReactorUaaClient uaaClient(ConnectionContext connectionContext, TokenProvider tokenProvider) {
+		return ReactorUaaClient.builder().connectionContext(connectionContext).tokenProvider(tokenProvider).build();
 	}
 
 	@Bean
@@ -127,8 +115,7 @@ public class CloudFoundryClientAutoConfiguration {
 		String apiHost = this.cloudFoundryProperties.getUrl();
 		Boolean skipSslValidation = this.cloudFoundryProperties.isSkipSslValidation();
 
-		return DefaultConnectionContext.builder().apiHost(apiHost)
-				.skipSslValidation(skipSslValidation).build();
+		return DefaultConnectionContext.builder().apiHost(apiHost).skipSslValidation(skipSslValidation).build();
 	}
 
 	@Bean
@@ -137,8 +124,7 @@ public class CloudFoundryClientAutoConfiguration {
 	public PasswordGrantTokenProvider tokenProvider() {
 		String username = this.cloudFoundryProperties.getUsername();
 		String password = this.cloudFoundryProperties.getPassword();
-		return PasswordGrantTokenProvider.builder().password(password).username(username)
-				.build();
+		return PasswordGrantTokenProvider.builder().password(password).username(username).build();
 	}
 
 }

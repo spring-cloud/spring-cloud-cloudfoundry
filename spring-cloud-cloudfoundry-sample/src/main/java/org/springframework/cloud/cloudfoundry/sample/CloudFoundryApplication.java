@@ -59,8 +59,7 @@ public class CloudFoundryApplication {
 		Log log = LogFactory.getLog(getClass());
 		return args -> discoveryClient.getServices().forEach(svc -> {
 			log.info("service = " + svc);
-			discoveryClient.getInstances(svc)
-					.forEach(si -> log.info("\tinstance = " + si));
+			discoveryClient.getInstances(svc).forEach(si -> log.info("\tinstance = " + si));
 		});
 	}
 

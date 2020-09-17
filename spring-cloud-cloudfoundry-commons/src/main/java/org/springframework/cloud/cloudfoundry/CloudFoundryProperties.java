@@ -146,8 +146,7 @@ public class CloudFoundryProperties implements InitializingBean {
 		vals.put("url", getUrl());
 		vals.put("username", getUsername());
 		vals.put("password", getPassword());
-		vals.forEach((key, value) -> Assert.hasText(value,
-				String.format("'%s' must be provided", key)));
+		vals.forEach((key, value) -> Assert.hasText(value, String.format("'%s' must be provided", key)));
 	}
 
 }

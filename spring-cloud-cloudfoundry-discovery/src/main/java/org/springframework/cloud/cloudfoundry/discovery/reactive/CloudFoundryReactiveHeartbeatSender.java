@@ -30,8 +30,7 @@ import org.springframework.stereotype.Component;
  * @author Tim Ysewyn
  */
 @Component
-public class CloudFoundryReactiveHeartbeatSender
-		implements ApplicationEventPublisherAware {
+public class CloudFoundryReactiveHeartbeatSender implements ApplicationEventPublisherAware {
 
 	private final ReactiveDiscoveryClient client;
 
@@ -41,12 +40,10 @@ public class CloudFoundryReactiveHeartbeatSender
 		this.client = client;
 	}
 
-	@Scheduled(
-			fixedDelayString = "${spring.cloud.cloudfoundry.discovery.heartbeatFrequency:5000}")
+	@Scheduled(fixedDelayString = "${spring.cloud.cloudfoundry.discovery.heartbeatFrequency:5000}")
 	public void poll() {
 		if (this.publisher != null) {
-			this.publisher.publishEvent(
-					new HeartbeatEvent(this.client, this.client.getServices()));
+			this.publisher.publishEvent(new HeartbeatEvent(this.client, this.client.getServices()));
 		}
 	}
 

@@ -37,8 +37,7 @@ import org.springframework.cloud.cloudfoundry.discovery.CloudFoundryDiscoveryPro
  *
  * @author Tim Ysewyn
  */
-public class CloudFoundryNativeReactiveDiscoveryClient
-		implements ReactiveDiscoveryClient {
+public class CloudFoundryNativeReactiveDiscoveryClient implements ReactiveDiscoveryClient {
 
 	private final CloudFoundryService cloudFoundryService;
 
@@ -46,8 +45,8 @@ public class CloudFoundryNativeReactiveDiscoveryClient
 
 	private final CloudFoundryDiscoveryProperties properties;
 
-	CloudFoundryNativeReactiveDiscoveryClient(CloudFoundryOperations operations,
-			CloudFoundryService svc, CloudFoundryDiscoveryProperties properties) {
+	CloudFoundryNativeReactiveDiscoveryClient(CloudFoundryOperations operations, CloudFoundryService svc,
+			CloudFoundryDiscoveryProperties properties) {
 		this.cloudFoundryService = svc;
 		this.cloudFoundryOperations = operations;
 		this.properties = properties;
@@ -66,8 +65,7 @@ public class CloudFoundryNativeReactiveDiscoveryClient
 
 	@Override
 	public Flux<String> getServices() {
-		return this.cloudFoundryOperations.applications().list()
-				.map(ApplicationSummary::getName);
+		return this.cloudFoundryOperations.applications().list().map(ApplicationSummary::getName);
 	}
 
 	@Override
@@ -75,8 +73,7 @@ public class CloudFoundryNativeReactiveDiscoveryClient
 		return this.properties.getOrder();
 	}
 
-	protected ServiceInstance mapApplicationInstanceToServiceInstance(
-			Tuple2<ApplicationDetail, InstanceDetail> tuple) {
+	protected ServiceInstance mapApplicationInstanceToServiceInstance(Tuple2<ApplicationDetail, InstanceDetail> tuple) {
 		ApplicationDetail applicationDetail = tuple.getT1();
 		InstanceDetail instanceDetail = tuple.getT2();
 
@@ -84,16 +81,14 @@ public class CloudFoundryNativeReactiveDiscoveryClient
 		String applicationIndex = instanceDetail.getIndex();
 		String instanceId = applicationId + "." + applicationIndex;
 		String name = applicationDetail.getName();
-		String url = applicationDetail.getUrls().size() > 0
-				? applicationDetail.getUrls().get(0) : null;
+		String url = applicationDetail.getUrls().size() > 0 ? applicationDetail.getUrls().get(0) : null;
 		boolean secure = (url + "").toLowerCase().startsWith("https");
 
 		HashMap<String, String> metadata = new HashMap<>();
 		metadata.put("applicationId", applicationId);
 		metadata.put("instanceId", applicationIndex);
 
-		return new DefaultServiceInstance(instanceId, name, url, secure ? 443 : 80,
-				secure, metadata);
+		return new DefaultServiceInstance(instanceId, name, url, secure ? 443 : 80, secure, metadata);
 	}
 
 }

@@ -37,19 +37,14 @@ public class CloudFoundryService {
 		this.cloudFoundryOperations = cloudFoundryOperations;
 	}
 
-	public Flux<Tuple2<ApplicationDetail, InstanceDetail>> getApplicationInstances(
-			String serviceId) {
-		GetApplicationRequest applicationRequest = GetApplicationRequest.builder()
-				.name(serviceId).build();
-		return this.cloudFoundryOperations.applications().get(applicationRequest)
-				.flatMapMany(applicationDetail -> {
-					Flux<InstanceDetail> ids = Flux
-							.fromStream(applicationDetail.getInstanceDetails().stream())
-							.filter(id -> id.getState().equalsIgnoreCase("RUNNING"));
-					Flux<ApplicationDetail> generate = Flux
-							.generate(sink -> sink.next(applicationDetail));
-					return generate.zipWith(ids);
-				});
+	public Flux<Tuple2<ApplicationDetail, InstanceDetail>> getApplicationInstances(String serviceId) {
+		GetApplicationRequest applicationRequest = GetApplicationRequest.builder().name(serviceId).build();
+		return this.cloudFoundryOperations.applications().get(applicationRequest).flatMapMany(applicationDetail -> {
+			Flux<InstanceDetail> ids = Flux.fromStream(applicationDetail.getInstanceDetails().stream())
+					.filter(id -> id.getState().equalsIgnoreCase("RUNNING"));
+			Flux<ApplicationDetail> generate = Flux.generate(sink -> sink.next(applicationDetail));
+			return generate.zipWith(ids);
+		});
 	}
 
 }

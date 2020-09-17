@@ -49,12 +49,10 @@ public class StickyFilterConfiguration {
 		filter.setOrder(Ordered.LOWEST_PRECEDENCE);
 		filter.setFilter(new OncePerRequestFilter() {
 			@Override
-			protected void doFilterInternal(HttpServletRequest request,
-					HttpServletResponse response, FilterChain filterChain)
-					throws ServletException, IOException {
+			protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+					FilterChain filterChain) throws ServletException, IOException {
 				if (!response.containsHeader("Set-Cookie")) {
-					response.addCookie(new Cookie("JSESSIONID",
-							StickyFilterConfiguration.this.cookie));
+					response.addCookie(new Cookie("JSESSIONID", StickyFilterConfiguration.this.cookie));
 				}
 				filterChain.doFilter(request, response);
 			}

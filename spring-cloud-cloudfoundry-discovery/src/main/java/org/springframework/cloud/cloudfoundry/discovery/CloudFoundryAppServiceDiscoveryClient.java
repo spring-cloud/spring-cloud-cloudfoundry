@@ -43,8 +43,7 @@ public class CloudFoundryAppServiceDiscoveryClient extends CloudFoundryDiscovery
 
 	private static final String INTERNAL_DOMAIN = "apps.internal";
 
-	CloudFoundryAppServiceDiscoveryClient(CloudFoundryOperations cloudFoundryOperations,
-			CloudFoundryService svc,
+	CloudFoundryAppServiceDiscoveryClient(CloudFoundryOperations cloudFoundryOperations, CloudFoundryService svc,
 			CloudFoundryDiscoveryProperties cloudFoundryDiscoveryProperties) {
 		super(cloudFoundryOperations, svc, cloudFoundryDiscoveryProperties);
 	}
@@ -56,23 +55,19 @@ public class CloudFoundryAppServiceDiscoveryClient extends CloudFoundryDiscovery
 
 	@Override
 	public List<ServiceInstance> getInstances(String serviceId) {
-		return getCloudFoundryService()
-				.getApplicationInstances(serviceId).filter(tuple -> tuple.getT1()
-						.getUrls().stream().anyMatch(this::isInternalDomain))
-				.map(tuple -> {
+		return getCloudFoundryService().getApplicationInstances(serviceId)
+				.filter(tuple -> tuple.getT1().getUrls().stream().anyMatch(this::isInternalDomain)).map(tuple -> {
 					ApplicationDetail applicationDetail = tuple.getT1();
 					InstanceDetail instanceDetail = tuple.getT2();
 					String applicationId = applicationDetail.getId();
 					String applicationIndex = instanceDetail.getIndex();
 					String name = applicationDetail.getName();
-					String url = applicationDetail.getUrls().stream()
-							.filter(this::isInternalDomain).findFirst()
+					String url = applicationDetail.getUrls().stream().filter(this::isInternalDomain).findFirst()
 							.map(x -> instanceDetail.getIndex() + "." + x).get();
 					HashMap<String, String> metadata = new HashMap<>();
 					metadata.put("applicationId", applicationId);
 					metadata.put("instanceId", applicationIndex);
-					return (ServiceInstance) new DefaultServiceInstance(name, url, 8080,
-							false, metadata);
+					return (ServiceInstance) new DefaultServiceInstance(name, url, 8080, false, metadata);
 				}).collectList().block();
 	}
 

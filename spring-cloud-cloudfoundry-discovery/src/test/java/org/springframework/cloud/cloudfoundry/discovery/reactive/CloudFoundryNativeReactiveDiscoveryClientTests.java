@@ -62,8 +62,7 @@ class CloudFoundryNativeReactiveDiscoveryClientTests {
 	@Test
 	public void verifyDefaults() {
 		when(properties.getOrder()).thenReturn(0);
-		assertThat(client.description())
-				.isEqualTo("CF Reactive Service Discovery Client");
+		assertThat(client.description()).isEqualTo("CF Reactive Service Discovery Client");
 		assertThat(client.getOrder()).isEqualTo(0);
 	}
 
@@ -71,10 +70,9 @@ class CloudFoundryNativeReactiveDiscoveryClientTests {
 	public void shouldReturnFluxOfServices() {
 		Applications apps = mock(Applications.class);
 		when(operations.applications()).thenReturn(apps);
-		ApplicationSummary summary = ApplicationSummary.builder()
-				.id(UUID.randomUUID().toString()).instances(1).memoryLimit(1024)
-				.requestedState("requestedState").diskQuota(1024).name("service")
-				.runningInstances(1).build();
+		ApplicationSummary summary = ApplicationSummary.builder().id(UUID.randomUUID().toString()).instances(1)
+				.memoryLimit(1024).requestedState("requestedState").diskQuota(1024).name("service").runningInstances(1)
+				.build();
 		when(apps.list()).thenReturn(Flux.just(summary));
 		Flux<String> services = this.client.getServices();
 		StepVerifier.create(services).expectNext("service").expectComplete().verify();
@@ -89,13 +87,11 @@ class CloudFoundryNativeReactiveDiscoveryClientTests {
 
 	@Test
 	public void shouldReturnFluxOfServiceInstances() {
-		ApplicationDetail applicationDetail = ApplicationDetail.builder()
-				.id(UUID.randomUUID().toString()).stack("stack").instances(1)
-				.memoryLimit(1024).requestedState("requestedState").diskQuota(1024)
+		ApplicationDetail applicationDetail = ApplicationDetail.builder().id(UUID.randomUUID().toString())
+				.stack("stack").instances(1).memoryLimit(1024).requestedState("requestedState").diskQuota(1024)
 				.name("service").runningInstances(1).build();
 		InstanceDetail instanceDetail = InstanceDetail.builder().index("0").build();
-		Tuple2<ApplicationDetail, InstanceDetail> instance = Tuples.of(applicationDetail,
-				instanceDetail);
+		Tuple2<ApplicationDetail, InstanceDetail> instance = Tuples.of(applicationDetail, instanceDetail);
 		when(this.svc.getApplicationInstances("service")).thenReturn(Flux.just(instance));
 		Flux<ServiceInstance> instances = this.client.getInstances("service");
 		StepVerifier.create(instances).expectNextCount(1).expectComplete().verify();

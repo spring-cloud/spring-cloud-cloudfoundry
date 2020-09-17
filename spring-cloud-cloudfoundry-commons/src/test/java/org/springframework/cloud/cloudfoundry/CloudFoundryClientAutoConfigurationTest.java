@@ -36,12 +36,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class CloudFoundryClientAutoConfigurationTest {
 
-	private final static String[] SPRING_CLOUD_PROPERTIES = {
-			"spring.cloud.cloudfoundry.username", "spring.cloud.cloudfoundry.password", };
+	private final static String[] SPRING_CLOUD_PROPERTIES = { "spring.cloud.cloudfoundry.username",
+			"spring.cloud.cloudfoundry.password", };
 
 	private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
-			.withConfiguration(
-					AutoConfigurations.of(CloudFoundryClientAutoConfiguration.class));
+			.withConfiguration(AutoConfigurations.of(CloudFoundryClientAutoConfiguration.class));
 
 	private static boolean requiredPropertiesSet() {
 		for (String k : SPRING_CLOUD_PROPERTIES) {
@@ -59,13 +58,11 @@ public class CloudFoundryClientAutoConfigurationTest {
 	@Test
 	public void autoConfiguresBeansWithAllProperties() {
 		this.contextRunner.withPropertyValues("spring.cloud.cloudfoundry.username=user",
-				"spring.cloud.cloudfoundry.password=secret",
-				"spring.cloud.cloudfoundry.org=myorg",
+				"spring.cloud.cloudfoundry.password=secret", "spring.cloud.cloudfoundry.org=myorg",
 				"spring.cloud.cloudfoundry.space=myspace").run((context) -> {
 					assertCloudFoundryClientBeansPresent(context);
 
-					DefaultCloudFoundryOperations operations = context
-							.getBean(DefaultCloudFoundryOperations.class);
+					DefaultCloudFoundryOperations operations = context.getBean(DefaultCloudFoundryOperations.class);
 					assertThat(operations.getOrganization()).isEqualTo("myorg");
 					assertThat(operations.getSpace()).isEqualTo("myspace");
 				});
@@ -77,8 +74,7 @@ public class CloudFoundryClientAutoConfigurationTest {
 				"spring.cloud.cloudfoundry.password=secret").run((context) -> {
 					assertCloudFoundryClientBeansPresent(context);
 
-					DefaultCloudFoundryOperations operations = context
-							.getBean(DefaultCloudFoundryOperations.class);
+					DefaultCloudFoundryOperations operations = context.getBean(DefaultCloudFoundryOperations.class);
 					assertThat(operations.getOrganization()).isNullOrEmpty();
 					assertThat(operations.getSpace()).isNullOrEmpty();
 				});
@@ -90,8 +86,7 @@ public class CloudFoundryClientAutoConfigurationTest {
 
 		this.contextRunner.run((context) -> {
 			assertCloudFoundryClientBeansPresent(context);
-			CloudFoundryOperations operations = context
-					.getBean(CloudFoundryOperations.class);
+			CloudFoundryOperations operations = context.getBean(CloudFoundryOperations.class);
 
 			OrganizationSummary summary = operations.organizations().list().blockFirst();
 
@@ -101,8 +96,7 @@ public class CloudFoundryClientAutoConfigurationTest {
 		});
 	}
 
-	private void assertCloudFoundryClientBeansPresent(
-			AssertableApplicationContext context) {
+	private void assertCloudFoundryClientBeansPresent(AssertableApplicationContext context) {
 		assertThat(context).hasSingleBean(ReactorCloudFoundryClient.class);
 		assertThat(context).hasSingleBean(DefaultCloudFoundryOperations.class);
 		assertThat(context).hasSingleBean(DefaultConnectionContext.class);
