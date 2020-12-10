@@ -65,8 +65,8 @@ public class CloudFoundryAppServiceDiscoveryClientTest {
 		List<ServiceInstance> instances = this.discoveryClient.getInstances(serviceId);
 
 		assertThat(instances).hasSize(1);
-		assertThat(instances.get(0)).isEqualTo(new DefaultServiceInstance(serviceId, "0.billing.apps.internal", 8080,
-				false, new HashMap<String, String>() {
+		assertThat(instances.get(0)).isEqualTo(new DefaultServiceInstance(null, serviceId, "0.billing.apps.internal",
+				8080, false, new HashMap<String, String>() {
 					{
 						put("applicationId", "billing1");
 						put("instanceId", "0");
@@ -87,22 +87,22 @@ public class CloudFoundryAppServiceDiscoveryClientTest {
 		List<ServiceInstance> instances = this.discoveryClient.getInstances(serviceId);
 
 		assertThat(instances).hasSize(3);
-		assertThat(instances.get(0)).isEqualTo(new DefaultServiceInstance(serviceId, "0.billing.apps.internal", 8080,
-				false, new HashMap<String, String>() {
+		assertThat(instances.get(0)).isEqualTo(new DefaultServiceInstance(null, serviceId, "0.billing.apps.internal",
+				8080, false, new HashMap<String, String>() {
 					{
 						put("applicationId", "billing-id");
 						put("instanceId", "0");
 					}
 				}));
-		assertThat(instances.get(1)).isEqualTo(new DefaultServiceInstance(serviceId, "1.billing.apps.internal", 8080,
-				false, new HashMap<String, String>() {
+		assertThat(instances.get(1)).isEqualTo(new DefaultServiceInstance(null, serviceId, "1.billing.apps.internal",
+				8080, false, new HashMap<String, String>() {
 					{
 						put("applicationId", "billing-id");
 						put("instanceId", "1");
 					}
 				}));
-		assertThat(instances.get(2)).isEqualTo(new DefaultServiceInstance(serviceId, "2.billing.apps.internal", 8080,
-				false, new HashMap<String, String>() {
+		assertThat(instances.get(2)).isEqualTo(new DefaultServiceInstance(null, serviceId, "2.billing.apps.internal",
+				8080, false, new HashMap<String, String>() {
 					{
 						put("applicationId", "billing-id");
 						put("instanceId", "2");

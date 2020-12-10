@@ -62,7 +62,7 @@ public class SimpleDnsBasedReactiveDiscoveryClient implements ReactiveDiscoveryC
 	@Override
 	public Flux<ServiceInstance> getInstances(String serviceId) {
 		return Mono.justOrEmpty(serviceIdToHostnameConverter.toHostname(serviceId)).flatMapMany(getInetAddresses())
-				.map(address -> new DefaultServiceInstance(serviceId, address.getHostAddress(), 8080, false));
+				.map(address -> new DefaultServiceInstance(null, serviceId, address.getHostAddress(), 8080, false));
 	}
 
 	private Function<String, Publisher<? extends InetAddress>> getInetAddresses() {

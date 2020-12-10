@@ -66,7 +66,7 @@ public class SimpleDnsBasedDiscoveryClient implements DiscoveryClient {
 			InetAddress[] addresses = InetAddress.getAllByName(hostname);
 			if (addresses != null) {
 				for (InetAddress address : addresses) {
-					DefaultServiceInstance serviceInstance = new DefaultServiceInstance(serviceId,
+					DefaultServiceInstance serviceInstance = new DefaultServiceInstance(null, serviceId,
 							address.getHostAddress(), 8080, false);
 					serviceInstances.add(serviceInstance);
 				}

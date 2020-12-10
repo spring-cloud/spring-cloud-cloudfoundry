@@ -67,7 +67,7 @@ public class CloudFoundryAppServiceDiscoveryClient extends CloudFoundryDiscovery
 					HashMap<String, String> metadata = new HashMap<>();
 					metadata.put("applicationId", applicationId);
 					metadata.put("instanceId", applicationIndex);
-					return (ServiceInstance) new DefaultServiceInstance(name, url, 8080, false, metadata);
+					return (ServiceInstance) new DefaultServiceInstance(null, name, url, 8080, false, metadata);
 				}).collectList().block();
 	}
 
