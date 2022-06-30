@@ -1,16 +1,16 @@
 |===
 |Name | Default | Description
 
-|spring.cloud.cloudfoundry.discovery.default-server-port | `80` | Port to use when no port is defined by service discovery.
-|spring.cloud.cloudfoundry.discovery.enabled | `true` | Flag to indicate that discovery is enabled.
-|spring.cloud.cloudfoundry.discovery.heartbeat-frequency | `5000` | Frequency in milliseconds of poll for heart beat. The client will poll on this frequency and broadcast a list of service ids.
-|spring.cloud.cloudfoundry.discovery.internal-domain | `apps.internal` | Default internal domain when configured to use Native DNS service discovery.
-|spring.cloud.cloudfoundry.discovery.order | `0` | Order of the discovery client used by `CompositeDiscoveryClient` for sorting available clients.
-|spring.cloud.cloudfoundry.discovery.use-container-ip | `false` | Whether to resolve hostname when BOSH DNS is used. In order to use this feature, spring.cloud.cloudfoundry.discovery.use-dns must be true.
-|spring.cloud.cloudfoundry.discovery.use-dns | `false` | Whether to use BOSH DNS for the discovery. In order to use this feature, your Cloud Foundry installation must support Service Discovery.
+|spring.cloud.cloudfoundry.discovery.default-server-port | `+++80+++` | Port to use when no port is defined by service discovery.
+|spring.cloud.cloudfoundry.discovery.enabled | `+++true+++` | Flag to indicate that discovery is enabled.
+|spring.cloud.cloudfoundry.discovery.heartbeat-frequency | `+++5000+++` | Frequency in milliseconds of poll for heart beat. The client will poll on this frequency and broadcast a list of service ids.
+|spring.cloud.cloudfoundry.discovery.internal-domain | `+++apps.internal+++` | Default internal domain when configured to use Native DNS service discovery.
+|spring.cloud.cloudfoundry.discovery.order | `+++0+++` | Order of the discovery client used by `CompositeDiscoveryClient` for sorting available clients.
+|spring.cloud.cloudfoundry.discovery.use-container-ip | `+++false+++` | Whether to resolve hostname when BOSH DNS is used. In order to use this feature, spring.cloud.cloudfoundry.discovery.use-dns must be true.
+|spring.cloud.cloudfoundry.discovery.use-dns | `+++false+++` | Whether to use BOSH DNS for the discovery. In order to use this feature, your Cloud Foundry installation must support Service Discovery.
 |spring.cloud.cloudfoundry.org |  | Organization name to initially target.
 |spring.cloud.cloudfoundry.password |  | Password for user to authenticate and obtain token.
-|spring.cloud.cloudfoundry.skip-ssl-validation | `false` | 
+|spring.cloud.cloudfoundry.skip-ssl-validation | `+++false+++` | 
 |spring.cloud.cloudfoundry.space |  | Space name to initially target.
 |spring.cloud.cloudfoundry.url |  | URL of Cloud Foundry API (Cloud Controller).
 |spring.cloud.cloudfoundry.username |  | Username to authenticate (usually an email address).
