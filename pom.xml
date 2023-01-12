@@ -18,7 +18,7 @@
 	<properties>
 		<cf-java-client.version>4.9.0.RELEASE</cf-java-client.version>
 		<bintray.package>cloudfoundry</bintray.package>
-		<main.basedir>${basedir}</main.basedir>
+		<main.basedir>${project.basedir}</main.basedir>
 		<spring-cloud-commons.version>3.1.1-SNAPSHOT</spring-cloud-commons.version>
 	</properties>
 
