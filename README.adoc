@@ -4,8 +4,12 @@ Manual changes to this file will be lost when it is generated again.
 Edit the files in the src/main/asciidoc/ directory instead.
 ////
 
+== Spring Cloud for Cloudfoundry project is no longer maintained 
 
-= Spring Cloud for Cloudfoundry
+=== See https://spring.io/blog/2022/01/27/spring-cloud-2022-0-0-m1-codename-kilburn-has-been-released#notable-changes-in-the-202200-release-train[blog post] and https://github.com/spring-cloud/spring-cloud-release/wiki/Spring-Cloud-2022.0-Release-Notes[release notes] for more information
+
+
+== Spring Cloud for Cloudfoundry
 
 image:https://circleci.com/gh/spring-cloud/spring-cloud-cloudfoundry.svg?style=svg["CircleCI", link="https://circleci.com/gh/spring-cloud/spring-cloud-cloudfoundry"]
 
